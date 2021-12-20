@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRST Maintenance Management System", "HRST Maintenance Management System.csproj", "{5E8A6E05-0860-47D6-AF0E-EF4842D34E35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRST_Maintenance_Management_System", "HRST_Maintenance_Management_System.csproj", "{5E8A6E05-0860-47D6-AF0E-EF4842D34E35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
