@@ -15,6 +15,7 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
+import { UserEditComponent } from './user-edit/user-edit.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { MatTableModule } from '@angular/material/table';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    AdminPageComponent
+    AdminPageComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -35,7 +37,8 @@ import { MatTableModule } from '@angular/material/table';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
-      { path: 'admin-page', component: AdminPageComponent}
+      { path: 'admin-page', component: AdminPageComponent },
+      { path: 'user-edit', component:UserEditComponent},
     
     ]),
     BrowserAnimationsModule,
