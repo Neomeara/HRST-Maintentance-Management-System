@@ -12,4 +12,7 @@ export class UserEditComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  name = "Jon";
+  lastname = "Davis"
+
 }

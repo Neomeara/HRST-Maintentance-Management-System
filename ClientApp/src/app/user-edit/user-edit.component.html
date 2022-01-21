@@ -1,1 +1,28 @@
-<p>user-edit works!</p>
+
+<div class="container">
+  <form action="action_page.php">
+
+    <label for="fname">First Name</label>
+    <p>{{name}}</p>
+
+    <label for="lname">Last Name</label>
+    <p>{{lastname}}</p>
+
+    <h4>Select your toppings:</h4>
+    <mat-checkbox >List1</mat-checkbox>
+    <mat-checkbox >List2</mat-checkbox>
+
+
+    <label for="subject">Notes</label>
+    <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+
+    <div class="buttons">
+      <div class="action_btn">
+        <button name="submit" class="action_btn submit" type="submit" value="Save" onclick="myFunction()">Save</button>
+        <button name="submit" class="action_btn edit" type="submit" value="Edit" onclick="myFunction2()">Edit</button>
+        <p id="saved"></p>
+      </div>
+    </div>
+
+  </form>
+</div>

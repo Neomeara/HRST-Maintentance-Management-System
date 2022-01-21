@@ -2,6 +2,6 @@ table {
   width: 100%;
 }
 .mat-row:hover {
-  background-color: #E8EAF6;
+  background-color: #808080;
   cursor: pointer;
 }

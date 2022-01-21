@@ -16,6 +16,8 @@ import { AdminPageComponent } from './admin-page/admin-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
 import { UserEditComponent } from './user-edit/user-edit.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 
 
 @NgModule({
@@ -43,6 +45,7 @@ import { UserEditComponent } from './user-edit/user-edit.component';
     ]),
     BrowserAnimationsModule,
     MatTableModule,
+    MatCheckboxModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
