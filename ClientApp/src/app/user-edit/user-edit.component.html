@@ -8,9 +8,18 @@
     <label for="lname">Last Name</label>
     <p>{{lastname}}</p>
 
-    <h4>Select your toppings:</h4>
-    <mat-checkbox >List1</mat-checkbox>
-    <mat-checkbox >List2</mat-checkbox>
+    <label for="uname">Username</label>
+    <p>{{username}}</p>
+
+    <label for="role">Role</label>
+    <p>{{role}}</p>
+
+    <label for="company">Company</label>
+    <p>{{company}}</p>
+
+    <label>Select lists you want this user to have access to:</label>
+    <div><mat-checkbox>List1</mat-checkbox></div>
+    <div><mat-checkbox>List2</mat-checkbox></div>
 
 
     <label for="subject">Notes</label>
@@ -20,7 +29,7 @@
       <div class="action_btn">
         <button name="submit" class="action_btn submit" type="submit" value="Save" onclick="myFunction()">Save</button>
         <button name="submit" class="action_btn edit" type="submit" value="Edit" onclick="myFunction2()">Edit</button>
-        <p id="saved"></p>
+
       </div>
     </div>
 

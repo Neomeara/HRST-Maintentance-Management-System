@@ -14,5 +14,8 @@ export class UserEditComponent implements OnInit {
 
   name = "Jon";
   lastname = "Davis"
+  username = "JD10101"
+  role = "Basic User"
+  company = "Company1"
 
 }
