@@ -18,12 +18,12 @@ using Microsoft.Extensions.Logging;
 
 namespace HRST_Maintenance_Management_System.Areas.Identity.Pages.Account
 {
-    public class LoginModell : PageModel
+    public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModell(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;
