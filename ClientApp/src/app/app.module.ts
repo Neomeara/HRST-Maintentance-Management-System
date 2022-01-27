@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
@@ -13,6 +12,8 @@ import { ApiAuthorizationModule } from 'src/api-authorization/api-authorization.
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { TodoListPageComponent } from './todo-list-page/todo-list-page.component';
+import { AdminPageComponent } from './admin-page/admin-page.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,8 @@ import { TodoListPageComponent } from './todo-list-page/todo-list-page.component
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
+    FetchDataComponent,
+    AdminPageComponent
     FetchDataComponent,
     TodoListPageComponent
   ],
@@ -32,6 +35,10 @@ import { TodoListPageComponent } from './todo-list-page/todo-list-page.component
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
+      { path: 'admin-page', component: AdminPageComponent}
+    
+    ]),
+    BrowserAnimationsModule
       { path: 'todo-list', component: TodoListPageComponent},
     ])
   ],

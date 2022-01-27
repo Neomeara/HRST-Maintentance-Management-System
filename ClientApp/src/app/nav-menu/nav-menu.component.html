@@ -3,7 +3,7 @@
     class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
   >
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">HRST_Maintenance_Management_System</a>
+      <a class="navbar-brand" [routerLink]="['/']">HRST MMS</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -34,6 +34,12 @@
           <li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/todo-list']">ToDo List</a>
           </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link text-dark" [routerLink]="['/admin-page']"
+              >Admin Page</a
+            >
+          </li>
+
         </ul>
         <app-login-menu></app-login-menu>
       </div>
