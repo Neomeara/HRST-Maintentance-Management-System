@@ -13,6 +13,11 @@ import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material/table';
+import { UserEditComponent } from './user-edit/user-edit.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
+
 
 @NgModule({
   declarations: [
@@ -21,7 +26,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    AdminPageComponent
+    AdminPageComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -32,10 +38,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
-      { path: 'admin-page', component: AdminPageComponent}
+
+      { path: 'admin-page', component: AdminPageComponent },
+      { path: 'user-edit', component:UserEditComponent},
+
     
     ]),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatTableModule,
+    MatCheckboxModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }

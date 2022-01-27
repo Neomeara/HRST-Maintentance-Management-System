@@ -1,0 +1,37 @@
+
+<div class="container">
+  <form action="action_page.php">
+
+    <label for="fname">First Name</label>
+    <p>{{name}}</p>
+
+    <label for="lname">Last Name</label>
+    <p>{{lastname}}</p>
+
+    <label for="uname">Username</label>
+    <p>{{username}}</p>
+
+    <label for="role">Role</label>
+    <p>{{role}}</p>
+
+    <label for="company">Company</label>
+    <p>{{company}}</p>
+
+    <label>Select lists you want this user to have access to:</label>
+    <div><mat-checkbox>List1</mat-checkbox></div>
+    <div><mat-checkbox>List2</mat-checkbox></div>
+
+
+    <label for="subject">Notes</label>
+    <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+
+    <div class="buttons">
+      <div class="action_btn">
+        <button name="submit" class="action_btn submit" type="submit" value="Save" onclick="myFunction()">Save</button>
+        <button name="submit" class="action_btn edit" type="submit" value="Edit" onclick="myFunction2()">Edit</button>
+
+      </div>
+    </div>
+
+  </form>
+</div>
