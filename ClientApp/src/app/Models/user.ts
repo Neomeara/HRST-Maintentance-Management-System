@@ -4,5 +4,4 @@ export interface User {
   lastName: string;
   email: string;
   group: string;
-  lists: [];
 }

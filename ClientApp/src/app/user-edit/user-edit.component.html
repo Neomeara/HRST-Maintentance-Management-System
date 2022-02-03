@@ -1,21 +1,21 @@
 
 <div class="container">
   <form action="action_page.php">
-
+    <h1>User Edit Page</h1>
     <label for="fname">First Name</label>
-    <p>{{name}}</p>
+    <p>{{userdata.firstname}}</p>
 
     <label for="lname">Last Name</label>
-    <p>{{lastname}}</p>
+    <p>{{userdata.lastname}}</p>
 
     <label for="uname">Username</label>
-    <p>{{username}}</p>
+    <p>{{userdata.userName}}</p>
 
-    <label for="role">Role</label>
-    <p>{{role}}</p>
+    <label for="role">Group</label>
+    <p>{{userdata.group}}</p>
 
-    <label for="company">Company</label>
-    <p>{{company}}</p>
+    <label for="company">Email</label>
+    <p>{{userdata.email}}</p>
 
     <label>Select lists you want this user to have access to:</label>
     <div><mat-checkbox>List1</mat-checkbox></div>
