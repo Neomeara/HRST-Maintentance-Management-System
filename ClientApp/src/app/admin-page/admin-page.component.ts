@@ -1,31 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../Models/user';
 import { Router } from '@angular/router';
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
+import { getBaseUrl } from '../../main';
+import { HttpClient } from '@angular/common/http';
+import { Inject } from '@angular/core';
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
 
-];
 @Component({
   selector: 'app-admin-page',
   templateUrl: './admin-page.component.html',
   styleUrls: ['./admin-page.component.css']
 })
 export class AdminPageComponent implements OnInit {
-
-  constructor(private router: Router) { }
+  public users: any[] =[];
+  constructor(Http: HttpClient, @Inject('BASE_URL') getBaseUrl: string, private router: Router) {
+    Http.get<any[]>(getBaseUrl + 'api/users/userinfo').subscribe(result => {
+      this.users = result;
+    }, error => console.error(error));
+  }
 
   ngOnInit(): void {
+
   }
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
+
+  displayedColumns: string[] = ['username', 'firstname', 'lastname', 'company'];
+   dataSource = this.users;
 
 
   test(user : User) {
