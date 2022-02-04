@@ -14,6 +14,8 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { TodoListPageComponent } from './todo-list-page/todo-list-page.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TodoListComponent } from './todo-list-page/todo-list/todo-list.component';
+import { ListItemComponent } from './todo-list-page/list-item/list-item.component';
 
 @NgModule({
   declarations: [
@@ -22,25 +24,25 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    AdminPageComponent
+    AdminPageComponent,
     FetchDataComponent,
-    TodoListPageComponent
+    TodoListPageComponent,
+    TodoListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     ApiAuthorizationModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
-      { path: 'admin-page', component: AdminPageComponent}
+      { path: 'admin-page', component: AdminPageComponent},
+      { path: 'todo-list', component: TodoListPageComponent},
     
     ]),
-    BrowserAnimationsModule
-      { path: 'todo-list', component: TodoListPageComponent},
-    ])
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
