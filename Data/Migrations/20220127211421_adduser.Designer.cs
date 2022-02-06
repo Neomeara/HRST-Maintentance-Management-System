@@ -4,6 +4,7 @@ using HRST_Maintenance_Management_System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRST_Maintenance_Management_System.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220127211421_adduser")]
+    partial class adduser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,11 +178,20 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -211,9 +222,19 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("group")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("listID")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -226,143 +247,6 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("HRST_Maintenance_Management_System.Models.ListItem", b =>
-                {
-                    b.Property<int>("ListItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ListItemId"), 1L, 1);
-
-                    b.Property<string>("Comments")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Cost")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CostYear")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("LocationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MaintenanceListId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MaintenanceScheduleId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ListItemId");
-
-                    b.HasIndex("LocationId");
-
-                    b.HasIndex("MaintenanceListId");
-
-                    b.HasIndex("MaintenanceScheduleId");
-
-                    b.ToTable("ListItems");
-                });
-
-            modelBuilder.Entity("HRST_Maintenance_Management_System.Models.Location", b =>
-                {
-                    b.Property<int>("LocationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocationId"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("LocationId");
-
-                    b.ToTable("Locations");
-                });
-
-            modelBuilder.Entity("HRST_Maintenance_Management_System.Models.MaintenanceList", b =>
-                {
-                    b.Property<int>("MaintenanceListId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaintenanceListId"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Group")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastEditDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("MaintenanceListId");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("MaintenanceLists");
-                });
-
-            modelBuilder.Entity("HRST_Maintenance_Management_System.Models.MaintenanceSchedule", b =>
-                {
-                    b.Property<int>("MaintenanceScheduleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaintenanceScheduleId"), 1L, 1);
-
-                    b.Property<DateTime>("LastCompleted")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MaintenanceInterval")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("NextScheduledEventForcasted")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("NextScheduledEventPlanned")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("YearsToDelay")
-                        .HasColumnType("int");
-
-                    b.HasKey("MaintenanceScheduleId");
-
-                    b.ToTable("Schedules");
-                });
-
-            modelBuilder.Entity("HRST_Maintenance_Management_System.Models.Picture", b =>
-                {
-                    b.Property<int>("PictureId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PictureId"), 1L, 1);
-
-                    b.Property<int>("ListItemId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PictureId");
-
-                    b.HasIndex("ListItemId");
-
-                    b.ToTable("Pictures");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -502,53 +386,6 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("HRST_Maintenance_Management_System.Models.ListItem", b =>
-                {
-                    b.HasOne("HRST_Maintenance_Management_System.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HRST_Maintenance_Management_System.Models.MaintenanceList", "MaintenanceList")
-                        .WithMany("ListItems")
-                        .HasForeignKey("MaintenanceListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HRST_Maintenance_Management_System.Models.MaintenanceSchedule", "MaintenanceSchedule")
-                        .WithMany()
-                        .HasForeignKey("MaintenanceScheduleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Location");
-
-                    b.Navigation("MaintenanceList");
-
-                    b.Navigation("MaintenanceSchedule");
-                });
-
-            modelBuilder.Entity("HRST_Maintenance_Management_System.Models.MaintenanceList", b =>
-                {
-                    b.HasOne("HRST_Maintenance_Management_System.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("HRST_Maintenance_Management_System.Models.Picture", b =>
-                {
-                    b.HasOne("HRST_Maintenance_Management_System.Models.ListItem", "ListItem")
-                        .WithMany("Pictures")
-                        .HasForeignKey("ListItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ListItem");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -598,16 +435,6 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("HRST_Maintenance_Management_System.Models.ListItem", b =>
-                {
-                    b.Navigation("Pictures");
-                });
-
-            modelBuilder.Entity("HRST_Maintenance_Management_System.Models.MaintenanceList", b =>
-                {
-                    b.Navigation("ListItems");
                 });
 #pragma warning restore 612, 618
         }

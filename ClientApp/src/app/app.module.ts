@@ -14,8 +14,13 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { TodoListPageComponent } from './todo-list-page/todo-list-page.component';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material/table';
+import { UserEditComponent } from './user-edit/user-edit.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TodoListComponent } from './todo-list-page/todo-list/todo-list.component';
 import { ListItemComponent } from './todo-list-page/list-item/list-item.component';
+
+
 
 @NgModule({
   declarations: [
@@ -24,6 +29,8 @@ import { ListItemComponent } from './todo-list-page/list-item/list-item.componen
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
+    AdminPageComponent,
+    UserEditComponent
     AdminPageComponent,
     FetchDataComponent,
     TodoListPageComponent,
@@ -39,10 +46,17 @@ import { ListItemComponent } from './todo-list-page/list-item/list-item.componen
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
+
+      { path: 'admin-page', component: AdminPageComponent },
+      { path: 'user-edit', component:UserEditComponent},
+
       { path: 'admin-page', component: AdminPageComponent},
       { path: 'todo-list', component: TodoListPageComponent},
     
     ]),
+    BrowserAnimationsModule,
+    MatTableModule,
+    MatCheckboxModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }

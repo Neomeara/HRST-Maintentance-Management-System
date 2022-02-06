@@ -12,7 +12,12 @@ const PROXY_CONFIG = [
       "/Identity",
       "/connect",
       "/ApplyDatabaseMigrations",
-      "/_framework"
+      "/_framework",
+      "/weather",
+      "/api"
+      "/_framework",
+      "/api",
+      "/api/users"
    ],
     target: target,
     secure: false
