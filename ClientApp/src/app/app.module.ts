@@ -30,11 +30,12 @@ import { ListItemComponent } from './todo-list-page/list-item/list-item.componen
     CounterComponent,
     FetchDataComponent,
     AdminPageComponent,
-    UserEditComponent
+    UserEditComponent,
     AdminPageComponent,
     FetchDataComponent,
     TodoListPageComponent,
-    TodoListComponent
+    TodoListComponent,
+    ListItemComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -50,8 +51,9 @@ import { ListItemComponent } from './todo-list-page/list-item/list-item.componen
       { path: 'admin-page', component: AdminPageComponent },
       { path: 'user-edit', component:UserEditComponent},
 
-      { path: 'admin-page', component: AdminPageComponent},
-      { path: 'todo-list', component: TodoListPageComponent},
+      { path: 'todo-list', component: TodoListPageComponent },
+      { path: 'edit-list', component: TodoListComponent },
+      { path: 'edit-list-item', component: ListItemComponent}
     
     ]),
     BrowserAnimationsModule,

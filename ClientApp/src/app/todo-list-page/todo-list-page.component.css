@@ -1,0 +1,10 @@
+.list {
+    border-bottom: 5px solid black;
+}
+.list :hover {
+    background-color: lightgray;
+}
+.list button {
+    height: 25px;
+    width: 100px;
+}

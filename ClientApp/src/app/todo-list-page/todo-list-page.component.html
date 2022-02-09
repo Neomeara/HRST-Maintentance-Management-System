@@ -1,1 +1,18 @@
-<p>todo-list-page works!</p>
+<div *ngIf="selectedList">
+
+<h1>{{selectedList.maintenanceListId}} Details</h1>
+<div>Group: {{selectedList.group}}</div>
+<div>
+  <label for="list-owner-name">List Owner Name: </label>
+  <input id="list-owner-name" [(ngModel)]="selectedList.applicationUser.firstName" placeholder="FirstName" />
+</div>
+
+</div>
+
+<h2>My Lists</h2>
+<ul class="lists">
+  <li *ngFor="let list of lists" class="list" (click)="onSelect(list)">
+    <h3 >{{list.maintenanceListId}}</h3> {{list.group}}
+    
+  </li>
+</ul>

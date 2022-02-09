@@ -25,14 +25,51 @@ namespace HRST_Maintenance_Management_System.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        [Route("getlists")]
+        [Route("getAllLists")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MaintenanceList>>> getList()
+        public async Task<ActionResult<IEnumerable<MaintenanceList>>> getAllLists()
         {
             IEnumerable<MaintenanceList> lists;
             lists = await _applicationDbContext.MaintenanceLists.ToListAsync();
             Console.Write(lists);
             return Ok(lists);
+
+        }
+
+        [Route("getList")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MaintenanceList>>> getList(int id)
+        {
+            MaintenanceList list;
+            list = await _applicationDbContext.MaintenanceLists.FindAsync(id);
+            if (list == null)
+            {
+                return BadRequest();    
+            }
+
+            IEnumerable<ListItem> listItems = await _applicationDbContext.ListItems.ToListAsync();
+            listItems = listItems.Where(x=> x.MaintenanceList == list);
+
+            list.ListItems = listItems.ToList();
+
+            Console.Write(list);
+            return Ok(list);
+
+        }
+
+        [Route("getListItem")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MaintenanceList>>> getListItem(int id)
+        {
+            ListItem item;
+            item = await _applicationDbContext.ListItems.FindAsync(id);
+            if (item == null)
+            {
+                return BadRequest();
+            }
+
+            Console.Write(item);
+            return Ok(item);
 
         }
 

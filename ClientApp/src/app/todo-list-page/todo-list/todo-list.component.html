@@ -1,1 +1,13 @@
-<p>todo-list works!</p>
+<div *ngIf="list">
+  <h1>List Details</h1>
+  <div><span>id: </span>{{list.maintenanceListId}}</div>
+  <div>
+    <label for="Group">List Group: </label>
+    <input id="Group" [(ngModel)]="list.group" placeholder="hrst" />
+  </div>
+  <div><span>Create Date: </span>{{list.creationDate}}</div>
+  <div><span>last edit date: </span>{{list.lastEditDate}}</div>
+ <div *ngFor="let item of list.listItems" (click)="selectItem(item)">
+    <p>{{item.name}}</p>
+  </div>
+  </div>
