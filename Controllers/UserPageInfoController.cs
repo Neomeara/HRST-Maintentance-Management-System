@@ -50,5 +50,46 @@ namespace HRST_Maintenance_Management_System.Controllers
             return Ok(user);
 
         }
+
+        [HttpPut]
+        [Route("updateuser")]
+        public async Task<ActionResult>UpdateUser(UpdateUser model)
+        {
+            ApplicationUser user;
+            user =  await _DbContext.Users.SingleOrDefaultAsync(x=> x.Email == model.Email);
+            if (user == null)
+            {
+                return BadRequest();
+
+            }
+            
+            user.UserName = model.UserName;
+            user.firstname = model.FirstName;
+            user.lastname = model.LastName;
+            _DbContext.SaveChanges();
+            return Ok(user);
+        }
+
+        [HttpPut]
+        [Route("updateuser2")]
+
+        public async Task<ActionResult<IEnumerable<ApplicationUser>>> updateUser(string id,UpdateUser model)
+        {
+            ApplicationUser user;
+            user = await _DbContext.Users.FindAsync(id);
+            if (user == null)
+            {
+                return BadRequest();
+
+            }
+            user.UserName = model.UserName;
+            user.firstname = model.FirstName;
+            user.lastname = model.LastName;
+            user.Email = model.Email;
+            _DbContext.SaveChanges();
+            return Ok(user);
+
+
+        }
     }
 }

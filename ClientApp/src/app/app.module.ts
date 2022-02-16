@@ -16,7 +16,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import { FirstLastnameComponent } from './first-lastname/first-lastname.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -27,20 +28,23 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     CounterComponent,
     FetchDataComponent,
     AdminPageComponent,
-    UserEditComponent
+    UserEditComponent,
+    FirstLastnameComponent
+
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
-
       { path: 'admin-page', component: AdminPageComponent },
-      { path: 'user-edit', component:UserEditComponent},
+      { path: 'user-edit', component: UserEditComponent },
+      {path : 'first-lastname' , component: FirstLastnameComponent}
 
     
     ]),
