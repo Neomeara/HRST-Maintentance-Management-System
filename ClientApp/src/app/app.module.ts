@@ -23,7 +23,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FirstLastnameComponent } from './first-lastname/first-lastname.component';
-import { ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 
@@ -53,7 +52,7 @@ import Swal from 'sweetalert2';
       
       { path: 'admin-page', component: AdminPageComponent },
       { path: 'user-edit', component: UserEditComponent },
-      {path : 'first-lastname' , component: FirstLastnameComponent}
+      {path : 'first-lastname' , component: FirstLastnameComponent},
 
       { path: 'todo-list', component: TodoListPageComponent },
       { path: 'edit-list', component: TodoListComponent },
