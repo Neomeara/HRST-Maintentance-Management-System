@@ -4,6 +4,7 @@ using HRST_Maintenance_Management_System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRST_Maintenance_Management_System.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220211191158_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -308,7 +310,6 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaintenanceListId"), 1L, 1);
 
                     b.Property<string>("ApplicationUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreationDate")
@@ -320,10 +321,6 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
 
                     b.Property<DateTime>("LastEditDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MaintenanceListId");
 
@@ -549,10 +546,8 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
             modelBuilder.Entity("HRST_Maintenance_Management_System.Models.MaintenanceList", b =>
                 {
                     b.HasOne("HRST_Maintenance_Management_System.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("MaintenanceLists")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
 
                     b.Navigation("ApplicationUser");
                 });
@@ -617,11 +612,6 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("HRST_Maintenance_Management_System.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("MaintenanceLists");
                 });
 
             modelBuilder.Entity("HRST_Maintenance_Management_System.Models.ListItem", b =>

@@ -13,6 +13,7 @@ const PROXY_CONFIG = [
       "/connect",
       "/ApplyDatabaseMigrations",
       "/_framework",
+      "/weather",
       "/api",
       "/api/users"
    ],

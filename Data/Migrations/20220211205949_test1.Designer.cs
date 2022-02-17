@@ -4,6 +4,7 @@ using HRST_Maintenance_Management_System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRST_Maintenance_Management_System.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220211205949_test1")]
+    partial class test1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -321,10 +323,6 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
                     b.Property<DateTime>("LastEditDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("MaintenanceListId");
 
                     b.HasIndex("ApplicationUserId");
@@ -549,7 +547,7 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
             modelBuilder.Entity("HRST_Maintenance_Management_System.Models.MaintenanceList", b =>
                 {
                     b.HasOne("HRST_Maintenance_Management_System.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("MaintenanceLists")
+                        .WithMany()
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -617,11 +615,6 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("HRST_Maintenance_Management_System.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("MaintenanceLists");
                 });
 
             modelBuilder.Entity("HRST_Maintenance_Management_System.Models.ListItem", b =>

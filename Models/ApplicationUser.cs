@@ -8,6 +8,9 @@ namespace HRST_Maintenance_Management_System.Models
         public string lastname { get; set; } = "";
         public string group { get; set; } = "";
 
+        public List<MaintenanceList> MaintenanceLists { get; set; } = new List<MaintenanceList> { };
+
+
 
     }
 }
