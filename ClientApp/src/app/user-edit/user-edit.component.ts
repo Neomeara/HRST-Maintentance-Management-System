@@ -5,6 +5,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject } from '@angular/core';
 import { getBaseUrl } from '../../main';
 import { FormControl, FormGroup } from '@angular/forms';
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
@@ -41,6 +43,9 @@ export class UserEditComponent implements OnInit {
     }, error => console.error(error));
 
   }
+  showSuccessAlert() {
+    Swal.fire('User Information Updated', '', 'success')
+  }
   onClickSubmit(data: any) {
 
     let params = new HttpParams();
@@ -49,6 +54,7 @@ export class UserEditComponent implements OnInit {
       this.formresult = result;
       console.log(result);
     }, error => console.error(error));
+    this.showSuccessAlert();
   }
 
 

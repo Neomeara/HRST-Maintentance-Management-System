@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Inject } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-first-lastname',
@@ -30,10 +31,14 @@ export class FirstLastnameComponent implements OnInit {
       LastName: new FormControl()
     });
   }
+  showSuccessAlert() {
+    Swal.fire('User Information Updated!', '', 'success')
+  }
   onClickSubmit(data: any) {
     this.Http_.put<any>(this.baseurl_ + 'api/users/updateuser',data).subscribe(result => {
       this.formresult = result;
       console.log(result);
     }, error => console.error(error));
+    this.showSuccessAlert();
   }
 }

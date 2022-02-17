@@ -18,7 +18,7 @@ import { UserEditComponent } from './user-edit/user-edit.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FirstLastnameComponent } from './first-lastname/first-lastname.component';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import Swal from 'sweetalert2';
 
 @NgModule({
   declarations: [
