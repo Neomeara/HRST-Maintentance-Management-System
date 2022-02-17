@@ -2,6 +2,8 @@
 using HRST_Maintenance_Management_System.Models;
 using HRST_Maintenance_Management_System.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,47 +14,43 @@ namespace HRST_Maintenance_Management_System.Controllers
     public class ListsController : ControllerBase
     {
         private ApplicationDbContext _applicationDbContext;
+        private UserManager<ApplicationUser> _userManager;
 
-        public ListsController(ApplicationDbContext applicationDbContext)
+        public ListsController(ApplicationDbContext applicationDbContext, UserManager<ApplicationUser> userManager)
         {
             _applicationDbContext = applicationDbContext;
+            _userManager = userManager;
         }
 
-        // GET: api/<ListsController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
         [Route("getAllLists")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MaintenanceList>>> getAllLists()
         {
             IEnumerable<MaintenanceList> lists;
-            lists = await _applicationDbContext.MaintenanceLists.ToListAsync();
-            Console.Write(lists);
+            lists = await _applicationDbContext.MaintenanceLists.Where(list => list != null).Include(user => user.ApplicationUser).ToListAsync();
+         
             return Ok(lists);
-
         }
 
         [Route("getList")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MaintenanceList>>> getList(int id)
+        public async Task<ActionResult<MaintenanceList>> getList(int id)
         {
+            
             MaintenanceList list;
             list = await _applicationDbContext.MaintenanceLists.FindAsync(id);
             if (list == null)
             {
                 return BadRequest();    
             }
-
             IEnumerable<ListItem> listItems = await _applicationDbContext.ListItems.ToListAsync();
-            listItems = listItems.Where(x=> x.MaintenanceList == list);
+            listItems = listItems.Where(x => x.MaintenanceList == list);
 
             list.ListItems = listItems.ToList();
 
             Console.Write(list);
+
             return Ok(list);
 
         }
@@ -68,68 +66,75 @@ namespace HRST_Maintenance_Management_System.Controllers
                 return BadRequest();
             }
 
-            Console.Write(item);
             return Ok(item);
 
         }
 
+        //[Authorize]
         [Route("newlist")]
         [HttpPost]
-        public async Task<ActionResult> AddList()
+        public async Task<ActionResult<MaintenanceList>> AddList(MaintenanceList maintenanceList)
         {
-            var newList = new MaintenanceList()
+
+
+            ApplicationUser currentUser = null;
+
+            if (User.Identity.Name != null)
             {
-                //ListId = 23,
-                Group = "hrst",
-                CreationDate = DateTime.Now,
-                LastEditDate = DateTime.Now,
-                
 
-            };
-            //var newOwner = new ApplicationUser();
-            IEnumerable<ApplicationUser> users;
-            users = await _applicationDbContext.Users.ToArrayAsync();
+                currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            }
 
-            //var newOwner = new ApplicationUser() { Email = "abc123@gmail.com" };
-            newList.ApplicationUser = users.First();
-            
-            
+            if (currentUser == null)
+            {
+                //return NotFound();
+                maintenanceList.ApplicationUser = await _userManager.Users.FirstAsync();
+                maintenanceList.ApplicationUserId = maintenanceList.ApplicationUser.Id;
+            }
+            else
+            {
+                maintenanceList.ApplicationUser = currentUser;
+                maintenanceList.ApplicationUserId = currentUser.Id;
 
-            var listResult = await _applicationDbContext.MaintenanceLists.AddAsync(newList);
+            }
+
+
+
+            var listResult = await _applicationDbContext.MaintenanceLists.AddAsync(maintenanceList);
 
             if (listResult.State == EntityState.Added)
             {
-                var dbResult = await _applicationDbContext.SaveChangesAsync();
-                return Ok(dbResult);
+                await _applicationDbContext.SaveChangesAsync();
+                return CreatedAtAction(nameof(maintenanceList),new { id = maintenanceList.MaintenanceListId }, maintenanceList);
             }
             return BadRequest(listResult);
 
 
 
         }
-        // GET api/<ListsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+
+        [Route("deleteList")]
+        [HttpDelete]
+        public async Task<ActionResult> deleteList(int id)
         {
-            return "value";
+
+
+            MaintenanceList list;
+            list = await _applicationDbContext.MaintenanceLists.FindAsync(id);
+            if (list == null)
+            {
+                return BadRequest();
+            }
+            var result = _applicationDbContext.MaintenanceLists.Remove(list);
+            if(result.State == EntityState.Deleted)
+            {
+                await _applicationDbContext.SaveChangesAsync();
+                
+            }
+          
+            return Ok(list);
+
         }
 
-        // POST api/<ListsController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<ListsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<ListsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

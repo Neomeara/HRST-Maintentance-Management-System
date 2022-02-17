@@ -1,13 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Common;
 namespace HRST_Maintenance_Management_System.Models
 {
     public class MaintenanceList
     {
+        
         [Required]
         [Key]
         public int MaintenanceListId { get; private set; }
-        public ApplicationUser ApplicationUser { get; set; } = new ApplicationUser();
+        
+        public ApplicationUser ApplicationUser { get; set; }
+        public string ApplicationUserId { get; set; }
+
+        public string Title { get; set; }
 
         public string Group { get; set; } = "";
         public List<ListItem> ListItems { get; set; } = new List<ListItem> { };
@@ -70,5 +76,7 @@ namespace HRST_Maintenance_Management_System.Models
 
 
     }
+
+ 
     
 }

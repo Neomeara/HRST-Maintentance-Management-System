@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
@@ -19,6 +19,9 @@ import { UserEditComponent } from './user-edit/user-edit.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TodoListComponent } from './todo-list-page/todo-list/todo-list.component';
 import { ListItemComponent } from './todo-list-page/list-item/list-item.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 
 
@@ -45,8 +48,6 @@ import { ListItemComponent } from './todo-list-page/list-item/list-item.componen
     BrowserAnimationsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
 
       { path: 'admin-page', component: AdminPageComponent },
       { path: 'user-edit', component:UserEditComponent},
@@ -59,6 +60,11 @@ import { ListItemComponent } from './todo-list-page/list-item/list-item.componen
     BrowserAnimationsModule,
     MatTableModule,
     MatCheckboxModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }

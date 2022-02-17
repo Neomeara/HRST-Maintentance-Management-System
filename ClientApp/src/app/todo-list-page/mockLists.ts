@@ -4,12 +4,12 @@ import { MaintenanceListService } from './maintenance-list.service';
 
 
 
-export const user1: User = {
+export const DefaultUser: User = {
   id: "1",
-  firstName: "nate",
-  lastName: "omeara",
-  email: "test@gmail.com",
-  group: "hrst"
+  firstName: "FirstName",
+  lastName: "LastName",
+  email: "Default@default.com",
+  group: "group"
 
 }
 
@@ -39,37 +39,37 @@ export const listitem1: ListItem = {
 }
 
 export const LISTS: MaintenanceList[] = [
-{
-  maintenanceListId: 0,
-  applicationUser: user1,
-  group: "HRST",
-  creationDate: new Date(),
-  lastEditDate: new Date(),
-    listItems: [listitem1, listitem1, listitem1
-    ]
-  },
-  {
-    maintenanceListId: 1,
-    applicationUser: user1,
-    group: "ABC",
-    creationDate: new Date(),
-    lastEditDate: new Date(),
-    listItems: []
-  },
-  {
-    maintenanceListId: 2,
-    applicationUser: user1,
-    group: "Company",
-    creationDate: new Date(),
-    lastEditDate: new Date(),
-    listItems: []
-  },
-  {
-    maintenanceListId: 3,
-    applicationUser: user1,
-    group: "SDSU",
-    creationDate: new Date(),
-    lastEditDate: new Date(),
-    listItems: []
-  }
+//{
+//  maintenanceListId: 0,
+//  applicationUser: DefaultUser,
+//  group: "HRST",
+//  creationDate: new Date(),
+//  lastEditDate: new Date(),
+//    listItems: [listitem1, listitem1, listitem1
+//    ]
+//  },
+//  {
+//    maintenanceListId: 1,
+//    applicationUser: DefaultUser,
+//    group: "ABC",
+//    creationDate: new Date(),
+//    lastEditDate: new Date(),
+//    listItems: []
+//  },
+//  {
+//    maintenanceListId: 2,
+//    applicationUser: DefaultUser,
+//    group: "Company",
+//    creationDate: new Date(),
+//    lastEditDate: new Date(),
+//    listItems: []
+//  },
+//  {
+//    maintenanceListId: 3,
+//    applicationUser: DefaultUser,
+//    group: "SDSU",
+//    creationDate: new Date(),
+//    lastEditDate: new Date(),
+//    listItems: []
+//  }
 ]

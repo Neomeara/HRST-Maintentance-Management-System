@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRST_Maintenance_Management_System.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220209055121_intToGuid")]
-    partial class intToGuid
+    [Migration("20220211205949_test1")]
+    partial class test1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -244,9 +244,11 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
 
             modelBuilder.Entity("HRST_Maintenance_Management_System.Models.ListItem", b =>
                 {
-                    b.Property<Guid>("ListItemId")
+                    b.Property<int>("ListItemId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ListItemId"), 1L, 1);
 
                     b.Property<string>("Comments")
                         .IsRequired()
@@ -258,14 +260,14 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
                     b.Property<DateTime>("CostYear")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("LocationId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("LocationId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("MaintenanceListId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("MaintenanceListId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("MaintenanceScheduleId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("MaintenanceScheduleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -284,9 +286,11 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
 
             modelBuilder.Entity("HRST_Maintenance_Management_System.Models.Location", b =>
                 {
-                    b.Property<Guid>("LocationId")
+                    b.Property<int>("LocationId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocationId"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -299,11 +303,14 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
 
             modelBuilder.Entity("HRST_Maintenance_Management_System.Models.MaintenanceList", b =>
                 {
-                    b.Property<Guid>("MaintenanceListId")
+                    b.Property<int>("MaintenanceListId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaintenanceListId"), 1L, 1);
 
                     b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreationDate")
@@ -325,9 +332,11 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
 
             modelBuilder.Entity("HRST_Maintenance_Management_System.Models.MaintenanceSchedule", b =>
                 {
-                    b.Property<Guid>("MaintenanceScheduleId")
+                    b.Property<int>("MaintenanceScheduleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaintenanceScheduleId"), 1L, 1);
 
                     b.Property<DateTime>("LastCompleted")
                         .HasColumnType("datetime2");
@@ -351,12 +360,14 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
 
             modelBuilder.Entity("HRST_Maintenance_Management_System.Models.Picture", b =>
                 {
-                    b.Property<Guid>("PictureId")
+                    b.Property<int>("PictureId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("ListItemId")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PictureId"), 1L, 1);
+
+                    b.Property<int>("ListItemId")
+                        .HasColumnType("int");
 
                     b.Property<string>("url")
                         .IsRequired()
@@ -537,7 +548,9 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
                 {
                     b.HasOne("HRST_Maintenance_Management_System.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
                 });
