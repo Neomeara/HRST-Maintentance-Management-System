@@ -22,7 +22,9 @@ import { ListItemComponent } from './todo-list-page/list-item/list-item.componen
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-
+import { FirstLastnameComponent } from './first-lastname/first-lastname.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 
 @NgModule({
@@ -34,23 +36,24 @@ import { MatInputModule } from '@angular/material/input';
     FetchDataComponent,
     AdminPageComponent,
     UserEditComponent,
-    AdminPageComponent,
-    FetchDataComponent,
     TodoListPageComponent,
     TodoListComponent,
-    ListItemComponent
+    ListItemComponent,
+    FirstLastnameComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     ApiAuthorizationModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-
+      
       { path: 'admin-page', component: AdminPageComponent },
-      { path: 'user-edit', component:UserEditComponent},
+      { path: 'user-edit', component: UserEditComponent },
+      {path : 'first-lastname' , component: FirstLastnameComponent}
 
       { path: 'todo-list', component: TodoListPageComponent },
       { path: 'edit-list', component: TodoListComponent },

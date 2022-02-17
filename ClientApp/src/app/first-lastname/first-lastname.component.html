@@ -1,0 +1,25 @@
+<div>
+  <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
+    <label for="email">Email</label>
+    <input id="email" type="text" class="fortextbox" name="Email" placeholder="email"
+           formControlName="Email">
+    <br />
+    <label for="username">Username</label>
+    <input id="username" type="text" class="fortextbox" name="UserName" placeholder="username"
+           formControlName="UserName">
+    <br />
+
+    <label for="firstname">First Name</label>
+    <input id="firstname" type="text" class="fortextbox" name="FirstName" placeholder="First Name"
+           formControlName="FirstName">
+    <br />
+
+    <label for="lastname">Last Name</label>
+    <input id="lastname" type="text" class="fortextbox" name="LastName" placeholder="Last Name"
+           formControlName="LastName">
+    <br />
+
+    <input type="submit" class="forsubmit" value="Submit">
+    
+  </form>
+</div>

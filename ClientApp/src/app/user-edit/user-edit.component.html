@@ -1,21 +1,32 @@
 
 <div class="container">
-  <form action="action_page.php">
+  <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
     <h1>User Edit Page</h1>
-    <label for="fname">First Name</label>
-    <p>{{userdata.firstname}}</p>
 
-    <label for="lname">Last Name</label>
-    <p>{{userdata.lastname}}</p>
+    <label for="firstname">First Name</label>
+    <input id="firstname" type="text" class="fortextbox" name="FirstName" placeholder={{userdata.firstname}}
+           formControlName="FirstName">
+    <br />
 
-    <label for="uname">Username</label>
-    <p>{{userdata.userName}}</p>
+    <label for="lastname">Last Name</label>
+    <input id="lastname" type="text" class="fortextbox" name="LastName" placeholder={{userdata.lastname}}
+           formControlName="LastName">
+    <br />
+
+    <label for="username">Username</label>
+    <input id="username" type="text" class="fortextbox" name="UserName" placeholder={{userdata.userName}} [value] ="userdata.userName"
+           formControlName="UserName">
+    <br />
 
     <label for="role">Group</label>
     <p>{{userdata.group}}</p>
 
-    <label for="company">Email</label>
-    <p>{{userdata.email}}</p>
+    <br />
+
+    <label for="email">Email</label>
+    <input id="email" type="text" class="fortextbox" name="Email" placeholder={{userdata.email}}
+           formControlName="Email">
+    <br />
 
     <label>Select lists you want this user to have access to:</label>
     <div><mat-checkbox>List1</mat-checkbox></div>
@@ -25,13 +36,7 @@
     <label for="subject">Notes</label>
     <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
 
-    <div class="buttons">
-      <div class="action_btn">
-        <button name="submit" class="action_btn submit" type="submit" value="Save" onclick="myFunction()">Save</button>
-        <button name="submit" class="action_btn edit" type="submit" value="Edit" onclick="myFunction2()">Edit</button>
-
-      </div>
-    </div>
+    <input type="submit" class="forsubmit" value="Submit">
 
   </form>
 </div>
