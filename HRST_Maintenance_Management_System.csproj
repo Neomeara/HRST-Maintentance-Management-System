@@ -9,6 +9,7 @@
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <RootNamespace>HRST_Maintenance_Management_System</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
+	  <TypeScriptExperimentalDecorators>True</TypeScriptExperimentalDecorators>
   </PropertyGroup>
 
   <ItemGroup>

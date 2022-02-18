@@ -78,9 +78,10 @@ export class TodoListPageComponent implements OnInit {
   public getDisplayFn() {
     return (val:User) => this.display(val);
   }
-  private display(user:User): string {
+  private display(user: User): string {
+
     //access component "this" here
-    return user ? user.email : user;
+    return user?.email ?? " ";
   }
   selectUser(user: User) {
     this.addListForm.get('userControl')?.setValue(user);
