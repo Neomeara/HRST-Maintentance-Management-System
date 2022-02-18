@@ -104,7 +104,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
             if (listResult.State == EntityState.Added)
             {
-                await _applicationDbContext.SaveChangesAsync();
+                _applicationDbContext.SaveChanges();
                 return CreatedAtAction(nameof(maintenanceList),new { id = maintenanceList.MaintenanceListId }, maintenanceList);
             }
             return BadRequest(listResult);
@@ -115,7 +115,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         [Route("deleteList")]
         [HttpDelete]
-        public async Task<ActionResult> deleteList(int id)
+        public async Task<ActionResult> DeleteList(int id)
         {
 
 
@@ -128,11 +128,11 @@ namespace HRST_Maintenance_Management_System.Controllers
             var result = _applicationDbContext.MaintenanceLists.Remove(list);
             if(result.State == EntityState.Deleted)
             {
-                await _applicationDbContext.SaveChangesAsync();
+                _applicationDbContext.SaveChanges();
                 
             }
           
-            return Ok(list);
+            return Ok();
 
         }
 

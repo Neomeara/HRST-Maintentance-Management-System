@@ -33,11 +33,13 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\Models\user.ts" />
+    <None Remove="ClientApp\src\app\todo-list-page\Dialogs\AddList\addListDialog.ts" />
     <None Remove="ClientApp\src\app\todo-list-page\mockLists.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\Models\user.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\todo-list-page\Dialogs\AddList\addListDialog.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\todo-list-page\mockLists.ts" />
   </ItemGroup>
 

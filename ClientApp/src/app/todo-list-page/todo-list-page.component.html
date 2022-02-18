@@ -1,41 +1,7 @@
+<div class="body">
 
-<!--<button (click) ="addList()">Add List</button>-->
-<form (ngSubmit)="formSubmit(addListForm.value)" [formGroup]="addListForm">
-  <mat-form-field>
-    <input type="text"
-           placeholder="Pick group"
-           aria-label="Number"
-           matInput
-           formControlName="groupControl"
-           [matAutocomplete]="groups">
-    <mat-autocomplete autoActiveFirstOption #groups="matAutocomplete">
-      <mat-option *ngFor="let group of allGroups$ | async" [value]="group">
-        {{group}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-  <mat-form-field>
-    <input type="text"
-           placeholder="Pick one"
-           aria-label="Number"
-           matInput
-           formControlName="userControl"
-           [matAutocomplete]="users">
-    <mat-autocomplete autoActiveFirstOption #users="matAutocomplete" [displayWith]="getDisplayFn()">
-      <mat-option *ngFor="let user of allUsers" [value]="user" (onSelect)="selectUser(user)">
-        {{user.email}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-    <input
-     type="text"
-      placeholder="title"
-           matInput
-           formControlName="titleControl"
-      />
-    <button type="submit">Add List</button>
-</form>
-<!--<input type="text" [(NgModel)]="title" />-->
+<button mat-raised-button (click)="openDialog()">Add List</button>
+
 
 <h2>My Lists</h2>
 <div class="listOfMaintenanceLists">
@@ -53,4 +19,5 @@
     </div>
     
   </div>
+</div>
 </div>

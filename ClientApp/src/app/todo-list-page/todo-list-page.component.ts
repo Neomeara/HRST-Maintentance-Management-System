@@ -1,16 +1,15 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-
-import { getBaseUrl } from '../../main';
-import { MaintenanceList, newList } from '../Models/MaintenanceList';
-import { User } from '../Models/user';
-import { DefaultUser, LISTS } from './mockLists';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
-import { FormControl, FormGroup } from '@angular/forms';
+import { MaintenanceList } from '../Models/MaintenanceList';
+import { User } from '../Models/user';
+import { addListDialog, DialogData } from './Dialogs/AddList/addListDialog';
 import { MaintenanceListService } from './maintenance-list.service';
+import { DefaultUser } from './mockLists';
+
+
 
 
 
@@ -24,13 +23,18 @@ export class TodoListPageComponent implements OnInit {
   private readonly _httpClient: HttpClient;
   private readonly _maintenaceListService: MaintenanceListService;
   private readonly _router: Router;
+  public addListData: DialogData = {lists:[], groups:[], users:[]};
 
-  constructor(private router: Router, httpClient:HttpClient, maintenaceListService: MaintenanceListService) {
+  //public readonly addListDialog: addListDialog;
+
+  constructor(private router: Router, httpClient: HttpClient, maintenaceListService: MaintenanceListService, public dialog: MatDialog) {
     this._router = router;
     this._httpClient = httpClient;
     this._maintenaceListService = maintenaceListService;
+    //this._addListData = addListData;
   }
 
+ 
 
   lists$: Observable<MaintenanceList[]> = of([]);
   lists: MaintenanceList[] = [];
@@ -40,28 +44,23 @@ export class TodoListPageComponent implements OnInit {
 
   allUsers: User[] = [ DefaultUser ];
 
-  addListForm = new FormGroup(
-    {
-      groupControl: new FormControl(""),
-      userControl: new FormControl(DefaultUser),
-      titleControl: new FormControl(""),
-
-    });
-  myControl3 = new FormControl();
-
-  groupName: string = "";
-
-  title: string = "";
-  ApplicationUser: User = DefaultUser;
-
 
 
   ngOnInit(): void {
 
-    this.lists$ = this._maintenaceListService.getLists();
+    //this.lists$ = this._maintenaceListService.getLists();
 
-    //this.lists$.subscribe(data => this.allGroups$ = of(data.map(g => g.group)));
-    this.allGroups$ = this.lists$.pipe(map(l => l.map(list => list.group)));
+    this._maintenaceListService.getLists().subscribe(a => {
+      this.lists$ = of(a);
+      this.addListData.lists = a;
+      this.addListData.groups = [... new Set(a.map(g => g.group))];
+      this.addListData.users = this.allUsers;
+    });
+
+    
+
+    this.addListData.groups = [... new Set(this.addListData.groups)];
+    
   }
 
 
@@ -70,20 +69,23 @@ export class TodoListPageComponent implements OnInit {
     let route = '/edit-list';
     this.router.navigate([route], { queryParams: { id: this.selectedList.maintenanceListId } });
   }
+  
 
-  formSubmit(data: any) {
-    this._maintenaceListService.addList(data.groupControl, data.titleControl, data.userControl);
-  }
+  openDialog(): void {
+ 
 
-  public getDisplayFn() {
-    return (val:User) => this.display(val);
-  }
-  private display(user:User): string {
-    //access component "this" here
-    return user ? user.email : user;
-  }
-  selectUser(user: User) {
-    this.addListForm.get('userControl')?.setValue(user);
+    const dialogRef = this.dialog.open(addListDialog, { width: '400px', height: '500px', data: this.addListData });
+
+    dialogRef.afterClosed().subscribe(result => {
+      
+      this._maintenaceListService.getLists().subscribe(a => {
+        this.lists$ = of(a);
+        this.addListData.lists = a;
+        this.addListData.groups = a.map(g => g.group);
+        this.addListData.users = this.allUsers;
+      });
+    });
+
   }
  
 

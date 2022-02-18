@@ -1,12 +1,10 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { newArray } from '@angular/compiler/src/util';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Router, Route, ActivatedRoute } from '@angular/router';
-import { getBaseUrl } from '../../../main';
-import { MaintenanceList, ListItem } from '../../Models/MaintenanceList';
-import { User } from '../../Models/user';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ListItem, MaintenanceList } from '../../Models/MaintenanceList';
+import { DeleteListDialogComponent } from '../Dialogs/delete-list-dialog/delete-list-dialog.component';
 import { MaintenanceListService } from '../maintenance-list.service';
-import { LISTS } from '../mockLists';
 
 @Component({
   selector: 'app-todo-list',
@@ -24,7 +22,12 @@ export class TodoListComponent implements OnInit {
   selectedItem?: ListItem;
 
 
-  constructor(private router: Router, private route: ActivatedRoute, httpClient:HttpClient, maintenanceListService: MaintenanceListService) {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    httpClient: HttpClient,
+    maintenanceListService: MaintenanceListService,
+    public dialog: MatDialog  ) {
     this._router = router;
     this._httpClient = httpClient;
     this._maintenaceListservice = maintenanceListService;
@@ -36,16 +39,20 @@ export class TodoListComponent implements OnInit {
       console.log(params);
       this.id = params.id;
       console.log(this.id);
+
+
     });
 
-    ////http get to database
-    //let params = new HttpParams();
-    //params = params.append('id', this.id);
-    //this._httpClient.get<MaintenanceList>(getBaseUrl() + 'api/lists/getList', { params: params }).subscribe(result => {
-    //  this.list = result;
-    //});
 
-    this._maintenaceListservice.getList(this.id).subscribe(data => this.list = data);
+    this._maintenaceListservice.getList(this.id).subscribe(data => {
+      if (data != null) {
+        this.list = data;
+      }
+      else {
+        this.router.navigate(['/todo-list']);
+      }
+    });
+    
   }
 
   selectItem(item: ListItem) {
@@ -53,5 +60,18 @@ export class TodoListComponent implements OnInit {
     let route = '/edit-list-item';
     this.router.navigate([route], { queryParams: { id: this.selectedItem.listItemId } });
   }
+
+  openDialog(): void {
+
+
+    const dialogRef = this.dialog.open(DeleteListDialogComponent, { width: '400px', height: '250px', data: this.list });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
+
+  }
+
+  
 
 }

@@ -1,0 +1,41 @@
+<h1 mat-dialog-title>Add New List</h1>
+<div mat-dialog-content>
+  <form (ngSubmit)="formSubmit(addListForm.value)" [formGroup]="addListForm">
+    <mat-form-field>
+      <input type="text"
+             placeholder="Pick group"
+             aria-label="Number"
+             matInput
+             formControlName="groupControl"
+             [matAutocomplete]="groups">
+      <mat-autocomplete autoActiveFirstOption #groups="matAutocomplete">
+        <mat-option *ngFor="let group of data.groups" [value]="group">
+          {{group}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text"
+             placeholder="Pick one"
+             aria-label="Number"
+             matInput
+             formControlName="userControl"
+             [matAutocomplete]="users">
+      <mat-autocomplete autoActiveFirstOption #users="matAutocomplete" [displayWith]="getDisplayFn()">
+        <mat-option *ngFor="let user of data.users" [value]="user" (onSelect)="selectUser(user)">
+          {{user.email}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+      <input
+       type="text"
+        placeholder="title"
+             matInput
+             formControlName="titleControl"
+        />
+      <button type="submit">Add List</button>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+</div>
