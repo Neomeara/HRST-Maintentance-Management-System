@@ -1,8 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { of, pipe } from 'rxjs';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 import { getBaseUrl } from '../../main';
 import { MaintenanceList, newList } from '../Models/MaintenanceList';
 import { User } from '../Models/user';
@@ -30,14 +28,11 @@ export class MaintenanceListService {
     return of(groups);
   }
 
-  public addList(groupName: string, title:string, ApplicationUser: User): any {
+  public  addList(groupName: string, title:string, ApplicationUser: User): Observable<any> {
     let list = newList(groupName, title, ApplicationUser);
 
-    let result;
-    this._httpClient.post<MaintenanceList>(getBaseUrl() + 'api/lists/newlist', list).subscribe(data => {
-      result = data;
-    })
-    return result;
+    return this._httpClient.post<MaintenanceList>(getBaseUrl() + 'api/lists/newlist', list, { observe: 'response' });
+    
   }
 
   public  getList(id: number) {
@@ -50,8 +45,13 @@ export class MaintenanceListService {
 
   }
 
-  public deleteList(id: number) {
-    this._httpClient.delete(getBaseUrl() + '/api/list/deleteList', {}).subscribe(data => { return data });
+  public  deleteList(id: number): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('id', id);
+    
+     return this._httpClient.delete(getBaseUrl() + 'api/lists/deleteList', { params: params, observe: 'response' })
+
+   
   }
 
 }
