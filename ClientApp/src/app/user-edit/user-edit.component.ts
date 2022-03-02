@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminPageComponent } from '../admin-page/admin-page.component'
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject } from '@angular/core';
 import { getBaseUrl } from '../../main';
 import { FormControl, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-user-edit',
@@ -22,9 +23,11 @@ export class UserEditComponent implements OnInit {
     });  formresult: any;
   private Http_: HttpClient;
   private baseurl_: string;
-  constructor(Http: HttpClient, @Inject('BASE_URL') getBaseUrl: string, private route: ActivatedRoute) {
+  private readonly router_:Router;
+  constructor(Http: HttpClient, @Inject('BASE_URL') getBaseUrl: string, private route: ActivatedRoute,router:Router) {
     this.Http_ = Http;
     this.baseurl_ = getBaseUrl;
+    this.router_ = router;
   }
   id: string ="";
   ngOnInit(): void {
@@ -44,8 +47,17 @@ export class UserEditComponent implements OnInit {
 
   }
   showSuccessAlert() {
-    Swal.fire('User Information Updated', '', 'success')
+    
+    Swal.fire('User Information Updated', '', 'success');
+    
+    this.redirectToAdminPage();
+  } 
+  redirectToAdminPage() {
+    setTimeout(() => {
+      this.router_.navigate(['admin-page'])
+    }, 2000);  
   }
+
   onClickSubmit(data: any) {
 
     let params = new HttpParams();
