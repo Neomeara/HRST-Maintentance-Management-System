@@ -91,5 +91,20 @@ namespace HRST_Maintenance_Management_System.Controllers
 
 
         }
+
+        [HttpGet]
+        [Route("editfirstnamelastname")]
+        public async Task<ActionResult<IEnumerable<ApplicationUser>>> Getusername(string username)
+        {
+            ApplicationUser user;
+            user =  _DbContext.Users.Where(x => x.Email == username).FirstOrDefault();
+            if (user == null)
+            {
+                return BadRequest();
+
+            }
+            return Ok(user);
+
+        }
     }
 }
