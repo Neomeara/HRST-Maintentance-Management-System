@@ -1,0 +1,65 @@
+<div *ngIf="newList === true; else elseBlock">
+  <h1>Add Item</h1>
+
+</div>
+<ng-template #elseBlock>
+  <div class="pageHeader">
+  <h1>Edit Item</h1>
+  <button mat-raised-button (click)="openDialog()">Delete Item</button>
+
+  </div>
+</ng-template>
+
+
+
+
+<form [formGroup]="listItemForm" (ngSubmit)="addItem(listItemForm.value)">
+  <mat-form-field>
+    <label for="NameInput">Name</label>
+    <input type="text" name="NameInput" formControlName="NameControl" matInput />
+  </mat-form-field>
+  <mat-form-field>
+    <label for="LocationInput">Location</label>
+    <input type="text" name="LocationInput" formControlName="LocationControl" matInput />
+  </mat-form-field>
+  <mat-form-field>
+    <label for="CostInput">Total Cost</label>
+    <input type="number" name="CostInput" formControlName="CostControl" matInput />
+  </mat-form-field>
+  <mat-form-field>
+    <label for="CostYearInput">Cost per Year</label>
+    <input type="number" name="CostYearInput" formControlName="CostYearControl" matInput />
+  </mat-form-field>
+  <mat-form-field>
+    <label for="MaintenanceIntervalInput">Maintenance Interval</label>
+    <input type="text" name="MaintenanceIntervalInput" formControlName="MaintenanceIntervalControl" matInput />
+  </mat-form-field>
+  <mat-form-field>
+    <label for="LastCompletedInput">Last Completed Date</label>
+    <input type="date" name="LastCompletedInput" formControlName="LastCompletedControl" matInput />
+  </mat-form-field>
+  <mat-form-field>
+    <label for="NextScheduledEventForcastedInput">Next Scheduled Event Forcasted</label>
+    <input type="date" name="NextScheduledEventForcastedInput" formControlName="NextScheduledEventForcastedControl" matInput />
+  </mat-form-field>
+  <mat-form-field>
+    <label for="NextScheduledEventPlannedInput">Next Schedule event planned</label>
+    <input type="date" name="NextScheduledEventPlannedInput" formControlName="NextScheduledEventPlannedControl" matInput />
+  </mat-form-field>
+  <mat-form-field>
+    <label for="YearsToDelayInput">Years to delay</label>
+    <input type="number" name="YearsToDelayInput" formControlName="YearsToDelayControl" matInput />
+  </mat-form-field>
+  <mat-form-field>
+    <label for="CommentsInput">Comments</label>
+    <input type="text" name="CommentsInput" formControlName="CommentsControl" matInput />
+  </mat-form-field>
+  <mat-form-field>
+    <label for="PicturesInput">Pictures</label>
+    <input type="text" name="PicturesInput" formControlName="PicturesControl" matInput />
+  </mat-form-field>
+
+  <button type="submit">Save</button>
+
+
+</form>

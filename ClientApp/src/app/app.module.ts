@@ -25,6 +25,8 @@ import { TodoListPageComponent } from './todo-list-page/todo-list-page.component
 import { TodoListComponent } from './todo-list-page/todo-list/todo-list.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { DeleteListDialogComponent } from './todo-list-page/Dialogs/delete-list-dialog/delete-list-dialog.component';
+import { EditListItemComponent } from './todo-list-page/edit-list-item/edit-list-item.component';
+import { DeleteListItemDialogComponent } from './todo-list-page/Dialogs/delete-list-item-dialog/delete-list-item-dialog.component';
 
 
 @NgModule({
@@ -41,7 +43,9 @@ import { DeleteListDialogComponent } from './todo-list-page/Dialogs/delete-list-
     ListItemComponent,
     FirstLastnameComponent,
     addListDialog,
-    DeleteListDialogComponent
+    DeleteListDialogComponent,
+    EditListItemComponent,
+    DeleteListItemDialogComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -58,8 +62,13 @@ import { DeleteListDialogComponent } from './todo-list-page/Dialogs/delete-list-
       {path : 'first-lastname' , component: FirstLastnameComponent},
 
       { path: 'todo-list', component: TodoListPageComponent },
+
       { path: 'edit-list', component: TodoListComponent },
-      { path: 'edit-list-item', component: ListItemComponent}
+      { path: 'edit-list/:listId', component: TodoListComponent },
+
+      { path: 'edit-list-item', component: EditListItemComponent},
+      { path: 'edit-list-item/:listId/:newList', component: EditListItemComponent},
+      { path: 'edit-list-item/:listId/:newList/:listItemId', component: EditListItemComponent}
     
     ]),
     BrowserAnimationsModule,

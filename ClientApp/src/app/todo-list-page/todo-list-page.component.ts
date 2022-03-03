@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { MaintenanceList } from '../Models/MaintenanceList';
 import { User } from '../Models/user';
-import { addListDialog, DialogData } from './Dialogs/AddList/addListDialog';
+import { addListDialog, AddListDialogData } from './Dialogs/AddList/addListDialog';
 import { MaintenanceListService } from './maintenance-list.service';
 import { DefaultUser } from './mockLists';
 
@@ -23,7 +23,7 @@ export class TodoListPageComponent implements OnInit {
   private readonly _httpClient: HttpClient;
   private readonly _maintenaceListService: MaintenanceListService;
   private readonly _router: Router;
-  public addListData: DialogData = {lists:[], groups:[], users:[]};
+  public addListData: AddListDialogData = {lists:[], groups:[], users:[]};
 
   //public readonly addListDialog: addListDialog;
 
@@ -67,7 +67,7 @@ export class TodoListPageComponent implements OnInit {
   onSelect(list: MaintenanceList): void {
     this.selectedList = list;
     let route = '/edit-list';
-    this.router.navigate([route], { queryParams: { id: this.selectedList.maintenanceListId } });
+    this.router.navigate([route, list.maintenanceListId]);
   }
   
 

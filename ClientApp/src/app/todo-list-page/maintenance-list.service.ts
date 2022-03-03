@@ -1,9 +1,11 @@
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { pipe } from 'rxjs';
 import { Observable, of } from 'rxjs';
 import { getBaseUrl } from '../../main';
-import { MaintenanceList, newList } from '../Models/MaintenanceList';
+import { MaintenanceList, newList, ListItem } from '../Models/MaintenanceList';
 import { User } from '../Models/user';
+import { defaultList, DefaultUser } from './mockLists';
 
 @Injectable({
   providedIn: 'root'
@@ -37,10 +39,7 @@ export class MaintenanceListService {
 
   public  getList(id: number) {
     //http get to database
-    let list: any;
-    let params = new HttpParams();
-    params = params.append('id', id);
-    return this._httpClient.get<MaintenanceList>(getBaseUrl() + 'api/lists/getList', { params: params });
+    return this._httpClient.get<MaintenanceList>(getBaseUrl() + 'api/lists/getlist/' + id.toString());
     
 
   }
@@ -52,6 +51,53 @@ export class MaintenanceListService {
      return this._httpClient.delete(getBaseUrl() + 'api/lists/deleteList', { params: params, observe: 'response' })
 
    
+  }
+
+  public addListItem(data: any, listId: number):Observable<any> {
+
+    let list: MaintenanceList = defaultList;
+    this.getList(listId).subscribe((ml) => { list = ml });
+    
+    let newItem: ListItem = {
+      maintenanceListId: 43,
+      maintenanceList: list,
+      listItemId: 0,
+      name: data.NameControl,
+      location: {
+        locationId: 0,
+        name: data.LocationControl
+      },
+      cost: data.CostControl,
+      costYear: data.CostYearControl,
+      maintenanceSchedule: {
+        maintenanceScheduleId: 0,
+        maintenanceInterval: data.MaintenanceIntervalControl,
+        lastCompleted: data.LastCompletedControl,
+        nextScheduledEventForcasted: data.NextScheduledEventForcastedControl,
+        nextScheduledEventPlanned: data.NextScheduledEventPlannedControl,
+        yearsToDelay: data.YearsToDelayControl,
+      },
+
+      comments: data.CommentsControl,
+      pictures: []
+    };
+
+    return this._httpClient.post<ListItem>(getBaseUrl() + 'api/lists/addItem', newItem, { observe: 'response' });
+  }
+
+  public deleteListItem(id: number): Observable<any> {
+    console.log(id);
+    let params = new HttpParams();
+    params = params.append('id', id);
+
+    
+
+    return this._httpClient.delete(getBaseUrl() + 'api/lists/deleteItem', { params: params, observe: 'response' });
+
+  }
+
+  public getListItem(id: number): Observable<any> {
+    return this._httpClient.get(getBaseUrl() + 'api/lists/getListItem/' + id.toString());
   }
 
 }

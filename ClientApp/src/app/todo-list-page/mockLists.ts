@@ -16,7 +16,16 @@ export const DefaultUser: User = {
 export const listitem1: ListItem = {
   listItemId: 1,
   maintenanceListId: 1,
-  //MaintenanceList: LISTS[0],
+  maintenanceList: {
+    maintenanceListId: 0,
+    title: "",
+    applicationUser: DefaultUser,
+    applicationUserId: "",
+    group: "HRST",
+    creationDate: new Date(),
+    lastEditDate: new Date(),
+    listItems: [],
+  },
   name: "item 1",
   location: {
     locationId: 1,
@@ -38,16 +47,29 @@ export const listitem1: ListItem = {
 
 }
 
+export const defaultList: MaintenanceList =
+  {
+    maintenanceListId: 0,
+    title: "",
+    applicationUser: DefaultUser,
+    applicationUserId: "",
+    group: "HRST",
+    creationDate: new Date(),
+    lastEditDate: new Date(),
+    listItems: []
+  }
+
 export const LISTS: MaintenanceList[] = [
-//{
-//  maintenanceListId: 0,
-//  applicationUser: DefaultUser,
-//  group: "HRST",
-//  creationDate: new Date(),
-//  lastEditDate: new Date(),
-//    listItems: [listitem1, listitem1, listitem1
-//    ]
-//  },
+{
+    maintenanceListId: 0,
+  title: "",
+    applicationUser: DefaultUser,
+  applicationUserId: "",
+  group: "HRST",
+  creationDate: new Date(),
+  lastEditDate: new Date(),
+    listItems: []
+  },
 //  {
 //    maintenanceListId: 1,
 //    applicationUser: DefaultUser,

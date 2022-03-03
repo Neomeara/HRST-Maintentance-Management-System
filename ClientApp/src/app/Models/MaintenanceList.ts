@@ -15,7 +15,7 @@ export interface MaintenanceList {
 
 export interface ListItem {
   listItemId: number,
-  //MaintenanceList: MaintenanceList,
+  maintenanceList: MaintenanceList,
   maintenanceListId: number,
   name: string,
   location: Location,

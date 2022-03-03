@@ -7,7 +7,7 @@ import { MaintenanceListService } from '../../maintenance-list.service';
 import { DefaultUser } from '../../mockLists';
 
 
-export interface DialogData {
+export interface AddListDialogData {
   lists: MaintenanceList[];
   groups: string[];
   users: User[];
@@ -30,7 +30,7 @@ export class addListDialog {
   constructor(
     public dialogRef: MatDialogRef<addListDialog>,
     maintenanceListService: MaintenanceListService,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData  ) {
+    @Inject(MAT_DIALOG_DATA) public data: AddListDialogData  ) {
     this._maintenaceListService = maintenanceListService;
   }
 
