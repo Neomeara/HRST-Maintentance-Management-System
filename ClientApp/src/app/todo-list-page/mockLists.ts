@@ -1,15 +1,19 @@
 import { MaintenanceList, ListItem } from '../Models/MaintenanceList';
-import { User } from '../Models/user';
+import { Group, User } from '../Models/user';
 import { MaintenanceListService } from './maintenance-list.service';
 
 
-
+export const defaultGroup: Group={
+  GroupId: 1,
+Name: "NewGroup",
+Domain: "NewDomain"
+}
 export const DefaultUser: User = {
   id: "1",
   firstName: "FirstName",
   lastName: "LastName",
   email: "Default@default.com",
-  group: "group"
+  group: defaultGroup
 
 }
 

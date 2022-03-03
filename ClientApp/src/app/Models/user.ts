@@ -3,5 +3,10 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
-  group: string;
+  group: Group;
+}
+export interface Group {
+  GroupId: number;
+  Name: string;
+  Domain: string;
 }

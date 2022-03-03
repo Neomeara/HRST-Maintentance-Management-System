@@ -15,7 +15,7 @@ namespace HRST_Maintenance_Management_System.Models
 
         public string Title { get; set; }
 
-        public string Group { get; set; } = "";
+        public Group Group { get; set; } = new Group();
         public List<ListItem> ListItems { get; set; } = new List<ListItem> { };
         public DateTime CreationDate { get; set; }
         public DateTime LastEditDate { get; set; }

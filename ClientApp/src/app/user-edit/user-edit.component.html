@@ -14,12 +14,13 @@
     <br />
 
     <label for="username">Username</label>
-    <input id="username" type="text" class="fortextbox" name="UserName" placeholder={{userdata.userName}} [value] ="userdata.userName"
+    <input id="username" type="text" class="fortextbox" name="UserName" placeholder={{userdata.userName}} [value]="userdata.userName"
            formControlName="UserName">
     <br />
 
-    <label for="role">Group</label>
-    <p>{{userdata.group}}</p>
+    <label for="group">Group</label>
+    <input id="group" type="text" class="fortextbox" name="Group" placeholder="group name"[value]="userdata.group.name"
+           formControlName="Group">
 
     <br />
 
@@ -29,14 +30,14 @@
     <br />
 
     <!--<label>Select lists you want this user to have access to:</label>
-    <div><mat-checkbox>List1</mat-checkbox></div>
-    <div><mat-checkbox>List2</mat-checkbox></div>
+  <div><mat-checkbox>List1</mat-checkbox></div>
+  <div><mat-checkbox>List2</mat-checkbox></div>
 
 
-    <label for="subject">Notes</label>
-    <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>-->
+  <label for="subject">Notes</label>
+  <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>-->
 
     <input type="submit" class="forsubmit" value="Submit">
-
+    <button (click)="deleteUser()">Delete User </button>
   </form>
 </div>

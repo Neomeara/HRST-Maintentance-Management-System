@@ -19,6 +19,7 @@ namespace HRST_Maintenance_Management_System.Data
         public DbSet<Picture> Pictures { get; set;}
         public DbSet<Location> Locations { get; set;}
         public DbSet<MaintenanceSchedule> Schedules { get; set;}
-       
+        public DbSet<Group> Groups { get; set; }
+
     }
 }
