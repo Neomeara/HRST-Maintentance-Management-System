@@ -1,21 +1,20 @@
 <div>
   <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
-    <label for="email">Email</label>
-    <input id="email" type="text" class="fortextbox" name="Email" placeholder="email"
-           formControlName="Email">
-    <br />
+    <h1>Hello {{userdata.email}}</h1>
+    <!--<input id="email" type="text" class="fortextbox" name="Email" placeholder={{userdata.email}}
+           formControlName="Email" readonly>-->
     <label for="username">Username</label>
-    <input id="username" type="text" class="fortextbox" name="UserName" placeholder="username"
+    <input id="username" type="text" class="fortextbox" name="UserName" placeholder={{userdata.userName}}
            formControlName="UserName">
     <br />
 
     <label for="firstname">First Name</label>
-    <input id="firstname" type="text" class="fortextbox" name="FirstName" placeholder="First Name"
+    <input id="firstname" type="text" class="fortextbox" name="FirstName" placeholder={{userdata.fistname}}
            formControlName="FirstName">
     <br />
 
     <label for="lastname">Last Name</label>
-    <input id="lastname" type="text" class="fortextbox" name="LastName" placeholder="Last Name"
+    <input id="lastname" type="text" class="fortextbox" name="LastName" placeholder={{userdata.lastname}}
            formControlName="LastName">
     <br />
 
