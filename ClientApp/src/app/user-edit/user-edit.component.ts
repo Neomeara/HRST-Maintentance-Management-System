@@ -6,6 +6,7 @@ import { Inject } from '@angular/core';
 import { getBaseUrl } from '../../main';
 import { FormControl, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { UserServiceService } from '../user-service.service';
 
 
 @Component({
@@ -19,15 +20,18 @@ export class UserEditComponent implements OnInit {
       Email: new FormControl(),
       UserName: new FormControl(),
       FirstName: new FormControl(),
-      LastName: new FormControl()
+      LastName: new FormControl(),
+      Group:new FormControl()
     });  formresult: any;
   private Http_: HttpClient;
   private baseurl_: string;
-  private readonly router_:Router;
-  constructor(Http: HttpClient, @Inject('BASE_URL') getBaseUrl: string, private route: ActivatedRoute,router:Router) {
+  private readonly router_: Router;
+  private readonly _userService: UserServiceService;
+  constructor(Http: HttpClient, @Inject('BASE_URL') getBaseUrl: string, private route: ActivatedRoute, router: Router, userService: UserServiceService) {
     this.Http_ = Http;
     this.baseurl_ = getBaseUrl;
     this.router_ = router;
+    this._userService = userService;
   }
   id: string ="";
   ngOnInit(): void {
@@ -41,7 +45,7 @@ export class UserEditComponent implements OnInit {
     this.Http_.get<any>(this.baseurl_ + 'api/users/edituser', { params: params }).subscribe(result => {
       this.userdata = result;
       console.log(result);
-      this.formdata.setValue({ Email: this.userdata.email, UserName: this.userdata.userName, FirstName: this.userdata.firstname, LastName: this.userdata.lastname });
+      this.formdata.setValue({ Email: this.userdata.email, UserName: this.userdata.userName, FirstName: this.userdata.firstname, LastName: this.userdata.lastname,Group:this.userdata.group.name });
 
     }, error => console.error(error));
 
@@ -59,7 +63,6 @@ export class UserEditComponent implements OnInit {
   }
 
   onClickSubmit(data: any) {
-
     let params = new HttpParams();
     params = params.append('id', this.id);
     this.Http_.put<any>(this.baseurl_ + 'api/users/updateuser2', data, {params: params}).subscribe(result => {
@@ -67,6 +70,15 @@ export class UserEditComponent implements OnInit {
       console.log(result);
     }, error => console.error(error));
     this.showSuccessAlert();
+  }
+
+  deleteUser() {
+    this._userService.deleteUser(this.id).subscribe(() => {
+
+      this.router_.navigate(['/admin-page']);
+    });
+
+
   }
 
 

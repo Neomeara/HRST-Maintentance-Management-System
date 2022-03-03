@@ -30,7 +30,8 @@ namespace HRST_Maintenance_Management_System.Controllers
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> Get()
         {
             IEnumerable<ApplicationUser> user;
-            user = await _DbContext.Users.ToListAsync();
+            
+            user = await _DbContext.Users.Include(x=> x.Group).ToListAsync();
             return Ok(user);
 
         }
@@ -41,7 +42,7 @@ namespace HRST_Maintenance_Management_System.Controllers
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> Get(string id)
         {
             ApplicationUser user;
-            user = await _DbContext.Users.FindAsync(id);
+            user = await _DbContext.Users.Include(i=> i.Group ).FirstOrDefaultAsync(i=> i.Id == id);
             if (user == null)
             {
                 return BadRequest();
@@ -67,6 +68,29 @@ namespace HRST_Maintenance_Management_System.Controllers
             user.firstname = model.FirstName;
             user.lastname = model.LastName;
             _DbContext.SaveChanges();
+            string domain = user.Email.Substring(user.Email.IndexOf('@'));
+            string pt1 = user.Email.Substring(user.Email.IndexOf('@') + 1);
+            string pt2 = pt1.Substring(pt1.IndexOf('.'));
+            string name = pt1.Replace(pt2, "");
+            Group group = _DbContext.Groups.Where(y => y.Domain == domain).FirstOrDefault();
+            if (domain == null)
+            {
+                return BadRequest();
+            }
+            if (group == null)
+            {
+                Group newgroup = new Group();
+                newgroup.Domain = domain;
+                newgroup.Name = name;
+                user.Group = newgroup;
+                _DbContext.Groups.Add(newgroup);
+                _DbContext.SaveChanges();
+            }
+            else
+            {
+                user.Group = group;
+
+            }
             return Ok(user);
         }
 
@@ -87,9 +111,10 @@ namespace HRST_Maintenance_Management_System.Controllers
             user.lastname = model.LastName;
             user.Email = model.Email;
             _DbContext.SaveChanges();
+
+
+
             return Ok(user);
-
-
         }
 
         [HttpGet]
@@ -103,8 +128,34 @@ namespace HRST_Maintenance_Management_System.Controllers
                 return BadRequest();
 
             }
+
             return Ok(user);
 
+
+
+        }
+
+
+        [Route("deleteUser")]
+        [HttpDelete]
+        public async Task<ActionResult> DeleteUser(string id)
+        {
+
+
+            ApplicationUser user;
+            user = await _DbContext.Users.FindAsync(id);
+            if (user == null)
+            {
+                return BadRequest();
+
+            }
+            var result = _DbContext.Users.Remove(user);
+            if (result.State == EntityState.Deleted)
+            {
+                _DbContext.SaveChanges();
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }
