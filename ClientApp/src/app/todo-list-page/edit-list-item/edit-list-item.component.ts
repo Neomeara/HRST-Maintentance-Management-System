@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ListItem } from '../../Models/MaintenanceList';
-import { DeleteListItemDialogComponent, DeleteListItemDialogData } from '../Dialogs/delete-list-item-dialog/delete-list-item-dialog.component';
+import { DeleteListItemDialogComponent } from '../Dialogs/delete-list-item-dialog/delete-list-item-dialog.component';
 import { MaintenanceListService } from '../maintenance-list.service';
 
 @Component({

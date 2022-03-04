@@ -7,6 +7,7 @@ import { getBaseUrl } from '../../main';
 import { FormControl, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { UserServiceService } from '../user-service.service';
+import { User } from '../Models/user';
 
 
 @Component({
@@ -15,36 +16,37 @@ import { UserServiceService } from '../user-service.service';
   styleUrls: ['./user-edit.component.css']
 })
 export class UserEditComponent implements OnInit {
-  public userdata: any = {};
+  public userdata?: User;
+
     formdata = new FormGroup({
       Email: new FormControl(),
       UserName: new FormControl(),
       FirstName: new FormControl(),
       LastName: new FormControl(),
       Group:new FormControl()
-    });  formresult: any;
+    }); formresult: any;
+
+  private id: string ="";
   private Http_: HttpClient;
   private baseurl_: string;
   private readonly router_: Router;
-  private readonly _userService: UserServiceService;
-  constructor(Http: HttpClient, @Inject('BASE_URL') getBaseUrl: string, private route: ActivatedRoute, router: Router, userService: UserServiceService) {
+
+  constructor(Http: HttpClient, @Inject('BASE_URL') getBaseUrl: string, private route: ActivatedRoute, router: Router, private userService: UserServiceService) {
     this.Http_ = Http;
     this.baseurl_ = getBaseUrl;
     this.router_ = router;
-    this._userService = userService;
   }
-  id: string ="";
   ngOnInit(): void {
+    // get the query params
     this.route.queryParams.subscribe(params => {
       console.log(params);
       this.id = params.id;
       console.log(this.id);
     });
-    let params = new HttpParams();
-    params = params.append('id', this.id);
-    this.Http_.get<any>(this.baseurl_ + 'api/users/edituser', { params: params }).subscribe(result => {
+
+    // get the user data
+   this.userService.getUser(this.id).subscribe(result => {
       this.userdata = result;
-      console.log(result);
       this.formdata.setValue({ Email: this.userdata.email, UserName: this.userdata.userName, FirstName: this.userdata.firstname, LastName: this.userdata.lastname,Group:this.userdata.group.name });
 
     }, error => console.error(error));
@@ -73,7 +75,7 @@ export class UserEditComponent implements OnInit {
   }
 
   deleteUser() {
-    this._userService.deleteUser(this.id).subscribe(() => {
+    this.userService.deleteUser(this.id).subscribe(() => {
 
       this.router_.navigate(['/admin-page']);
     });

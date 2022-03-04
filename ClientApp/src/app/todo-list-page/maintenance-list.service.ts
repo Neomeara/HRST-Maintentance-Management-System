@@ -4,7 +4,7 @@ import { pipe } from 'rxjs';
 import { Observable, of } from 'rxjs';
 import { getBaseUrl } from '../../main';
 import { MaintenanceList, newList, ListItem } from '../Models/MaintenanceList';
-import { User } from '../Models/user';
+import { Group, User } from '../Models/user';
 import { defaultList, DefaultUser } from './mockLists';
 
 @Injectable({
@@ -26,11 +26,11 @@ export class MaintenanceListService {
   public getGroups(): Observable<string[]> {
     let groups: string[] = [];
     
-    this.getLists().subscribe(data => groups= data.map(g => g.group));
+    this.getLists().subscribe(data => groups= data.map(g => g.group.name));
     return of(groups);
   }
 
-  public  addList(groupName: string, title:string, ApplicationUser: User): Observable<any> {
+  public  addList(groupName: Group, title:string, ApplicationUser: User): Observable<any> {
     let list = newList(groupName, title, ApplicationUser);
 
     return this._httpClient.post<MaintenanceList>(getBaseUrl() + 'api/lists/newlist', list, { observe: 'response' });
@@ -59,7 +59,7 @@ export class MaintenanceListService {
     this.getList(listId).subscribe((ml) => { list = ml });
     
     let newItem: ListItem = {
-      maintenanceListId: 43,
+      maintenanceListId: listId,
       maintenanceList: list,
       listItemId: 0,
       name: data.NameControl,

@@ -2,14 +2,14 @@ import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaintenanceList } from '../../../Models/MaintenanceList';
-import { User } from '../../../Models/user';
+import { Group, User } from '../../../Models/user';
 import { MaintenanceListService } from '../../maintenance-list.service';
-import { DefaultUser } from '../../mockLists';
+import { defaultGroup, DefaultUser } from '../../mockLists';
 
 
 export interface AddListDialogData {
   lists: MaintenanceList[];
-  groups: string[];
+  groups: Group[];
   users: User[];
 }
 
@@ -21,8 +21,8 @@ export class addListDialog {
   private _maintenaceListService: MaintenanceListService;
   addListForm = new FormGroup(
     {
-      groupControl: new FormControl(""),
-      userControl: new FormControl(DefaultUser),
+      groupControl: new FormControl(),
+      userControl: new FormControl(),
       titleControl: new FormControl(""),
 
     });
@@ -32,6 +32,7 @@ export class addListDialog {
     maintenanceListService: MaintenanceListService,
     @Inject(MAT_DIALOG_DATA) public data: AddListDialogData  ) {
     this._maintenaceListService = maintenanceListService;
+
   }
 
   formSubmit(data: any) {
@@ -41,10 +42,13 @@ export class addListDialog {
     
   }
 
-  public getDisplayFn() {
-    return (val: User) => this.display(val);
+  // Select and submit full user object
+  public getUserDisplayFn() {
+    return (val: User) => this.userDisplay(val);
   }
-  private display(user: User): string {
+
+
+  private userDisplay(user: User): string {
     //access component "this" here
     return user ? user.email : user;
   }
@@ -52,8 +56,22 @@ export class addListDialog {
     this.addListForm.get('userControl')?.setValue(user);
   }
 
+
+  // select and submit full group object
+  public getGroupDisplayFn() {
+    return (val: Group) => this.groupDisplay(val);
+  }
+
+  private groupDisplay(group: Group): string {
+    //access component "this" here
+    return group ? group.name : group;
+  }
+  selectGroup(group: Group) {
+    this.addListForm.get('groupControl')?.setValue(group);
+  }
+
   onNoClick(): void {
-    this.dialogRef.close("exit");
+    this.dialogRef.close("cancel");
   }
 
 

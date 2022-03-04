@@ -28,7 +28,7 @@ namespace HRST_Maintenance_Management_System.Controllers
         public async Task<ActionResult<IEnumerable<MaintenanceList>>> getAllLists()
         {
             IEnumerable<MaintenanceList> lists;
-            lists = await _applicationDbContext.MaintenanceLists.Where(list => list != null).Include(user => user.ApplicationUser).ToListAsync();
+            lists = await _applicationDbContext.MaintenanceLists.Where(list => list != null).Include(user => user.ApplicationUser).Include(user => user.Group).ToListAsync();
          
             return Ok(lists);
         }

@@ -4,16 +4,18 @@ import { MaintenanceListService } from './maintenance-list.service';
 
 
 export const defaultGroup: Group={
-  GroupId: 1,
-Name: "NewGroup",
-Domain: "NewDomain"
+  groupId: 1,
+name: "NewGroup",
+domain: "NewDomain"
 }
 export const DefaultUser: User = {
   id: "1",
-  firstName: "FirstName",
-  lastName: "LastName",
+  firstname: "FirstName",
+  lastname: "LastName",
   email: "Default@default.com",
-  group: defaultGroup
+  group: defaultGroup,
+  maintenanceLists: [],
+  userName: "userName"
 
 }
 
@@ -25,7 +27,7 @@ export const listitem1: ListItem = {
     title: "",
     applicationUser: DefaultUser,
     applicationUserId: "",
-    group: "HRST",
+    group: defaultGroup,
     creationDate: new Date(),
     lastEditDate: new Date(),
     listItems: [],
@@ -57,7 +59,7 @@ export const defaultList: MaintenanceList =
     title: "",
     applicationUser: DefaultUser,
     applicationUserId: "",
-    group: "HRST",
+    group: defaultGroup,
     creationDate: new Date(),
     lastEditDate: new Date(),
     listItems: []
@@ -69,7 +71,7 @@ export const LISTS: MaintenanceList[] = [
   title: "",
     applicationUser: DefaultUser,
   applicationUserId: "",
-  group: "HRST",
+  group: defaultGroup,
   creationDate: new Date(),
   lastEditDate: new Date(),
     listItems: []

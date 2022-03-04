@@ -4,11 +4,7 @@ import { Router } from '@angular/router';
 import { ListItem } from '../../../Models/MaintenanceList';
 import { MaintenanceListService } from '../../maintenance-list.service';
 
-export interface DeleteListItemDialogData {
-  listId: number,
-  item: ListItem
-  
-}
+
 
 @Component({
   selector: 'app-delete-list-item-dialog',
