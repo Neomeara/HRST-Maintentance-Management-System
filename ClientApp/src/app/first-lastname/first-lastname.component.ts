@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { AuthorizeService } from '../../api-authorization/authorize.service';
+import { defaultGroup } from '../todo-list-page/mockLists';
 
 @Component({
   selector: 'app-first-lastname',
@@ -60,7 +61,7 @@ export class FirstLastnameComponent implements OnInit {
     Swal.fire('User Information Updated!', '', 'success')
   }
   onClickSubmit(data: any) {
-    
+    data.group = defaultGroup;
     this.Http_.put<any>(this.baseurl_ + 'api/users/updateuser',data).subscribe(result => {
       this.formresult = result;
       

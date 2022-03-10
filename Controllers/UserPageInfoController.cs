@@ -57,17 +57,13 @@ namespace HRST_Maintenance_Management_System.Controllers
         public async Task<ActionResult>UpdateUser(UpdateUser model)
         {
             ApplicationUser user;
+            ApplicationUser user2;
             user =  await _DbContext.Users.SingleOrDefaultAsync(x=> x.Email == model.Email);
             if (user == null)
             {
                 return BadRequest();
 
             }
-            
-            user.UserName = model.UserName;
-            user.firstname = model.FirstName;
-            user.lastname = model.LastName;
-            _DbContext.SaveChanges();
             string domain = user.Email.Substring(user.Email.IndexOf('@'));
             string pt1 = user.Email.Substring(user.Email.IndexOf('@') + 1);
             string pt2 = pt1.Substring(pt1.IndexOf('.'));
@@ -77,6 +73,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             {
                 return BadRequest();
             }
+
             if (group == null)
             {
                 Group newgroup = new Group();
@@ -91,6 +88,17 @@ namespace HRST_Maintenance_Management_System.Controllers
                 user.Group = group;
 
             }
+            user2 = await _DbContext.Users.FirstOrDefaultAsync(x => x.UserName == model.UserName);
+            if (user2 != null && user2.Id != user.Id)
+            {
+                return BadRequest("hello");
+            }
+            
+            user.UserName = model.UserName;
+            user.firstname = model.FirstName;
+            user.lastname = model.LastName;
+            _DbContext.SaveChanges();
+
             return Ok(user);
         }
 
@@ -110,9 +118,8 @@ namespace HRST_Maintenance_Management_System.Controllers
             user.firstname = model.FirstName;
             user.lastname = model.LastName;
             user.Email = model.Email;
+            user.Group = model.group;
             _DbContext.SaveChanges();
-
-
 
             return Ok(user);
         }
