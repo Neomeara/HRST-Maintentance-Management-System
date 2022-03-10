@@ -2,10 +2,10 @@ import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { pipe } from 'rxjs';
 import { Observable, of } from 'rxjs';
-import { getBaseUrl } from '../../main';
-import { MaintenanceList, newList, ListItem } from '../Models/MaintenanceList';
-import { Group, User } from '../Models/user';
-import { defaultList, DefaultUser } from './mockLists';
+import { getBaseUrl } from '../../../main';
+import { ListItem, MaintenanceList, newList } from '../../Models/MaintenanceList';
+import { Group, User } from '../../Models/user';
+import { defaultList } from '../../todo-list-page/mockLists';
 
 @Injectable({
   providedIn: 'root'
@@ -99,5 +99,11 @@ export class MaintenanceListService {
   public getListItem(id: number): Observable<any> {
     return this._httpClient.get(getBaseUrl() + 'api/lists/getListItem/' + id.toString());
   }
+
+  public editItem(item: ListItem): Observable<ListItem> {
+    return this._httpClient.put<ListItem>(getBaseUrl() + 'api/lists/editItem', item);
+  }
+
+  
 
 }

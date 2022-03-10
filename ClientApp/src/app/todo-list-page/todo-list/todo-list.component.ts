@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ListItem, MaintenanceList } from '../../Models/MaintenanceList';
+import { MaintenanceListService } from '../../Services/MaintenanceList/maintenance-list.service';
 import { DeleteListDialogComponent } from '../Dialogs/delete-list-dialog/delete-list-dialog.component';
-import { MaintenanceListService } from '../maintenance-list.service';
 
 @Component({
   selector: 'app-todo-list',

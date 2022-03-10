@@ -5,7 +5,7 @@ import { getBaseUrl } from '../../main';
 import { HttpClient } from '@angular/common/http';
 import { Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserServiceService } from '../user-service.service';
+import { UserServiceService } from '../Services/Users/user-service.service';
 
 
 @Component({

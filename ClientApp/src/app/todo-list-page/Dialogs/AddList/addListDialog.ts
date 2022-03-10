@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaintenanceList } from '../../../Models/MaintenanceList';
 import { Group, User } from '../../../Models/user';
-import { MaintenanceListService } from '../../maintenance-list.service';
+import { MaintenanceListService } from '../../../Services/MaintenanceList/maintenance-list.service';
 import { defaultGroup, DefaultUser } from '../../mockLists';
 
 

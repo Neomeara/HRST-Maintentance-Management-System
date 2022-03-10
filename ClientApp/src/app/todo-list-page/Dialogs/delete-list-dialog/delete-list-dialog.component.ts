@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MaintenanceList } from '../../../Models/MaintenanceList';
-import { MaintenanceListService } from '../../maintenance-list.service';
+import { MaintenanceListService } from '../../../Services/MaintenanceList/maintenance-list.service';
 
 @Component({
   selector: 'app-delete-list-dialog',

@@ -1,13 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { AdminPageComponent } from '../admin-page/admin-page.component'
-import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Inject } from '@angular/core';
-import { getBaseUrl } from '../../main';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { UserServiceService } from '../user-service.service';
 import { User } from '../Models/user';
+import { UserServiceService } from '../Services/Users/user-service.service';
 
 
 @Component({
@@ -47,7 +44,7 @@ export class UserEditComponent implements OnInit {
     // get the user data
    this.userService.getUser(this.id).subscribe(result => {
       this.userdata = result;
-      this.formdata.setValue({ Email: this.userdata.email, UserName: this.userdata.userName, FirstName: this.userdata.firstname, LastName: this.userdata.lastname,Group:this.userdata.group.name });
+     this.formdata.setValue({ Email: result.email, UserName: result.userName, FirstName: result.firstname, LastName: result.lastname, Group: result.group.name });
 
     }, error => console.error(error));
 

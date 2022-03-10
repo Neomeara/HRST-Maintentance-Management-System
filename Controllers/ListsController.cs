@@ -60,7 +60,11 @@ namespace HRST_Maintenance_Management_System.Controllers
         public async Task<ActionResult<IEnumerable<MaintenanceList>>> getListItem(int id)
         {
             ListItem item;
-            item = await _applicationDbContext.ListItems.FindAsync(id);
+            item = await _applicationDbContext.ListItems.Where(i => i.ListItemId == id)
+                .Include(i => i.MaintenanceList).ThenInclude(ml => ml.ApplicationUser)
+                .Include(i => i.Location)
+                .Include(i => i.MaintenanceSchedule)
+                .SingleOrDefaultAsync();
             if (item == null)
             {
                 return BadRequest();
@@ -129,6 +133,25 @@ namespace HRST_Maintenance_Management_System.Controllers
             }
             return BadRequest(result);
 
+        }
+
+        [HttpPut]
+        [Route("editItem")]
+        public async Task<ActionResult<ListItem>> EditItem(ListItem item)
+        {
+            //ListItem currentItem = await _applicationDbContext.ListItems.Where(i => i.ListItemId == item.ListItemId)
+            //    .Include(i => i.MaintenanceList).ThenInclude(ml=>ml.ApplicationUser)
+            //    .Include(i => i.Location)
+            //    .Include(i => i.MaintenanceSchedule)
+            //    .SingleOrDefaultAsync();
+            ListItem currentItem = await _applicationDbContext.ListItems.FindAsync(item.ListItemId);
+            if(currentItem != null)
+            {
+                currentItem = item;
+                _applicationDbContext.SaveChanges();
+                return(Ok());
+            }
+            return BadRequest(new { id = item.ListItemId });
         }
 
 

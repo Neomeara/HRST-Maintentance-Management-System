@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { getBaseUrl } from '../main';
-import { User } from './Models/user';
+import { getBaseUrl } from '../../../main';
+import { User } from '../../Models/user';
 
 @Injectable({
   providedIn: 'root'

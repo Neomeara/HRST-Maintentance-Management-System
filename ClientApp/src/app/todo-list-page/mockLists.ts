@@ -1,6 +1,5 @@
 import { MaintenanceList, ListItem } from '../Models/MaintenanceList';
 import { Group, User } from '../Models/user';
-import { MaintenanceListService } from './maintenance-list.service';
 
 
 export const defaultGroup: Group={

@@ -2,13 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MaintenanceList } from '../Models/MaintenanceList';
-import { Group, User } from '../Models/user';
-import { UserServiceService } from '../user-service.service';
+import { User } from '../Models/user';
+import { MaintenanceListService } from '../Services/MaintenanceList/maintenance-list.service';
+import { UserServiceService } from '../Services/Users/user-service.service';
 import { addListDialog, AddListDialogData } from './Dialogs/AddList/addListDialog';
-import { MaintenanceListService } from './maintenance-list.service';
-import { DefaultUser } from './mockLists';
 
 
 

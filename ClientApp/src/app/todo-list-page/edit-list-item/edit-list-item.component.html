@@ -13,7 +13,7 @@
 
 
 
-<form [formGroup]="listItemForm" (ngSubmit)="addItem(listItemForm.value)">
+<form [formGroup]="listItemForm" (ngSubmit)="submit(listItemForm.value)">
   <mat-form-field>
     <label for="NameInput">Name</label>
     <input type="text" name="NameInput" formControlName="NameControl" matInput />
@@ -58,7 +58,7 @@
     <label for="PicturesInput">Pictures</label>
     <input type="text" name="PicturesInput" formControlName="PicturesControl" matInput />
   </mat-form-field>
-
+ 
   <button type="submit">Save</button>
 
 
