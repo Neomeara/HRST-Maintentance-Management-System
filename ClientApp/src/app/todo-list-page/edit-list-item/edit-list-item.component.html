@@ -1,11 +1,18 @@
 <div *ngIf="newList === true; else elseBlock">
   <h1>Add Item</h1>
+  <button mat-raised-button (click)="backToList()">View List</button>
+
 
 </div>
 <ng-template #elseBlock>
   <div class="pageHeader">
-  <h1>Edit Item</h1>
-  <button mat-raised-button (click)="openDialog()">Delete Item</button>
+    <h1>Edit Item</h1>
+    <div>
+    <button mat-raised-button (click)="backToList()">View List</button>
+    <button mat-raised-button (click)="openDialog()">Delete Item</button>
+
+    </div>
+
 
   </div>
 </ng-template>
@@ -28,7 +35,7 @@
   </mat-form-field>
   <mat-form-field>
     <label for="CostYearInput">Cost per Year</label>
-    <input type="number" name="CostYearInput" formControlName="CostYearControl" matInput />
+    <input type="date" name="CostYearInput" formControlName="CostYearControl" matInput />
   </mat-form-field>
   <mat-form-field>
     <label for="MaintenanceIntervalInput">Maintenance Interval</label>

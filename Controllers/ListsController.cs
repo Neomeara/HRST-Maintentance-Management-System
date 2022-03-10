@@ -135,21 +135,28 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
-        [HttpPut]
         [Route("editItem")]
-        public async Task<ActionResult<ListItem>> EditItem(ListItem item)
+        [HttpPost]
+        public async Task<ActionResult> EditItem(ListItem item, int id)
         {
+            Console.WriteLine("\n\n\n" + item.MaintenanceListId);
             //ListItem currentItem = await _applicationDbContext.ListItems.Where(i => i.ListItemId == item.ListItemId)
             //    .Include(i => i.MaintenanceList).ThenInclude(ml=>ml.ApplicationUser)
             //    .Include(i => i.Location)
             //    .Include(i => i.MaintenanceSchedule)
             //    .SingleOrDefaultAsync();
-            ListItem currentItem = await _applicationDbContext.ListItems.FindAsync(item.ListItemId);
+            ListItem currentItem = await _applicationDbContext.ListItems.FindAsync(id);
             if(currentItem != null)
             {
-                currentItem = item;
+                item.MaintenanceListId = id;
+                currentItem.Name = item.Name;
+                currentItem.Location = item.Location;
+                currentItem.Cost = item.Cost;
+                currentItem.CostYear = item.CostYear;
+                currentItem.MaintenanceSchedule = item.MaintenanceSchedule;
+                currentItem.Comments = item.Comments;
                 _applicationDbContext.SaveChanges();
-                return(Ok());
+                return Ok();
             }
             return BadRequest(new { id = item.ListItemId });
         }
