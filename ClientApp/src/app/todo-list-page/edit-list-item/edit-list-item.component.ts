@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -66,11 +67,11 @@ export class EditListItemComponent implements OnInit {
         this.listItemForm.controls['NameControl'].setValue(this.listItem.name);
         this.listItemForm.controls['LocationControl'].setValue(this.listItem.location.name);
         this.listItemForm.controls['CostControl'].setValue(this.listItem.cost);
-        this.listItemForm.controls['CostYearControl'].setValue(this.listItem.costYear);
+        this.listItemForm.controls['CostYearControl'].setValue(formatDate(this.listItem.costYear, 'yyyy-MM-dd', 'en-us'));
         this.listItemForm.controls['MaintenanceIntervalControl'].setValue(this.listItem.maintenanceSchedule.maintenanceInterval);
-        this.listItemForm.controls['LastCompletedControl'].setValue(this.listItem.maintenanceSchedule.lastCompleted);
-        this.listItemForm.controls['NextScheduledEventForcastedControl'].setValue(this.listItem.maintenanceSchedule.nextScheduledEventForcasted);
-        this.listItemForm.controls['NextScheduledEventPlannedControl'].setValue(this.listItem.maintenanceSchedule.nextScheduledEventPlanned);
+        this.listItemForm.controls['LastCompletedControl'].setValue(formatDate(this.listItem.maintenanceSchedule.lastCompleted,'yyyy-MM-dd', 'en-us'));
+        this.listItemForm.controls['NextScheduledEventForcastedControl'].setValue(formatDate(this.listItem.maintenanceSchedule.nextScheduledEventForcasted, 'yyyy-MM-dd', 'en-us'));
+        this.listItemForm.controls['NextScheduledEventPlannedControl'].setValue(formatDate(this.listItem.maintenanceSchedule.nextScheduledEventPlanned, 'yyyy-MM-dd', 'en-us'));
         this.listItemForm.controls['YearsToDelayControl'].setValue(this.listItem.maintenanceSchedule.yearsToDelay);
         this.listItemForm.controls['CommentsControl'].setValue(this.listItem.comments);
         this.listItemForm.controls['PicturesControl'].setValue(this.listItem.pictures);
@@ -87,6 +88,10 @@ export class EditListItemComponent implements OnInit {
       
   }
 
+  backToList() {
+    this.router.navigate(['/edit-list', this.listId]);
+
+  }
 
   // button choice function
   submit(data:any) {
@@ -103,8 +108,7 @@ export class EditListItemComponent implements OnInit {
   addItem(data: any) {
   
     this.maintenaceListService.addListItem(data, this.listId).subscribe(() => {
-      this.router.navigate(['/edit-list', this.listId]);
-
+      this.backToList();
     });
     
 
@@ -127,7 +131,7 @@ export class EditListItemComponent implements OnInit {
     //this.listItem.pictures = this.listItemForm.controls['PicturesControl'].value;
 
       this.maintenaceListService.editItem(this.listItem).subscribe(results => console.log(results));
-
+      this.backToList();
     }
   }
 

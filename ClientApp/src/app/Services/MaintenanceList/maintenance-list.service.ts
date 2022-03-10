@@ -101,7 +101,9 @@ export class MaintenanceListService {
   }
 
   public editItem(item: ListItem): Observable<ListItem> {
-    return this._httpClient.put<ListItem>(getBaseUrl() + 'api/lists/editItem', item);
+    let params = new HttpParams();
+    params = params.append('id', item.listItemId);
+    return this._httpClient.post<ListItem>(getBaseUrl() + 'api/lists/editItem', item, {params:params});
   }
 
   
