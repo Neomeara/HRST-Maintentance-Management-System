@@ -8,9 +8,9 @@
              matInput
              formControlName="groupControl"
              [matAutocomplete]="groups">
-      <mat-autocomplete autoActiveFirstOption #groups="matAutocomplete">
-        <mat-option *ngFor="let group of data.groups" [value]="group">
-          {{group}}
+      <mat-autocomplete autoActiveFirstOption #groups="matAutocomplete" [displayWith]="getGroupDisplayFn()">
+        <mat-option *ngFor="let group of data.groups" [value]="group" (onSelect)="selectGroup(group)">
+          {{group.name}}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
@@ -21,7 +21,7 @@
              matInput
              formControlName="userControl"
              [matAutocomplete]="users">
-      <mat-autocomplete autoActiveFirstOption #users="matAutocomplete" [displayWith]="getDisplayFn()">
+      <mat-autocomplete autoActiveFirstOption #users="matAutocomplete" [displayWith]="getUserDisplayFn()">
         <mat-option *ngFor="let user of data.users" [value]="user" (onSelect)="selectUser(user)">
           {{user.email}}
         </mat-option>

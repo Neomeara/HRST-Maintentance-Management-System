@@ -2,12 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MaintenanceList } from '../Models/MaintenanceList';
 import { User } from '../Models/user';
-import { addListDialog, DialogData } from './Dialogs/AddList/addListDialog';
-import { MaintenanceListService } from './maintenance-list.service';
-import { DefaultUser } from './mockLists';
+import { MaintenanceListService } from '../Services/MaintenanceList/maintenance-list.service';
+import { UserServiceService } from '../Services/Users/user-service.service';
+import { addListDialog, AddListDialogData } from './Dialogs/AddList/addListDialog';
 
 
 
@@ -21,45 +21,27 @@ import { DefaultUser } from './mockLists';
 export class TodoListPageComponent implements OnInit {
 
   private readonly _httpClient: HttpClient;
-  private readonly _maintenaceListService: MaintenanceListService;
   private readonly _router: Router;
-  public addListData: DialogData = {lists:[], groups:[], users:[]};
+  private readonly _userService: UserServiceService
+  public addListData: AddListDialogData = {lists:[], groups:[], users:[]};
 
-  //public readonly addListDialog: addListDialog;
 
-  constructor(private router: Router, httpClient: HttpClient, maintenaceListService: MaintenanceListService, public dialog: MatDialog) {
+  constructor(private router: Router, httpClient: HttpClient, private maintenaceListService: MaintenanceListService, public dialog: MatDialog, private userService:UserServiceService) {
     this._router = router;
     this._httpClient = httpClient;
-    this._maintenaceListService = maintenaceListService;
-    //this._addListData = addListData;
+    this._userService = userService;
   }
 
  
 
-  lists$: Observable<MaintenanceList[]> = of([]);
-  lists: MaintenanceList[] = [];
+  lists$: Observable<MaintenanceList[]> = this.maintenaceListService.getLists();
   selectedList?: MaintenanceList;
   
-  allGroups$: Observable<string[]> = of([]);
-
-  allUsers: User[] = [ DefaultUser ];
+  users$: Observable<User[]> = this.userService.getAllUsers()
 
 
 
   ngOnInit(): void {
-
-    //this.lists$ = this._maintenaceListService.getLists();
-
-    this._maintenaceListService.getLists().subscribe(a => {
-      this.lists$ = of(a);
-      this.addListData.lists = a;
-      this.addListData.groups = [... new Set(a.map(g => g.group))];
-      this.addListData.users = this.allUsers;
-    });
-
-    
-
-    this.addListData.groups = [... new Set(this.addListData.groups)];
     
   }
 
@@ -67,23 +49,27 @@ export class TodoListPageComponent implements OnInit {
   onSelect(list: MaintenanceList): void {
     this.selectedList = list;
     let route = '/edit-list';
-    this.router.navigate([route], { queryParams: { id: this.selectedList.maintenanceListId } });
+    this.router.navigate([route, list.maintenanceListId]);
   }
   
 
   openDialog(): void {
+
+    this.users$.subscribe((users: User[]) => {
+      this.addListData.users = users;
+      this.addListData.groups = users.map(u => u.group)
+    console.log(this.addListData.users, this.addListData.groups);
+
+    });
  
 
     const dialogRef = this.dialog.open(addListDialog, { width: '400px', height: '500px', data: this.addListData });
 
-    dialogRef.afterClosed().subscribe(result => {
-      
-      this._maintenaceListService.getLists().subscribe(a => {
-        this.lists$ = of(a);
-        this.addListData.lists = a;
-        this.addListData.groups = a.map(g => g.group);
-        this.addListData.users = this.allUsers;
-      });
+    dialogRef.afterClosed().subscribe((result: string) => {
+      if (result !== "cancel") {
+        this.lists$ = this.maintenaceListService.getLists();
+      }
+
     });
 
   }

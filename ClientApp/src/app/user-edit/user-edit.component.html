@@ -4,39 +4,40 @@
     <h1>User Edit Page</h1>
 
     <label for="firstname">First Name</label>
-    <input id="firstname" type="text" class="fortextbox" name="FirstName" placeholder={{userdata.firstname}}
-           formControlName="FirstName">
+    <input id="firstname" type="text" class="fortextbox" name="FirstName" placeholder="First Name"
+           formControlName="FirstName" > 
     <br />
 
     <label for="lastname">Last Name</label>
-    <input id="lastname" type="text" class="fortextbox" name="LastName" placeholder={{userdata.lastname}}
+    <input id="lastname" type="text" class="fortextbox" name="LastName" placeholder="Last Name" 
            formControlName="LastName">
     <br />
 
     <label for="username">Username</label>
-    <input id="username" type="text" class="fortextbox" name="UserName" placeholder={{userdata.userName}} [value] ="userdata.userName"
+    <input id="username" type="text" class="fortextbox" name="UserName" placeholder="Username" 
            formControlName="UserName">
     <br />
 
-    <label for="role">Group</label>
-    <p>{{userdata.group}}</p>
+    <label for="group">Group</label>
+    <input id="group" type="text" class="fortextbox" name="Group" placeholder="Group Name"
+           formControlName="Group">
 
     <br />
 
     <label for="email">Email</label>
-    <input id="email" type="text" class="fortextbox" name="Email" placeholder={{userdata.email}}
+    <input id="email" type="text" class="fortextbox" name="Email" placeholder="Email" 
            formControlName="Email">
     <br />
 
     <!--<label>Select lists you want this user to have access to:</label>
-    <div><mat-checkbox>List1</mat-checkbox></div>
-    <div><mat-checkbox>List2</mat-checkbox></div>
+  <div><mat-checkbox>List1</mat-checkbox></div>
+  <div><mat-checkbox>List2</mat-checkbox></div>
 
 
-    <label for="subject">Notes</label>
-    <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>-->
+  <label for="subject">Notes</label>
+  <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>-->
 
     <input type="submit" class="forsubmit" value="Submit">
-
+    <button (click)="deleteUser()">Delete User </button>
   </form>
 </div>

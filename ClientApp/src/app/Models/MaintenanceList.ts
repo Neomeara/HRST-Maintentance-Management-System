@@ -1,13 +1,14 @@
 //import { User } from "oidc-client";
+import { IUser } from "../../api-authorization/authorize.service";
 import { DefaultUser } from "../todo-list-page/mockLists";
-import { User } from "./user";
+import { Group, User } from "./user";
 
 export interface MaintenanceList {
   maintenanceListId: number,
   applicationUser: User,
   applicationUserId: string,
   title: string,
-  group: string,
+  group: Group,
   listItems: ListItem[],
   creationDate: Date,
   lastEditDate: Date
@@ -15,7 +16,7 @@ export interface MaintenanceList {
 
 export interface ListItem {
   listItemId: number,
-  //MaintenanceList: MaintenanceList,
+  maintenanceList: MaintenanceList,
   maintenanceListId: number,
   name: string,
   location: Location,
@@ -48,7 +49,7 @@ export interface MaintenanceSchedule {
 }
 
 
-export function newList(group: string, title: string, ApplicationUser: User) : MaintenanceList {
+export function newList(group: Group, title: string, ApplicationUser: User) : MaintenanceList {
   let newList: MaintenanceList = {
     maintenanceListId: 1,
     applicationUser: ApplicationUser,
@@ -63,3 +64,4 @@ export function newList(group: string, title: string, ApplicationUser: User) : M
   return newList;
 
 }
+

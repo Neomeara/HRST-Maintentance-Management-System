@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ListItem, MaintenanceList } from '../../Models/MaintenanceList';
+import { MaintenanceListService } from '../../Services/MaintenanceList/maintenance-list.service';
 import { DeleteListDialogComponent } from '../Dialogs/delete-list-dialog/delete-list-dialog.component';
-import { MaintenanceListService } from '../maintenance-list.service';
 
 @Component({
   selector: 'app-todo-list',
@@ -17,9 +17,13 @@ export class TodoListComponent implements OnInit {
   private readonly _router: Router;
   private readonly _maintenaceListservice: MaintenanceListService;
 
-  id: number =0;
   list?: MaintenanceList;
+  listId: number = 0;
+
   selectedItem?: ListItem;
+  itemId: number = 0;
+
+  newList: boolean = false;
 
 
   constructor(
@@ -34,17 +38,13 @@ export class TodoListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // get the query params
-    this.route.queryParams.subscribe(params => {
-      console.log(params);
-      this.id = params.id;
-      console.log(this.id);
+    // get the params
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.listId = Number(params.get('listId'))
+    })
 
 
-    });
-
-
-    this._maintenaceListservice.getList(this.id).subscribe(data => {
+    this._maintenaceListservice.getList(this.listId).subscribe(data => {
       if (data != null) {
         this.list = data;
       }
@@ -55,10 +55,20 @@ export class TodoListComponent implements OnInit {
     
   }
 
+  addItem() {
+    let route = '/edit-list-item';
+    this.newList = true;
+    this.router.navigate([route, this.listId, this.newList]);
+
+  }
+
   selectItem(item: ListItem) {
     this.selectedItem = item;
-    let route = '/edit-list-item';
-    this.router.navigate([route], { queryParams: { id: this.selectedItem.listItemId } });
+    this.newList = false;
+    let route = '/edit-list-item/';
+    if (this.selectedItem !== null) {
+      this.router.navigate([route, item.maintenanceListId, this.newList, this.selectedItem.listItemId]);
+    }
   }
 
   openDialog(): void {

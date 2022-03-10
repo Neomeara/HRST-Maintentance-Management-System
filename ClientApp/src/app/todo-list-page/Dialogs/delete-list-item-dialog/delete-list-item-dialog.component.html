@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Are you sure?</h1>
+<div mat-dialog-content>
+  <p>Clicking delete will remove this forever. Do you still want to delete the list item "{{data.name}}"</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No, Don't Delete</button>
+  <button mat-button (click)="deleteListItem()">Yes, Delete List item</button>
+
+</div>

@@ -1,13 +1,45 @@
-<div *ngIf="list">
-  <h1>List Details</h1>
-  <label for="Title">Title: </label>
-  <h3 name="Title">{{list.title}}</h3>
-   <label for="Group">List Group: </label>
-   <p name="Group">{{list.group}}</p>
-  <label for="CreateDate">Creation Date</label> <p name="CreateDate">{{list.creationDate}}</p>
-  <label for="EditDate">Last Edit Date</label> <p name="EditDate">{{list.lastEditDate}}</p>
- <div *ngFor="let item of list.listItems" (click)="selectItem(item)">
-    <p>{{item.name}}</p>
+<div *ngIf="list" class="body">
+
+  <div class="pageHeader">
+    <h1>List Details</h1>
+    <div class="listFunctions">
+      <button type="button" (click)="addItem()">Add Item</button>
+      <button type="button">Manage User Access</button>
+      <button type="button" (click)="openDialog()">Delete List</button>
+
+
+    </div>
   </div>
-  <button type="button" (click)="openDialog()">Delete List</button>
+
+  <div class="listDetails">
+    <div >
+      <label for="Title" class="label">Title: </label>
+      <span name="Title">{{list.title}}</span>
+    </div>
+
+    <div>
+      <label for="Group" class="label">List Group: </label>
+      <span name="Group">{{list.group.name}}</span>
+    </div>
+
+    <div>
+      <label for="CreateDate" class="label">Creation Date:</label>
+      <span name="CreateDate">{{list.creationDate}}</span>
+    </div>
+
+    <div>
+      <label for="EditDate">Last Edit Date:</label>
+      <span name="EditDate">{{list.lastEditDate}}</span>
+    </div>
+
   </div>
+
+  <div class="listOfMaintenanceListItems">
+    <div *ngFor="let item of list.listItems" (click)="selectItem(item)">
+      <div class="maintenanceListItem">
+        <p>{{item.name}}</p>
+
+      </div>
+    </div>
+  </div>
+</div>
