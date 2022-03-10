@@ -5,27 +5,41 @@
 
     <label for="firstname">First Name</label>
     <input id="firstname" type="text" class="fortextbox" name="FirstName" placeholder="First Name"
-           formControlName="FirstName" > 
+           formControlName="FirstName">
     <br />
 
     <label for="lastname">Last Name</label>
-    <input id="lastname" type="text" class="fortextbox" name="LastName" placeholder="Last Name" 
+    <input id="lastname" type="text" class="fortextbox" name="LastName" placeholder="Last Name"
            formControlName="LastName">
     <br />
 
     <label for="username">Username</label>
-    <input id="username" type="text" class="fortextbox" name="UserName" placeholder="Username" 
+    <input id="username" type="text" class="fortextbox" name="UserName" placeholder="Username"
            formControlName="UserName">
     <br />
 
-    <label for="group">Group</label>
-    <input id="group" type="text" class="fortextbox" name="Group" placeholder="Group Name"
-           formControlName="Group">
+    <!--<label for="group">Group</label>
+  <input id="group" type="text" class="fortextbox" name="Group" placeholder="Group Name"
+         formControlName="Group">-->
+    <mat-form-field *ngIf="groups.length > 0">
+
+      <input type="text"
+             placeholder="Pick group"
+             aria-label="Number"
+             matInput
+             formControlName="Group"
+             [matAutocomplete]="abc">
+      <mat-autocomplete autoActiveFirstOption  #abc="matAutocomplete" [displayWith]="getGroupDisplayFn()">
+        <mat-option *ngFor="let group of groups" [value]="group" (onSelect)="selectGroup(group)">
+          {{group.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
 
     <br />
 
     <label for="email">Email</label>
-    <input id="email" type="text" class="fortextbox" name="Email" placeholder="Email" 
+    <input id="email" type="text" class="fortextbox" name="Email" placeholder="Email"
            formControlName="Email">
     <br />
 
