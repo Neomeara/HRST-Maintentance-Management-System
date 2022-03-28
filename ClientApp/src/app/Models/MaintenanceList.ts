@@ -1,14 +1,10 @@
-//import { User } from "oidc-client";
-import { IUser } from "../../api-authorization/authorize.service";
-import { DefaultUser } from "../todo-list-page/mockLists";
 import { Group, User } from "./user";
 
 export interface MaintenanceList {
   maintenanceListId: number,
-  applicationUser: User,
-  applicationUserId: string,
+  applicationUserId?: string,
   title: string,
-  group: Group,
+  groupId: number,
   listItems: ListItem[],
   creationDate: Date,
   lastEditDate: Date
@@ -16,21 +12,18 @@ export interface MaintenanceList {
 
 export interface ListItem {
   listItemId: number,
-  maintenanceList: MaintenanceList,
   maintenanceListId: number,
   name: string,
-  location: Location,
+  locationId: number,
   cost: number,
   costYear: Date,
-  maintenanceSchedule: MaintenanceSchedule,
+  maintenanceScheduleId: number,
   comments: string,
   pictures: Picture[]
 }
 
 export interface Picture {
   PictureId: number,
-  ListItem: ListItem,
-  ListItemId: number,
   url:string
 }
 
@@ -52,10 +45,9 @@ export interface MaintenanceSchedule {
 export function newList(group: Group, title: string, ApplicationUser: User) : MaintenanceList {
   let newList: MaintenanceList = {
     maintenanceListId: 1,
-    applicationUser: ApplicationUser,
     applicationUserId: ApplicationUser.id,
     title: title,
-    group: group,
+    groupId: group.groupId,
     creationDate: new Date(),
     lastEditDate: new Date(),
     listItems: []
@@ -63,5 +55,18 @@ export function newList(group: Group, title: string, ApplicationUser: User) : Ma
 
   return newList;
 
+}
+
+
+export interface FullListItem {
+  listItem: ListItem,
+  location: Location,
+  maintenanceSchedule: MaintenanceSchedule
+}
+
+export interface FullMaintenanceList {
+  maintenanceList: MaintenanceList,
+  applicationUser: User,
+  group: Group,
 }
 

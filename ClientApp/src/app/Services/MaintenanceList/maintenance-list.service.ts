@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { pipe } from 'rxjs';
 import { Observable, of } from 'rxjs';
 import { getBaseUrl } from '../../../main';
-import { ListItem, MaintenanceList, newList } from '../../Models/MaintenanceList';
+import { FullListItem, FullMaintenanceList, ListItem, MaintenanceList, MaintenanceSchedule, newList, Location } from '../../Models/MaintenanceList';
 import { Group, User } from '../../Models/user';
 import { defaultList } from '../../todo-list-page/mockLists';
 
@@ -23,11 +23,10 @@ export class MaintenanceListService {
     return this._httpClient.get<MaintenanceList[]>(getBaseUrl() + 'api/lists/getAllLists').pipe(lists => lists);
   }
 
-  public getGroups(): Observable<string[]> {
-    let groups: string[] = [];
+  public getAllGroups(): Observable<Group[]> {
     
-    this.getLists().subscribe(data => groups= data.map(g => g.group.name));
-    return of(groups);
+    return this._httpClient.get<Group[]>(getBaseUrl() + 'api/lists/getAllGroups');
+
   }
 
   public  addList(groupName: Group, title:string, ApplicationUser: User): Observable<any> {
@@ -53,36 +52,12 @@ export class MaintenanceListService {
    
   }
 
-  public addListItem(data: any, listId: number):Observable<any> {
+  public addListItem(data: FullListItem, listId: number):Observable<FullListItem> {
 
     let list: MaintenanceList = defaultList;
     this.getList(listId).subscribe((ml) => { list = ml });
-    
-    let newItem: ListItem = {
-      maintenanceListId: listId,
-      maintenanceList: list,
-      listItemId: 0,
-      name: data.NameControl,
-      location: {
-        locationId: 0,
-        name: data.LocationControl
-      },
-      cost: data.CostControl,
-      costYear: data.CostYearControl,
-      maintenanceSchedule: {
-        maintenanceScheduleId: 0,
-        maintenanceInterval: data.MaintenanceIntervalControl,
-        lastCompleted: data.LastCompletedControl,
-        nextScheduledEventForcasted: data.NextScheduledEventForcastedControl,
-        nextScheduledEventPlanned: data.NextScheduledEventPlannedControl,
-        yearsToDelay: data.YearsToDelayControl,
-      },
 
-      comments: data.CommentsControl,
-      pictures: []
-    };
-
-    return this._httpClient.post<ListItem>(getBaseUrl() + 'api/lists/addItem', newItem, { observe: 'response' });
+    return this._httpClient.post<FullListItem>(getBaseUrl() + 'api/lists/addItem', data);
   }
 
   public deleteListItem(id: number): Observable<any> {
@@ -106,6 +81,23 @@ export class MaintenanceListService {
     return this._httpClient.post<ListItem>(getBaseUrl() + 'api/lists/editItem', item, {params:params});
   }
 
-  
+  public getFullListItem(id: number): Observable<FullListItem> {
+    return this._httpClient.get<FullListItem>(getBaseUrl() + 'api/lists/getFullListItem/' + id.toString());
+  }
 
+  public getFullList(id: number): Observable<FullMaintenanceList> {
+    return this._httpClient.get<FullMaintenanceList>(getBaseUrl() + 'api/lists/getFullList/' + id.toString());
+  }
+
+  public getAllLocations(): Observable<Location[]> {
+    return this._httpClient.get<Location[]>(getBaseUrl() + 'api/lists/getAllLocations');
+  }
+
+  public getAllSchedules(): Observable<MaintenanceSchedule[]> {
+    return this._httpClient.get<MaintenanceSchedule[]>(getBaseUrl() + 'api/lists/getAllSchedules');
+  }
+
+  public getAllFullLists(): Observable<FullMaintenanceList[]> {
+    return this._httpClient.get<FullMaintenanceList[]>(getBaseUrl() + 'api/lists/getAllFullLists');
+  }
 }

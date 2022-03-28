@@ -20,13 +20,13 @@ import { FirstLastnameComponent } from './first-lastname/first-lastname.componen
 import { HomeComponent } from './home/home.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { addListDialog } from './todo-list-page/Dialogs/AddList/addListDialog';
-import { ListItemComponent } from './todo-list-page/list-item/list-item.component';
 import { TodoListPageComponent } from './todo-list-page/todo-list-page.component';
 import { TodoListComponent } from './todo-list-page/todo-list/todo-list.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { DeleteListDialogComponent } from './todo-list-page/Dialogs/delete-list-dialog/delete-list-dialog.component';
 import { EditListItemComponent } from './todo-list-page/edit-list-item/edit-list-item.component';
 import { DeleteListItemDialogComponent } from './todo-list-page/Dialogs/delete-list-item-dialog/delete-list-item-dialog.component';
+import { AuthorizeGuard } from '../api-authorization/authorize.guard';
 
 
 @NgModule({
@@ -40,7 +40,6 @@ import { DeleteListItemDialogComponent } from './todo-list-page/Dialogs/delete-l
     UserEditComponent,
     TodoListPageComponent,
     TodoListComponent,
-    ListItemComponent,
     FirstLastnameComponent,
     addListDialog,
     DeleteListDialogComponent,

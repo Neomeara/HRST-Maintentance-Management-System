@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { ListItem, MaintenanceList } from '../../Models/MaintenanceList';
+import { FullMaintenanceList, ListItem, MaintenanceList } from '../../Models/MaintenanceList';
 import { MaintenanceListService } from '../../Services/MaintenanceList/maintenance-list.service';
 import { DeleteListDialogComponent } from '../Dialogs/delete-list-dialog/delete-list-dialog.component';
 
@@ -17,13 +18,14 @@ export class TodoListComponent implements OnInit {
   private readonly _router: Router;
   private readonly _maintenaceListservice: MaintenanceListService;
 
-  list?: MaintenanceList;
+  fullList?: FullMaintenanceList;
   listId: number = 0;
 
   selectedItem?: ListItem;
   itemId: number = 0;
 
   newList: boolean = false;
+  filterControl = new FormControl('');
 
 
   constructor(
@@ -44,9 +46,9 @@ export class TodoListComponent implements OnInit {
     })
 
 
-    this._maintenaceListservice.getList(this.listId).subscribe(data => {
+    this._maintenaceListservice.getFullList(this.listId).subscribe(data => {
       if (data != null) {
-        this.list = data;
+        this.fullList = data;
       }
       else {
         this.router.navigate(['/todo-list']);
@@ -74,7 +76,7 @@ export class TodoListComponent implements OnInit {
   openDialog(): void {
 
 
-    const dialogRef = this.dialog.open(DeleteListDialogComponent, { width: '400px', height: '250px', data: this.list });
+    const dialogRef = this.dialog.open(DeleteListDialogComponent, { width: '400px', height: '250px', data: this.fullList });
 
     dialogRef.afterClosed().subscribe(result => {
 

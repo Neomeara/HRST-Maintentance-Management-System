@@ -25,10 +25,13 @@
     <label for="NameInput">Name</label>
     <input type="text" name="NameInput" formControlName="NameControl" matInput />
   </mat-form-field>
+  <div formGroupName="LocationGroup">
+
   <mat-form-field>
     <label for="LocationInput">Location</label>
-    <input type="text" name="LocationInput" formControlName="LocationControl" matInput />
+    <input type="text" name="LocationInput" formControlName="LocationNameControl" matInput />
   </mat-form-field>
+  </div>
   <mat-form-field>
     <label for="CostInput">Total Cost</label>
     <input type="number" name="CostInput" formControlName="CostControl" matInput />
@@ -37,6 +40,8 @@
     <label for="CostYearInput">Cost per Year</label>
     <input type="date" name="CostYearInput" formControlName="CostYearControl" matInput />
   </mat-form-field>
+  <div formGroupName="ScheduleGroup">
+
   <mat-form-field>
     <label for="MaintenanceIntervalInput">Maintenance Interval</label>
     <input type="text" name="MaintenanceIntervalInput" formControlName="MaintenanceIntervalControl" matInput />
@@ -57,6 +62,7 @@
     <label for="YearsToDelayInput">Years to delay</label>
     <input type="number" name="YearsToDelayInput" formControlName="YearsToDelayControl" matInput />
   </mat-form-field>
+  </div>
   <mat-form-field>
     <label for="CommentsInput">Comments</label>
     <input type="text" name="CommentsInput" formControlName="CommentsControl" matInput />

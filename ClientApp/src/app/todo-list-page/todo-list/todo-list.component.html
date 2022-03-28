@@ -1,4 +1,4 @@
-<div *ngIf="list" class="body">
+<div *ngIf="fullList" class="body">
 
   <div class="pageHeader">
     <h1>List Details</h1>
@@ -12,30 +12,34 @@
   </div>
 
   <div class="listDetails">
-    <div >
+    <div>
       <label for="Title" class="label">Title: </label>
-      <span name="Title">{{list.title}}</span>
+      <span name="Title">{{fullList.maintenanceList.title}}</span>
     </div>
 
     <div>
       <label for="Group" class="label">List Group: </label>
-      <span name="Group">{{list.group.name}}</span>
+      <span name="Group">{{fullList.group.name}}</span>
     </div>
 
     <div>
       <label for="CreateDate" class="label">Creation Date:</label>
-      <span name="CreateDate">{{list.creationDate}}</span>
+      <span name="CreateDate">{{fullList.maintenanceList.creationDate}}</span>
     </div>
 
     <div>
       <label for="EditDate">Last Edit Date:</label>
-      <span name="EditDate">{{list.lastEditDate}}</span>
+      <span name="EditDate">{{fullList.maintenanceList.lastEditDate}}</span>
     </div>
 
   </div>
+  <h2>List Items</h2>
+  <form>
 
+    <input matInput type="text" id="filterInput" name="filterInput" [formControl]="filterControl" />
+  </form>
   <div class="listOfMaintenanceListItems">
-    <div *ngFor="let item of list.listItems" (click)="selectItem(item)">
+    <div *ngFor="let item of fullList.maintenanceList.listItems" (click)="selectItem(item)">
       <div class="maintenanceListItem">
         <p>{{item.name}}</p>
 

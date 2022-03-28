@@ -4,19 +4,23 @@
 
 
 <h2>My Lists</h2>
+  <form>
+
+<input matInput type="text" id="filterInput" name="filterInput" [formControl]="filterControl"/>
+  </form>
 
 <div class="listOfMaintenanceLists">
   <div *ngFor="let list of lists$ | async" (click)="onSelect(list)" >
     <div class="maintenanceList">
 
     <label for="listTitle" class="label">Title: </label>
-    <span name="listTitle" class="text">{{list.title}}</span>
+    <span name="listTitle" class="text">{{list.maintenanceList.title}}</span>
     <br />
     <label for="listGroup" class="label">Group: </label>
     <span name="listGroup" class="text">{{list.group.name}}</span>
     <br />
     <label for="listOwner" class="label">Owner: </label>
-    <span name="listOwner" class="text">{{list.applicationUser.firstname}} - {{list.applicationUser.lastname}}-{{list.applicationUser.email}}</span>
+    <span name="listOwner" class="text">{{list.applicationUser.firstname}} - {{list.applicationUser.lastname}} - {{list.applicationUser.email}}</span>
     </div>
     
   </div>

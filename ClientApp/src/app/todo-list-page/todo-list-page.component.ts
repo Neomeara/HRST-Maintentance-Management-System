@@ -1,9 +1,15 @@
+import { trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, EventEmitter } from '@angular/core';
+import { AfterContentInit } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { of, pipe } from 'rxjs';
 import { Observable } from 'rxjs';
-import { MaintenanceList } from '../Models/MaintenanceList';
+import { map, startWith, tap } from 'rxjs/operators';
+import { FullMaintenanceList, MaintenanceList } from '../Models/MaintenanceList';
 import { User } from '../Models/user';
 import { MaintenanceListService } from '../Services/MaintenanceList/maintenance-list.service';
 import { UserServiceService } from '../Services/Users/user-service.service';
@@ -34,40 +40,60 @@ export class TodoListPageComponent implements OnInit {
 
  
 
-  lists$: Observable<MaintenanceList[]> = this.maintenaceListService.getLists();
-  selectedList?: MaintenanceList;
+  lists: FullMaintenanceList[] =[];
+  lists$: Observable<FullMaintenanceList[]> = this.maintenaceListService.getAllFullLists();
+  selectedList?: FullMaintenanceList;
   
   users$: Observable<User[]> = this.userService.getAllUsers()
 
-
+  filterControl = new FormControl('');
 
   ngOnInit(): void {
-    
+    //use this to filter stuff
+    this.maintenaceListService.getAllFullLists().subscribe(l => {
+      this.lists = l;
+
+      this.lists$ = this.filterControl.valueChanges.pipe(
+      startWith(''),
+      
+      map(value => this.filterLists(value))
+    );
+    });
+
+
   }
 
 
-  onSelect(list: MaintenanceList): void {
+  private filterLists(term: string) {
+    const lowerTerm = term.toLowerCase();
+    return this.lists.filter(item => item.maintenanceList.title.toLowerCase().includes(lowerTerm) ||
+      item.applicationUser.email.toLowerCase().includes(lowerTerm) ||
+      item.applicationUser.firstname.toLowerCase().includes(lowerTerm) ||
+      item.applicationUser.lastname.toLowerCase().includes(lowerTerm) ||
+      item.group.name.toLowerCase().includes(lowerTerm))
+
+  }
+
+
+  onSelect(list: FullMaintenanceList): void {
     this.selectedList = list;
     let route = '/edit-list';
-    this.router.navigate([route, list.maintenanceListId]);
+    this.router.navigate([route, list.maintenanceList.maintenanceListId]);
   }
   
 
   openDialog(): void {
 
-    this.users$.subscribe((users: User[]) => {
-      this.addListData.users = users;
-      this.addListData.groups = users.map(u => u.group)
-    console.log(this.addListData.users, this.addListData.groups);
-
-    });
+   // get all the users
+    this.userService.getAllUsers().subscribe(u => this.addListData.users = u);
+    this.maintenaceListService.getAllGroups().subscribe(g => this.addListData.groups = g);
  
 
     const dialogRef = this.dialog.open(addListDialog, { width: '400px', height: '500px', data: this.addListData });
 
     dialogRef.afterClosed().subscribe((result: string) => {
       if (result !== "cancel") {
-        this.lists$ = this.maintenaceListService.getLists();
+        this.lists$ = this.maintenaceListService.getAllFullLists();
       }
 
     });
