@@ -1,4 +1,9 @@
-<table mat-table [dataSource]="allUsers$" class="mat-elevation-z8">
+<mat-form-field appearance="standard">
+  <mat-label>Enter a username</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Enter a username" #input>
+</mat-form-field>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
 
   <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
@@ -29,7 +34,12 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="test(row)"></tr>
 
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+  </tr>
 
 </table>
+
+<mat-paginator #pageinator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
 
 

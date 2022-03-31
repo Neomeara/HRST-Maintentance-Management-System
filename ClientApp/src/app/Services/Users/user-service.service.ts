@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { getBaseUrl } from '../../../main';
-import { User } from '../../Models/user';
+import { Group, User } from '../../Models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,13 @@ export class UserServiceService {
     params = params.append('id', id);
     return this._httpClient.delete(getBaseUrl() + 'api/users/deleteUser', { params: params, observe: 'response' })
 
-
+  }
+  public getuservianame(username: string):Observable<User> {
+    let params = new HttpParams();
+    params = params.append('username', username);
+    return this._httpClient.get<any>(getBaseUrl() + 'api/users/editfirstnamelastname', { params: params });
+  }
+  public getAllGroups(): Observable<Group[]> {
+    return this._httpClient.get<Group[]>(getBaseUrl() + 'api/users/getGroups')
   }
 }

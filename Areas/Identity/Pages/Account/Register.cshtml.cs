@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using HRST_Maintenance_Management_System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace HRST_Maintenance_Management_System.Areas.Identity.Pages.Account
 {
@@ -30,12 +32,14 @@ namespace HRST_Maintenance_Management_System.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _applicationDbContext;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
+            ApplicationDbContext applicationDbContext,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -44,6 +48,7 @@ namespace HRST_Maintenance_Management_System.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _applicationDbContext = applicationDbContext;
         }
 
         /// <summary>
@@ -80,6 +85,18 @@ namespace HRST_Maintenance_Management_System.Areas.Identity.Pages.Account
             [Display(Name = "Email")]
             public string Email { get; set; }
 
+            [Required]
+            [Display(Name = "Username")]
+            public string Username { get; set; }
+
+            [Required]
+            [Display(Name = "Firstname")]
+            public string Firstname { get; set; }
+
+            [Required]
+            [Display(Name = "Lastname")]
+            public string Lastname { get; set; }
+
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -110,13 +127,59 @@ namespace HRST_Maintenance_Management_System.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            ApplicationUser user = new ApplicationUser(_applicationDbContext);
+
+            //ApplicationUser user2 = new ApplicationUser(_applicationDbContext);
+            //bool isvalid = true;
+            //user = await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.UserName == Input.Username);
+            //if (user != null)
+            //{
+            //    isvalid = false;
+            //    ModelState.AddModelError(string.Empty, "Username is alreay in use. Please choose another username!");
+            //}
+            //else
+            //{
+            //    user = new ApplicationUser(_applicationDbContext);
+
+            //}
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                //var user = CreateUser();
+                user.UserName = Input.Username;
+                user.firstname = Input.Firstname;
+                user.lastname = Input.Lastname;
+                //start of group logic 
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+
+                string domain = Input.Email.Substring(Input.Email.IndexOf('@'));
+                string pt1 = Input.Email.Substring(Input.Email.IndexOf('@') + 1);
+                string pt2 = pt1.Substring(pt1.IndexOf('.'));
+                string name = pt1.Replace(pt2, "");
+                Group group = _applicationDbContext.Groups.Where(y => y.Domain == domain).FirstOrDefault();
+
+
+                if (group == null)
+                {
+                    Group newgroup = new Group();
+                    newgroup.Domain = domain;
+                    newgroup.Name = name;
+                    user.Group = newgroup;
+                    _applicationDbContext.Groups.Add(newgroup);
+                    _applicationDbContext.SaveChanges();
+                }
+                else
+                {
+                    user.Group = group;
+
+                }
+
+
+
+                //end of group logic
+
+                await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
@@ -161,6 +224,7 @@ namespace HRST_Maintenance_Management_System.Areas.Identity.Pages.Account
             try
             {
                 return Activator.CreateInstance<ApplicationUser>();
+
             }
             catch
             {

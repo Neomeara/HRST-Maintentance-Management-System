@@ -27,7 +27,7 @@ import { DeleteListDialogComponent } from './todo-list-page/Dialogs/delete-list-
 import { EditListItemComponent } from './todo-list-page/edit-list-item/edit-list-item.component';
 import { DeleteListItemDialogComponent } from './todo-list-page/Dialogs/delete-list-item-dialog/delete-list-item-dialog.component';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
-
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -50,15 +50,16 @@ import { AuthorizeGuard } from '../api-authorization/authorize.guard';
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    MatPaginatorModule,
     ReactiveFormsModule,
     ApiAuthorizationModule,
     BrowserAnimationsModule,
+    
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       
       { path: 'admin-page', component: AdminPageComponent },
       { path: 'user-edit', component: UserEditComponent },
-      {path : 'first-lastname' , component: FirstLastnameComponent},
 
       { path: 'todo-list', component: TodoListPageComponent },
 

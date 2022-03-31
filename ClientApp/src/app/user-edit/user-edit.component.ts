@@ -28,7 +28,8 @@ export class UserEditComponent implements OnInit {
   private Http_: HttpClient;
   private baseurl_: string;
   private readonly router_: Router;
-  public groups: any[] = [];
+  public groups: Group[] = [];
+
 
   constructor(Http: HttpClient, @Inject('BASE_URL') getBaseUrl: string, private route: ActivatedRoute, router: Router, private userService: UserServiceService) {
     this.Http_ = Http;
@@ -41,8 +42,9 @@ export class UserEditComponent implements OnInit {
       console.log(params);
       this.id = params.id;
       console.log(this.id);
-    });
 
+    });
+    this.userService.getAllGroups().subscribe(x => this.groups = x);
     // get the user data
    this.userService.getUser(this.id).subscribe(result => {
       this.userdata = result;
@@ -50,7 +52,6 @@ export class UserEditComponent implements OnInit {
 
     }, error => console.error(error));
 
-    this.userService.getAllUsers().subscribe(x=> this.groups = x.map(u =>u.group));
 
   }
 
@@ -91,10 +92,12 @@ export class UserEditComponent implements OnInit {
 
   private groupDisplay(group: Group): string {
     //access component "this" here
-    return group ? group.name : group;
+    return group ? group.name : defaultGroup.name;
   }
 
   selectGroup(group: Group) {
     this.formdata.get('Group')?.setValue(group);
   }
+
+
 }

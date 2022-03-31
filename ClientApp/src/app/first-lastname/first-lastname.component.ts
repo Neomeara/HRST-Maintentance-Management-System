@@ -2,11 +2,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { AuthorizeService } from '../../api-authorization/authorize.service';
+import { getBaseUrl } from '../../main';
 import { defaultGroup } from '../todo-list-page/mockLists';
 
 @Component({
@@ -35,9 +36,10 @@ export class FirstLastnameComponent implements OnInit {
       FirstName: new FormControl(),
       LastName: new FormControl()
     });
-  constructor(Http: HttpClient, @Inject('BASE_URL') getBaseUrl: string, private authorizeService: AuthorizeService, private route: ActivatedRoute) {
+  constructor(Http: HttpClient, @Inject('BASE_URL') getBaseUrl: string, private authorizeService: AuthorizeService, private route: ActivatedRoute,private router:Router) {
     this.Http_ = Http;
     this.baseurl_ = getBaseUrl;
+    
   }
   newusername: any = "";
 
@@ -54,19 +56,37 @@ export class FirstLastnameComponent implements OnInit {
       this.userdata = result;
       console.log(result);
       this.formdata.setValue({ Email: this.userdata.email, UserName: this.userdata.userName, FirstName: this.userdata.firstname, LastName: this.userdata.lastname });
-    }, error => console.error(error));
+    }, error => { console.error(error); this.router.navigate(['']);});
 
   }
   showSuccessAlert() {
-    Swal.fire('User Information Updated!', '', 'success')
+    Swal.fire('User Information Updated!', '', 'success');
   }
+  showFailAlert(errortype: number) {
+    if (errortype === 1) {
+      Swal.fire('Your username and email can not match!', '', 'error');
+
+    }
+    else if (errortype === 2) {
+      Swal.fire('Username is already taken!', '', 'error');
+
+    }
+  }
+  
   onClickSubmit(data: any) {
     data.group = defaultGroup;
-    this.Http_.put<any>(this.baseurl_ + 'api/users/updateuser',data).subscribe(result => {
-      this.formresult = result;
-      
-      console.log(result);
-    }, error => console.error(error));
-    this.showSuccessAlert();
-  }
+    if (this.userdata.userName === data.UserName) {
+      this.showFailAlert(1);
+      console.log(this.userdata.userName, this.userdata.email);
+    }
+    else {
+      this.Http_.put<any>(this.baseurl_ + 'api/users/updateuser', data).subscribe(result => {
+        this.formresult = result;
+        console.log(result);
+      }, error => { console.error(error); this.showFailAlert(2); });
+      this.showSuccessAlert();
+      this.router.navigate([""]);
+    }
+    }
+  
 }
