@@ -4,6 +4,7 @@ using HRST_Maintenance_Management_System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,7 +29,7 @@ namespace HRST_Maintenance_Management_System.Controllers
         public async Task<ActionResult<IEnumerable<MaintenanceList>>> getAllLists()
         {
             IEnumerable<MaintenanceList> lists;
-            lists = await _applicationDbContext.MaintenanceLists.Where(list => list != null).Include(user => user.ApplicationUser).Include(user => user.Group).ToListAsync();
+            lists = await _applicationDbContext.MaintenanceLists.ToListAsync();
          
             return Ok(lists);
         }
@@ -45,7 +46,7 @@ namespace HRST_Maintenance_Management_System.Controllers
                 return BadRequest();    
             }
             IEnumerable<ListItem> listItems = await _applicationDbContext.ListItems.ToListAsync();
-            listItems = listItems.Where(x => x.MaintenanceList == list);
+            listItems = listItems.Where(x => x.MaintenanceListId == list.MaintenanceListId);
 
             list.ListItems = listItems.ToList();
 
@@ -57,14 +58,10 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         [Route("getListItem/{id:int}")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MaintenanceList>>> getListItem(int id)
+        public async Task<ActionResult<ListItem>> getListItem(int id)
         {
             ListItem item;
-            item = await _applicationDbContext.ListItems.Where(i => i.ListItemId == id)
-                .Include(i => i.MaintenanceList).ThenInclude(ml => ml.ApplicationUser)
-                .Include(i => i.Location)
-                .Include(i => i.MaintenanceSchedule)
-                .SingleOrDefaultAsync();
+            item = await _applicationDbContext.ListItems.FindAsync(id);
             if (item == null)
             {
                 return BadRequest();
@@ -74,7 +71,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
-        [Route("deleteItem")]
+        [Route("deleteItem/{id}")]
         [HttpDelete]
         public async Task<ActionResult> deleteListItem(int id)
         {
@@ -88,48 +85,30 @@ namespace HRST_Maintenance_Management_System.Controllers
             if (result.State == EntityState.Deleted)
             {
                 _applicationDbContext.SaveChanges();
+                return Ok();
 
             }
+            return BadRequest();
 
-            return Ok();
         }
+
+     
 
         [Route("addItem")]
         [HttpPost]
-        public async Task<ActionResult<ListItem>> AddListItem(ListItem item)
+        public async Task<ActionResult<ListItem>> AddListItem(ListItem model)
         {
-            if(await _applicationDbContext.Schedules.FindAsync(item.MaintenanceSchedule.MaintenanceScheduleId) == null)
+            MaintenanceList list = await _applicationDbContext.MaintenanceLists.FindAsync(model.MaintenanceListId);
+            if(list == null)
             {
-                await _applicationDbContext.Schedules.AddAsync(item.MaintenanceSchedule);
+                return NotFound();
             }
 
-            if (await _applicationDbContext.Locations.FindAsync(item.Location.LocationId) == null)
-            {
-                await _applicationDbContext.Locations.AddAsync(item.Location);
-            }
-
-            
-                foreach (var picture in item.Pictures)
-                {
-                    await _applicationDbContext.AddAsync<Picture>(picture);
-
-                }
-            
-            _applicationDbContext.SaveChanges();
-
-            MaintenanceList list = await _applicationDbContext.MaintenanceLists.FindAsync(item.MaintenanceListId);
-            if(list != null)
-            {
-                item.MaintenanceList = list;
-            }
-
-            var result = await _applicationDbContext.ListItems.AddAsync(item);
-            Console.Write("\n\n\n RESULT\n");
-            Console.Write(result.ToString());
+            var result = await _applicationDbContext.ListItems.AddAsync(model);
             if (result.State == EntityState.Added)
             {
                 _applicationDbContext.SaveChanges();
-                return CreatedAtAction(nameof(item), new { id =item.ListItemId }, item);
+                return CreatedAtAction(nameof(model), new { id =model.ListItemId }, model);
             }
             return BadRequest(result);
 
@@ -139,22 +118,22 @@ namespace HRST_Maintenance_Management_System.Controllers
         [HttpPost]
         public async Task<ActionResult> EditItem(ListItem item, int id)
         {
-            Console.WriteLine("\n\n\n" + item.MaintenanceListId);
-            //ListItem currentItem = await _applicationDbContext.ListItems.Where(i => i.ListItemId == item.ListItemId)
-            //    .Include(i => i.MaintenanceList).ThenInclude(ml=>ml.ApplicationUser)
-            //    .Include(i => i.Location)
-            //    .Include(i => i.MaintenanceSchedule)
-            //    .SingleOrDefaultAsync();
+            
             ListItem currentItem = await _applicationDbContext.ListItems.FindAsync(id);
             if(currentItem != null)
             {
-                item.MaintenanceListId = id;
                 currentItem.Name = item.Name;
                 currentItem.Location = item.Location;
-                currentItem.Cost = item.Cost;
-                currentItem.CostYear = item.CostYear;
-                currentItem.MaintenanceSchedule = item.MaintenanceSchedule;
+                currentItem.Priority = item.Priority;
+                currentItem.TotalCost = item.TotalCost;
+                currentItem.CostPerYear = item.CostPerYear;
+                currentItem.MaintenanceInterval = item.MaintenanceInterval;
+                currentItem.MaintenanceIntervalType = item.MaintenanceIntervalType;
+                currentItem.LastCompleted = item.LastCompleted;
+                currentItem.NextScheduledEvent = item.NextScheduledEvent;
                 currentItem.Comments = item.Comments;
+           
+          
                 _applicationDbContext.SaveChanges();
                 return Ok();
             }
@@ -165,32 +144,8 @@ namespace HRST_Maintenance_Management_System.Controllers
         //[Authorize]
         [Route("newlist")]
         [HttpPost]
-        public async Task<ActionResult<MaintenanceList>> AddList(MaintenanceList maintenanceList)
+        public async Task<ActionResult<MaintenanceList>> AddList(MaintenanceList maintenanceList )
         {
-
-
-            ApplicationUser currentUser = null;
-
-            if (User.Identity.Name != null)
-            {
-
-                currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
-            }
-
-            if (currentUser == null)
-            {
-                //return NotFound();
-                maintenanceList.ApplicationUser = await _userManager.Users.FirstAsync();
-                maintenanceList.ApplicationUserId = maintenanceList.ApplicationUser.Id;
-            }
-            else
-            {
-                maintenanceList.ApplicationUser = currentUser;
-                maintenanceList.ApplicationUserId = currentUser.Id;
-
-            }
-
-
 
             var listResult = await _applicationDbContext.MaintenanceLists.AddAsync(maintenanceList);
 
@@ -200,12 +155,9 @@ namespace HRST_Maintenance_Management_System.Controllers
                 return CreatedAtAction(nameof(maintenanceList),new { id = maintenanceList.MaintenanceListId }, maintenanceList);
             }
             return BadRequest(listResult);
-
-
-
         }
 
-        [Route("deleteList")]
+        [Route("deleteList/{id}")]
         [HttpDelete]
         public async Task<ActionResult> DeleteList(int id)
         {
@@ -225,6 +177,38 @@ namespace HRST_Maintenance_Management_System.Controllers
             }
           
             return Ok();
+
+        }
+
+
+        // get all Groups
+        [Route("getAllGroups")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Group>>> getAllGroups()
+        {
+            IEnumerable<Group> groups;
+            groups = await _applicationDbContext.Groups.ToListAsync();
+            if (groups == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(groups);
+
+        }
+
+        [Route("getGroup/{id:int}")]
+        [HttpGet]
+        public async Task<ActionResult<Group>> getGroup(int id)
+        {
+            Group item;
+            item = await _applicationDbContext.Groups.FindAsync(id);
+            if (item == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(item);
 
         }
 

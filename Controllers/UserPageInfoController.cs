@@ -53,7 +53,7 @@ namespace HRST_Maintenance_Management_System.Controllers
         }
 
         [HttpPut]
-        [Route("updateuser")]
+        [Route("updateuser")] // firstnamelastname
         public async Task<ActionResult>UpdateUser(UpdateUser model)
         {
             ApplicationUser user;
@@ -129,7 +129,7 @@ namespace HRST_Maintenance_Management_System.Controllers
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> Getusername(string username)
         {
             ApplicationUser user;
-            user =  _DbContext.Users.Where(x => x.Email == username).FirstOrDefault();
+            user =  await _DbContext.Users.Where(x => x.Email == username).FirstOrDefaultAsync();
             if (user == null)
             {
                 return BadRequest();

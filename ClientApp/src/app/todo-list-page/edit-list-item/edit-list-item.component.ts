@@ -1,9 +1,10 @@
 import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { ListItem } from '../../Models/MaintenanceList';
+import { Observable } from 'rxjs';
+import { ListItem, MaintenanceList} from '../../Models/MaintenanceList';
 import { MaintenanceListService } from '../../Services/MaintenanceList/maintenance-list.service';
 import { DeleteListItemDialogComponent } from '../Dialogs/delete-list-item-dialog/delete-list-item-dialog.component';
 
@@ -18,30 +19,31 @@ export class EditListItemComponent implements OnInit {
   newList: boolean = false;
   itemId?: number;
   listItem?: ListItem;
+  
 
-
-
-  listItemForm = new FormGroup({
-    NameControl: new FormControl(""),
-    LocationControl: new FormControl(""),
-    CostControl: new FormControl(0),
-    CostYearControl: new FormControl(new Date()),
-    MaintenanceIntervalControl: new FormControl(0),
-    LastCompletedControl: new FormControl(new Date()),
-    NextScheduledEventForcastedControl: new FormControl(new Date()),
-    NextScheduledEventPlannedControl: new FormControl(new Date()),
-    YearsToDelayControl: new FormControl(0),
-    CommentsControl: new FormControl(""),
-    PicturesControl: new FormControl([])
-
-
-  });
-
-
-
-  constructor(private maintenaceListService: MaintenanceListService, private route: ActivatedRoute,private router: Router, private dialog: MatDialog) {
+  constructor(
+    private maintenaceListService: MaintenanceListService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private dialog: MatDialog,
+    private formBuilder: FormBuilder,
+      ) {
     
   }
+
+  public listItemForm = this.formBuilder.group({
+    name: [''],
+    location: [''],
+    priority: [''],
+    totalCost: [0],
+    costPerYear: [0],
+    maintenanceInterval: [0],
+    maintenanceIntervalType: [''],
+    lastCompleted: [new Date],
+    nextScheduledEvent: [new Date],
+    comments: [''],
+
+  })
 
   ngOnInit(): void {
     // get params from url
@@ -52,41 +54,44 @@ export class EditListItemComponent implements OnInit {
       }
       else {
         this.newList = false;
-        this.itemId = Number(params.get('listItemId'))
+        this.itemId = Number(params.get('listItemId'));
+        this.maintenaceListService.getListItem(Number(this.itemId)).subscribe((result : ListItem) => {
+
+          this.listItem = result;
+          this.listItemForm.patchValue({
+            name: result.name,
+            location: result.location,
+            priority: result.priority,
+            totalCost: result.totalCost,
+            costPerYear: result.costPerYear,
+            maintenanceInterval: result.maintenanceInterval,
+            maintenanceIntervalType: result.maintenanceIntervalType,
+            lastCompleted: formatDate(result.lastCompleted, 'yyyy-MM-dd', 'en'),
+            nextScheduledEvent: formatDate(result.nextScheduledEvent, 'yyyy-MM-dd', 'en'),
+            comments: result.comments
+          });         
+
+        });
         
 
       }
     });
 
-    if (this.newList === false && this.itemId !== null) {
-      console.log(this.newList);
-      this.maintenaceListService.getListItem(Number(this.itemId)).subscribe(result => {
+  }
 
-        this.listItem = result;
-        if (this.listItem) {
-        this.listItemForm.controls['NameControl'].setValue(this.listItem.name);
-        this.listItemForm.controls['LocationControl'].setValue(this.listItem.location.name);
-        this.listItemForm.controls['CostControl'].setValue(this.listItem.cost);
-        this.listItemForm.controls['CostYearControl'].setValue(formatDate(this.listItem.costYear, 'yyyy-MM-dd', 'en-us'));
-        this.listItemForm.controls['MaintenanceIntervalControl'].setValue(this.listItem.maintenanceSchedule.maintenanceInterval);
-        this.listItemForm.controls['LastCompletedControl'].setValue(formatDate(this.listItem.maintenanceSchedule.lastCompleted,'yyyy-MM-dd', 'en-us'));
-        this.listItemForm.controls['NextScheduledEventForcastedControl'].setValue(formatDate(this.listItem.maintenanceSchedule.nextScheduledEventForcasted, 'yyyy-MM-dd', 'en-us'));
-        this.listItemForm.controls['NextScheduledEventPlannedControl'].setValue(formatDate(this.listItem.maintenanceSchedule.nextScheduledEventPlanned, 'yyyy-MM-dd', 'en-us'));
-        this.listItemForm.controls['YearsToDelayControl'].setValue(this.listItem.maintenanceSchedule.yearsToDelay);
-        this.listItemForm.controls['CommentsControl'].setValue(this.listItem.comments);
-        this.listItemForm.controls['PicturesControl'].setValue(this.listItem.pictures);
-      }
+ 
 
-      });
+  setListItemForm(item: ListItem) {
+    this.listItemForm.patchValue({
+      NameControl: item.name,
+      CostControl: item.totalCost,
+      CostYearControl: item.costPerYear,
+      CommentsControl: item.comments,
+      //PicturesControl: new FormControl([]),
+    })
+  }
 
   
-
-     
-    }
-
-   
-      
-  }
 
   backToList() {
     this.router.navigate(['/edit-list', this.listId]);
@@ -99,52 +104,77 @@ export class EditListItemComponent implements OnInit {
       this.addItem(data);
     }
     else {
-      this.updateItem();
+      this.updateItem(data);
     }
   }
 
 
   // functions for adding a new list item
   addItem(data: any) {
-  
-    this.maintenaceListService.addListItem(data, this.listId).subscribe(() => {
+    let newItem: ListItem = data;
+    newItem.maintenanceListId = this.listId;
+    this.maintenaceListService.addListItem(newItem, this.listId).subscribe(() => {
       this.backToList();
     });
+    //console.log(data);
+    //let loc: Location | undefined = this.locations.find(l => l.name === data.LocationGroup.LocationNameControl);
+    //let schedule: MaintenanceSchedule|undefined = this.schedules.find(s => s === data.ScheduleGroup);
+
+    //let newItem: ListItem = {
+    //  listItem: {
+    //    listItemId: 0,
+    //    maintenanceListId: this.listId,
+    //    name: data.NameControl,
+    //    locationId: loc?.locationId || -1,
+    //    cost: data.CostControl,
+    //    costYear: data.CostYearControl,
+    //    maintenanceScheduleId: schedule?.maintenanceScheduleId || -1,
+    //    comments: data.CommentsControl,
+    //    pictures: []
+    //  },
+    //  location: {
+    //    locationId: loc?.locationId || -1,
+    //    name: loc?.name || data.LocationGroup.LocationNameControl
+    //  },
+    //  maintenanceSchedule: {
+    //    name: schedule?.name || '',
+    //    maintenanceScheduleId: schedule?.maintenanceScheduleId || -1,
+    //    maintenanceInterval: schedule?.maintenanceInterval || data.ScheduleGroup.MaintenanceIntervalControl,
+    //    lastCompleted: schedule?.lastCompleted || data.ScheduleGroup.LastCompletedControl,
+    //    nextScheduledEventForcasted: schedule?.nextScheduledEventForcasted || data.ScheduleGroup.NextScheduledEventForcastedControl, 
+    //    nextScheduledEventPlanned: schedule?.nextScheduledEventPlanned || data.ScheduleGroup.NextScheduledEventPlannedControl,
+    //    yearsToDelay: schedule?.yearsToDelay || data.ScheduleGroup.YearsToDelayControl
+    //  }
+    //};
+    
     
 
   }
 
   // functions for editing/viewing existing list item
-  updateItem() {
-    if (this.listItem) {
+  updateItem(data: any) {
+     let formList: ListItem = data;
+    formList.maintenanceListId = this.listId;
+    formList.listItemId = Number(this.itemId);
 
-    this.listItem.name = this.listItemForm.controls['NameControl'].value;
-    this.listItem.location.name = this.listItemForm.controls['LocationControl'].value;
-    this.listItem.cost = this.listItemForm.controls['CostControl'].value;
-    this.listItem.costYear = this.listItemForm.controls['CostYearControl'].value;
-    this.listItem.maintenanceSchedule.maintenanceInterval = this.listItemForm.controls['MaintenanceIntervalControl'].value;
-    this.listItem.maintenanceSchedule.lastCompleted = this.listItemForm.controls['LastCompletedControl'].value;
-    this.listItem.maintenanceSchedule.nextScheduledEventForcasted = this.listItemForm.controls['NextScheduledEventForcastedControl'].value;
-    this.listItem.maintenanceSchedule.nextScheduledEventPlanned = this.listItemForm.controls['NextScheduledEventPlannedControl'].value;
-    this.listItem.maintenanceSchedule.yearsToDelay = this.listItemForm.controls['YearsToDelayControl'].value;
-    this.listItem.comments = this.listItemForm.controls['CommentsControl'].value;
-    //this.listItem.pictures = this.listItemForm.controls['PicturesControl'].value;
 
-      this.maintenaceListService.editItem(this.listItem).subscribe(results => console.log(results));
+      this.maintenaceListService.editItem(formList).subscribe(results => console.log(results));
       this.backToList();
-    }
+    
   }
 
   openDialog(): void {
 
     //let deleteListItemData: DeleteListItemDialogData = { item: {}, listId: };
+    if (this.listItem) {
 
-    const dialogRef = this.dialog.open(DeleteListItemDialogComponent, { width: '400px', height: '250px', data: this.listItem });
+      const dialogRef = this.dialog.open(DeleteListItemDialogComponent, { width: '400px', height: '250px', data: this.listItem });
+      dialogRef.afterClosed().subscribe(result => {
+      });
+    }
 
-    dialogRef.afterClosed().subscribe(result => {
 
       
-    });
 
   }
 

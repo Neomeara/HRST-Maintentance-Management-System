@@ -1,6 +1,10 @@
-import { Component, Inject } from '@angular/core';
+import { NullTemplateVisitor } from '@angular/compiler';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 import { MaintenanceList } from '../../../Models/MaintenanceList';
 import { Group, User } from '../../../Models/user';
 import { MaintenanceListService } from '../../../Services/MaintenanceList/maintenance-list.service';
@@ -17,7 +21,7 @@ export interface AddListDialogData {
   selector: 'dialog-overview-example',
   templateUrl: 'addListDialog.html',
 })
-export class addListDialog {
+export class addListDialog implements OnInit{
   private _maintenaceListService: MaintenanceListService;
   addListForm = new FormGroup(
     {
@@ -27,6 +31,9 @@ export class addListDialog {
 
     });
 
+  filteredGroups: Observable<Group[]> = of(this.data.groups);
+  filteredUsers: Observable<User[]> = of(this.data.users)
+
   constructor(
     public dialogRef: MatDialogRef<addListDialog>,
     maintenanceListService: MaintenanceListService,
@@ -35,11 +42,43 @@ export class addListDialog {
 
   }
 
+  ngOnInit() {
+    this.filteredGroups = this.addListForm.get('groupControl')!.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterGroups(value))
+    );
+
+    this.filteredUsers = this.addListForm.get('userControl')!.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterUsers(value))
+    )
+
+  }
+
+  private _filterGroups(value: string): Group[] {
+    const filterValue = value.toLowerCase();
+    return this.data.groups.filter(option => option.name.toLowerCase().includes(filterValue))
+  }
+
+  private _filterUsers(value: string): User[] {
+    const filterValue = value.toLowerCase();
+    return this.data.users.filter(option => option.email.toLowerCase().includes(filterValue))
+  }
+
+
   formSubmit(data: any) {
-    this._maintenaceListService.addList(data.groupControl, data.titleControl, data.userControl).subscribe(() => {
-      this.dialogRef.close();
-    });
+
+    if (data.groupControl === null || data.userControl === null || data.titleControl === null) {
+      alert("Invalid input, try again please")
+    }
+    else {
+
+
+      this._maintenaceListService.addList(data.groupControl, data.titleControl, data.userControl).subscribe(() => {
+        this.dialogRef.close('ok');
+      });
     
+    }
   }
 
   // Select and submit full user object
@@ -68,6 +107,10 @@ export class addListDialog {
   }
   selectGroup(group: Group) {
     this.addListForm.get('groupControl')?.setValue(group);
+  }
+
+  groupChange() {
+    console.log('yup');
   }
 
   onNoClick(): void {

@@ -4,6 +4,7 @@ using HRST_Maintenance_Management_System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRST_Maintenance_Management_System.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220312003129_listsRework")]
+    partial class listsRework
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -274,45 +276,47 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CostPerYear")
+                    b.Property<int>("Cost")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("LastCompleted")
+                    b.Property<DateTime>("CostYear")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MaintenanceInterval")
+                    b.Property<int>("LocationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("MaintenanceIntervalType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("MaintenanceListId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaintenanceScheduleId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("NextScheduledEvent")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Priority")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TotalCost")
-                        .HasColumnType("int");
-
                     b.HasKey("ListItemId");
 
                     b.HasIndex("MaintenanceListId");
 
                     b.ToTable("ListItems");
+                });
+
+            modelBuilder.Entity("HRST_Maintenance_Management_System.Models.Location", b =>
+                {
+                    b.Property<int>("LocationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocationId"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LocationId");
+
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("HRST_Maintenance_Management_System.Models.MaintenanceList", b =>
@@ -346,6 +350,34 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
                     b.ToTable("MaintenanceLists");
                 });
 
+            modelBuilder.Entity("HRST_Maintenance_Management_System.Models.MaintenanceSchedule", b =>
+                {
+                    b.Property<int>("MaintenanceScheduleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaintenanceScheduleId"), 1L, 1);
+
+                    b.Property<DateTime>("LastCompleted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MaintenanceInterval")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NextScheduledEventForcasted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("NextScheduledEventPlanned")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("YearsToDelay")
+                        .HasColumnType("int");
+
+                    b.HasKey("MaintenanceScheduleId");
+
+                    b.ToTable("Schedules");
+                });
+
             modelBuilder.Entity("HRST_Maintenance_Management_System.Models.Picture", b =>
                 {
                     b.Property<int>("PictureId")
@@ -365,7 +397,7 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
 
                     b.HasIndex("ListItemId");
 
-                    b.ToTable("Picture");
+                    b.ToTable("Pictures");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

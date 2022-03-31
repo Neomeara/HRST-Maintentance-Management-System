@@ -1,14 +1,10 @@
-//import { User } from "oidc-client";
-import { IUser } from "../../api-authorization/authorize.service";
-import { DefaultUser } from "../todo-list-page/mockLists";
 import { Group, User } from "./user";
 
 export interface MaintenanceList {
   maintenanceListId: number,
-  applicationUser: User,
-  applicationUserId: string,
+  applicationUserId?: string,
   title: string,
-  group: Group,
+  groupId: number,
   listItems: ListItem[],
   creationDate: Date,
   lastEditDate: Date
@@ -16,46 +12,31 @@ export interface MaintenanceList {
 
 export interface ListItem {
   listItemId: number,
-  maintenanceList: MaintenanceList,
   maintenanceListId: number,
   name: string,
-  location: Location,
-  cost: number,
-  costYear: Date,
-  maintenanceSchedule: MaintenanceSchedule,
+  location: string,
+  priority: string,
+  totalCost: number,
+  costPerYear: number,
+  maintenanceInterval: number,
+  maintenanceIntervalType: string,
+  lastCompleted: Date,
+  nextScheduledEvent: Date,
   comments: string,
   pictures: Picture[]
 }
 
 export interface Picture {
   PictureId: number,
-  ListItem: ListItem,
-  ListItemId: number,
   url:string
 }
-
-export interface Location {
-  locationId: number,
-  name: string
-}
-
-export interface MaintenanceSchedule {
-  maintenanceScheduleId: number,
-  maintenanceInterval: number,
-  lastCompleted: Date,
-  nextScheduledEventForcasted: Date,
-  nextScheduledEventPlanned: Date,
-  yearsToDelay: number
-}
-
 
 export function newList(group: Group, title: string, ApplicationUser: User) : MaintenanceList {
   let newList: MaintenanceList = {
     maintenanceListId: 1,
-    applicationUser: ApplicationUser,
     applicationUserId: ApplicationUser.id,
     title: title,
-    group: group,
+    groupId: group.groupId,
     creationDate: new Date(),
     lastEditDate: new Date(),
     listItems: []
