@@ -89,7 +89,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
             }
             user2 = await _DbContext.Users.FirstOrDefaultAsync(x => x.UserName == model.UserName);
-            if (user2 != null && user2.Id != user.Id)
+            if (user2 != null)
             {
                 return BadRequest("hello");
             }
@@ -163,6 +163,17 @@ namespace HRST_Maintenance_Management_System.Controllers
                 return Ok();
             }
             return BadRequest();
+        }
+
+
+        [HttpGet]
+        [Route("getGroups")]
+        public async Task<ActionResult<IEnumerable<Group>>> getGroups()
+        {
+            IEnumerable<Group> group;
+            group =  _DbContext.Groups.Where(x=> x.Name != "!DefaultGroup!").ToList();
+            return Ok(group);
+
         }
     }
 }
