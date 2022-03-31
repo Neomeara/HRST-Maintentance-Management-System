@@ -5,3 +5,9 @@ table {
   background-color: #808080;
   cursor: pointer;
 }
+
+input {
+  background-color: dimgray;
+  color:white;
+}
+
