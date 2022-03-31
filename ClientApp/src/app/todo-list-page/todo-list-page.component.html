@@ -10,17 +10,17 @@
   </form>
 
 <div class="listOfMaintenanceLists">
-  <div *ngFor="let list of lists$ | async" (click)="onSelect(list)" >
+  <div *ngFor="let listRow of listRows$ | async" (click)="onSelect(listRow.list)" >
     <div class="maintenanceList">
 
     <label for="listTitle" class="label">Title: </label>
-    <span name="listTitle" class="text">{{list.maintenanceList.title}}</span>
+    <span name="listTitle" class="text">{{listRow.list.title}}</span>
     <br />
     <label for="listGroup" class="label">Group: </label>
-    <span name="listGroup" class="text">{{list.group.name}}</span>
+    <span name="listGroup" class="text">{{listRow.group.name}}</span>
     <br />
     <label for="listOwner" class="label">Owner: </label>
-    <span name="listOwner" class="text">{{list.applicationUser.firstname}} - {{list.applicationUser.lastname}} - {{list.applicationUser.email}}</span>
+    <span name="listOwner" class="text">{{listRow.applicationUser.firstname}} - {{listRow.applicationUser.lastname}} - {{listRow.applicationUser.email}}</span>
     </div>
     
   </div>

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { pipe } from 'rxjs';
 import { Observable, of } from 'rxjs';
 import { getBaseUrl } from '../../../main';
-import { FullListItem, FullMaintenanceList, ListItem, MaintenanceList, MaintenanceSchedule, newList, Location } from '../../Models/MaintenanceList';
+import {ListItem, MaintenanceList, newList} from '../../Models/MaintenanceList';
 import { Group, User } from '../../Models/user';
 import { defaultList } from '../../todo-list-page/mockLists';
 
@@ -28,6 +28,9 @@ export class MaintenanceListService {
     return this._httpClient.get<Group[]>(getBaseUrl() + 'api/lists/getAllGroups');
 
   }
+  public getGroup(id: number): Observable<Group> {
+    return this._httpClient.get<Group>(getBaseUrl() + 'api/lists/getGroup/' + id.toString());
+  }
 
   public  addList(groupName: Group, title:string, ApplicationUser: User): Observable<any> {
     let list = newList(groupName, title, ApplicationUser);
@@ -44,20 +47,18 @@ export class MaintenanceListService {
   }
 
   public  deleteList(id: number): Observable<any> {
-    let params = new HttpParams();
-    params = params.append('id', id);
     
-     return this._httpClient.delete(getBaseUrl() + 'api/lists/deleteList', { params: params, observe: 'response' })
+     return this._httpClient.delete(getBaseUrl() + 'api/lists/deleteList/' + id.toString(), { observe: 'response' })
 
    
   }
 
-  public addListItem(data: FullListItem, listId: number):Observable<FullListItem> {
+  public addListItem(data: ListItem, listId: number):Observable<ListItem> {
 
     let list: MaintenanceList = defaultList;
     this.getList(listId).subscribe((ml) => { list = ml });
 
-    return this._httpClient.post<FullListItem>(getBaseUrl() + 'api/lists/addItem', data);
+    return this._httpClient.post<ListItem>(getBaseUrl() + 'api/lists/addItem', data);
   }
 
   public deleteListItem(id: number): Observable<any> {
@@ -67,7 +68,7 @@ export class MaintenanceListService {
 
     
 
-    return this._httpClient.delete(getBaseUrl() + 'api/lists/deleteItem', { params: params, observe: 'response' });
+    return this._httpClient.delete(getBaseUrl() + 'api/lists/deleteItem/' + id.toString(),);
 
   }
 
@@ -81,23 +82,5 @@ export class MaintenanceListService {
     return this._httpClient.post<ListItem>(getBaseUrl() + 'api/lists/editItem', item, {params:params});
   }
 
-  public getFullListItem(id: number): Observable<FullListItem> {
-    return this._httpClient.get<FullListItem>(getBaseUrl() + 'api/lists/getFullListItem/' + id.toString());
-  }
 
-  public getFullList(id: number): Observable<FullMaintenanceList> {
-    return this._httpClient.get<FullMaintenanceList>(getBaseUrl() + 'api/lists/getFullList/' + id.toString());
-  }
-
-  public getAllLocations(): Observable<Location[]> {
-    return this._httpClient.get<Location[]>(getBaseUrl() + 'api/lists/getAllLocations');
-  }
-
-  public getAllSchedules(): Observable<MaintenanceSchedule[]> {
-    return this._httpClient.get<MaintenanceSchedule[]>(getBaseUrl() + 'api/lists/getAllSchedules');
-  }
-
-  public getAllFullLists(): Observable<FullMaintenanceList[]> {
-    return this._httpClient.get<FullMaintenanceList[]>(getBaseUrl() + 'api/lists/getAllFullLists');
-  }
 }

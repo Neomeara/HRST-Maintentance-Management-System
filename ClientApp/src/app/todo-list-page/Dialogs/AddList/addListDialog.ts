@@ -75,7 +75,7 @@ export class addListDialog implements OnInit{
 
 
       this._maintenaceListService.addList(data.groupControl, data.titleControl, data.userControl).subscribe(() => {
-        this.dialogRef.close();
+        this.dialogRef.close('ok');
       });
     
     }

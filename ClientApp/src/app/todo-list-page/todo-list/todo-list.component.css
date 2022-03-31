@@ -11,6 +11,10 @@
   border-bottom: 2px solid lightgray;
   margin-bottom: 5px;
   box-shadow: black 2px 2px 5px;
+  display:flex;
+  justify-content: space-between;
+  width: 100%;
+
 }
 
 div .maintenanceListItem :hover {
@@ -26,8 +30,13 @@ label {
   display: inline-block;
   margin: 3px;
 }
-
+.itemProperty {
+    width: 100px;
+    display: flex;
+    justify-content:space-between;
+}
 .text {
+    margin-top: 5px;
 }
 
 input {

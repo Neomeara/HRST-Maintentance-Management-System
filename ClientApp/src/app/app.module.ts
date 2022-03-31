@@ -78,7 +78,7 @@ import { AuthorizeGuard } from '../api-authorization/authorize.guard';
     ReactiveFormsModule,
     MatInputModule,
     MatDialogModule,
-   
+  
     
     
   ],

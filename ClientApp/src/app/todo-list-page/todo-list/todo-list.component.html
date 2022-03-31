@@ -14,22 +14,22 @@
   <div class="listDetails">
     <div>
       <label for="Title" class="label">Title: </label>
-      <span name="Title">{{fullList.maintenanceList.title}}</span>
+      <span name="Title">{{fullList.title}}</span>
     </div>
 
     <div>
       <label for="Group" class="label">List Group: </label>
-      <span name="Group">{{fullList.group.name}}</span>
+      <span name="Group">{{listGroup.name}}</span>
     </div>
 
     <div>
       <label for="CreateDate" class="label">Creation Date:</label>
-      <span name="CreateDate">{{fullList.maintenanceList.creationDate}}</span>
+      <span name="CreateDate">{{fullList.creationDate}}</span>
     </div>
 
     <div>
       <label for="EditDate">Last Edit Date:</label>
-      <span name="EditDate">{{fullList.maintenanceList.lastEditDate}}</span>
+      <span name="EditDate">{{fullList.lastEditDate}}</span>
     </div>
 
   </div>
@@ -39,9 +39,36 @@
     <input matInput type="text" id="filterInput" name="filterInput" [formControl]="filterControl" />
   </form>
   <div class="listOfMaintenanceListItems">
-    <div *ngFor="let item of fullList.maintenanceList.listItems" (click)="selectItem(item)">
+    <div *ngFor="let item of listItems$ | async" (click)="selectItem(item)">
       <div class="maintenanceListItem">
-        <p>{{item.name}}</p>
+        <div class="itemProperty">
+        <label for="itemName" class="label">Name: </label>
+        <span name="itemName">{{item.name}}</span>
+        </div>
+          
+
+
+        <div class="itemProperty">
+        <label for="itemLocation" class="label">Location: </label>
+        <span name="itemLocation">{{item.location}}</span>
+          </div>
+          <div class="itemProperty">
+        <label for="itemPriority" class="label">Priority: </label>
+        <span name="itemPriority">{{item.priority}}</span>
+            </div>
+        <div class="itemProperty">
+        <label for="itemTotalCost" class="label">Total Cost: </label>
+        <span name="itemTotalCost">{{item.totalCost}}</span>
+        </div>
+        <div class="itemProperty">
+        <label for="itemLastCompleted" class="label">Last Completed: </label>
+        <span name="itemLastCompleted">{{item.lastCompleted}}</span>
+          </div>
+            <div class="itemProperty">
+        <label for="itemComments" class="label">Comments: </label>
+        <span name="itemComments">{{item.comments}}</span>
+        </div>
+
 
       </div>
     </div>

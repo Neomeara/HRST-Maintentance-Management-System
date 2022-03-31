@@ -1,21 +1,21 @@
-import { trigger } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, EventEmitter } from '@angular/core';
-import { AfterContentInit } from '@angular/core';
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { of, pipe } from 'rxjs';
-import { Observable } from 'rxjs';
-import { map, startWith, tap } from 'rxjs/operators';
-import { FullMaintenanceList, MaintenanceList } from '../Models/MaintenanceList';
-import { User } from '../Models/user';
+import { Observable, of } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { MaintenanceList } from '../Models/MaintenanceList';
+import { Group, User } from '../Models/user';
 import { MaintenanceListService } from '../Services/MaintenanceList/maintenance-list.service';
 import { UserServiceService } from '../Services/Users/user-service.service';
 import { addListDialog, AddListDialogData } from './Dialogs/AddList/addListDialog';
 
-
+interface ListRow {
+  list: MaintenanceList,
+  group: Group,
+  applicationUser: User
+}
 
 
 
@@ -38,47 +38,76 @@ export class TodoListPageComponent implements OnInit {
     this._userService = userService;
   }
 
- 
+  listRows: ListRow[] = [];
 
-  lists: FullMaintenanceList[] =[];
-  lists$: Observable<FullMaintenanceList[]> = this.maintenaceListService.getAllFullLists();
-  selectedList?: FullMaintenanceList;
+  lists: MaintenanceList[] =[];
+  listRows$?: Observable<ListRow[]>;
+  selectedList?: MaintenanceList;
   
   users$: Observable<User[]> = this.userService.getAllUsers()
+
 
   filterControl = new FormControl('');
 
   ngOnInit(): void {
-    //use this to filter stuff
-    this.maintenaceListService.getAllFullLists().subscribe(l => {
-      this.lists = l;
+    let lists: MaintenanceList[] = [];
+    let groups: Group[] = [];
+    let users: User[] = [];
+    this.maintenaceListService.getLists().subscribe(l => {
+      lists = l;
+      this.maintenaceListService.getAllGroups().subscribe(g => {
+        groups = g;
+        this.userService.getAllUsers().subscribe(u => {
+          users = u;
+          this.listRows = lists.map(l => ({ list: l, group: groups.find(g => g.groupId === l.groupId)!, applicationUser: users.find(u => u.id === l.applicationUserId)! }));
+          this.listRows$ = this.filterControl.valueChanges.pipe(
+            startWith(''),
 
-      this.lists$ = this.filterControl.valueChanges.pipe(
-      startWith(''),
-      
-      map(value => this.filterLists(value))
-    );
+            map(value => this.filterLists(value))
+          );
+        });
+      });
     });
-
 
   }
 
 
   private filterLists(term: string) {
     const lowerTerm = term.toLowerCase();
-    return this.lists.filter(item => item.maintenanceList.title.toLowerCase().includes(lowerTerm) ||
+  return this.listRows.filter(item => item.list.title.toLowerCase().includes(lowerTerm) ||
       item.applicationUser.email.toLowerCase().includes(lowerTerm) ||
       item.applicationUser.firstname.toLowerCase().includes(lowerTerm) ||
       item.applicationUser.lastname.toLowerCase().includes(lowerTerm) ||
       item.group.name.toLowerCase().includes(lowerTerm))
+    
+  }
 
+  private createListRows() {
+    let lists: MaintenanceList[] = [];
+    let groups: Group[] = [];
+    let users: User[] = [];
+    this.maintenaceListService.getLists().subscribe(l => {
+      lists = l;
+      this.maintenaceListService.getAllGroups().subscribe(g => {
+        groups = g;
+        this.userService.getAllUsers().subscribe(u => {
+          users = u;
+          this.listRows = lists.map(l => ({ list: l, group: groups.find(g => g.groupId === l.groupId)!, applicationUser: users.find(u => u.id === l.applicationUserId)! }));
+          this.listRows$ = this.filterControl.valueChanges.pipe(
+          startWith(''),
+
+          map(value => this.filterLists(value))
+          );
+        });
+      });
+    });
   }
 
 
-  onSelect(list: FullMaintenanceList): void {
+  onSelect(list: MaintenanceList): void {
     this.selectedList = list;
     let route = '/edit-list';
-    this.router.navigate([route, list.maintenanceList.maintenanceListId]);
+    this.router.navigate([route, list.maintenanceListId]);
   }
   
 
@@ -92,8 +121,8 @@ export class TodoListPageComponent implements OnInit {
     const dialogRef = this.dialog.open(addListDialog, { width: '400px', height: '500px', data: this.addListData });
 
     dialogRef.afterClosed().subscribe((result: string) => {
-      if (result !== "cancel") {
-        this.lists$ = this.maintenaceListService.getAllFullLists();
+      if (result === "ok") {
+        this.createListRows();
       }
 
     });

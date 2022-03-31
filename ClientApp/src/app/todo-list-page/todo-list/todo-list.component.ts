@@ -3,9 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { FullMaintenanceList, ListItem, MaintenanceList } from '../../Models/MaintenanceList';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
+import { ListItem, MaintenanceList } from '../../Models/MaintenanceList';
+import { Group } from '../../Models/user';
 import { MaintenanceListService } from '../../Services/MaintenanceList/maintenance-list.service';
 import { DeleteListDialogComponent } from '../Dialogs/delete-list-dialog/delete-list-dialog.component';
+import { defaultGroup } from '../mockLists';
 
 @Component({
   selector: 'app-todo-list',
@@ -18,14 +22,17 @@ export class TodoListComponent implements OnInit {
   private readonly _router: Router;
   private readonly _maintenaceListservice: MaintenanceListService;
 
-  fullList?: FullMaintenanceList;
+  fullList?: MaintenanceList;
   listId: number = 0;
+  listGroup: Group = defaultGroup;
 
   selectedItem?: ListItem;
   itemId: number = 0;
 
-  newList: boolean = false;
+  newItem: boolean = false;
   filterControl = new FormControl('');
+
+  listItems$: Observable<ListItem[]> = null!;
 
 
   constructor(
@@ -46,9 +53,17 @@ export class TodoListComponent implements OnInit {
     })
 
 
-    this._maintenaceListservice.getFullList(this.listId).subscribe(data => {
+    this._maintenaceListservice.getList(this.listId).subscribe(data => {
       if (data != null) {
         this.fullList = data;
+        this._maintenaceListservice.getGroup(data.groupId).subscribe(g => {
+          this.listGroup = g;
+          this.listItems$ = this.filterControl.valueChanges.pipe(
+            startWith(''),
+
+            map(value => this.filterItems(value))
+          );
+        });
       }
       else {
         this.router.navigate(['/todo-list']);
@@ -57,19 +72,27 @@ export class TodoListComponent implements OnInit {
     
   }
 
+  private filterItems(term: string) {
+    const lowerTerm = term.toLowerCase();
+    return this.fullList!.listItems.filter(item => item.name.toLowerCase().includes(lowerTerm)
+      || item.location.toLowerCase().includes(lowerTerm)
+      || item.priority.toLowerCase().includes(lowerTerm)
+    )
+  }
+
   addItem() {
     let route = '/edit-list-item';
-    this.newList = true;
-    this.router.navigate([route, this.listId, this.newList]);
+    this.newItem = true;
+    this.router.navigate([route, this.listId, this.newItem]);
 
   }
 
   selectItem(item: ListItem) {
     this.selectedItem = item;
-    this.newList = false;
+    this.newItem = false;
     let route = '/edit-list-item/';
     if (this.selectedItem !== null) {
-      this.router.navigate([route, item.maintenanceListId, this.newList, this.selectedItem.listItemId]);
+      this.router.navigate([route, item.maintenanceListId, this.newItem, this.selectedItem.listItemId]);
     }
   }
 

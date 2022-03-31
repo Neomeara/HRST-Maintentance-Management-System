@@ -18,19 +18,19 @@ export const DefaultUser: User = {
 
 }
 
-export const listitem1: ListItem = {
-  listItemId: 1,
-  maintenanceListId: 1,
-  name: "item 1",
-  locationId: 1,
+//export const listitem1: ListItem = {
+//  listItemId: 1,
+//  maintenanceListId: 1,
+//  name: "item 1",
+//  locationId: 1,
 
-  cost: 200,
-  costYear: new Date(),
-  maintenanceScheduleId: 1,
-  comments: "",
-  pictures: []
+//  cost: 200,
+//  costYear: new Date(),
+//  maintenanceScheduleId: 1,
+//  comments: "",
+//  pictures: []
 
-}
+//}
 
 export const defaultList: MaintenanceList =
   {

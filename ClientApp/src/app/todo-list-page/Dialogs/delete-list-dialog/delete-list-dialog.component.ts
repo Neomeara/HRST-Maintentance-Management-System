@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { FullMaintenanceList, MaintenanceList } from '../../../Models/MaintenanceList';
+import { MaintenanceList } from '../../../Models/MaintenanceList';
 import { MaintenanceListService } from '../../../Services/MaintenanceList/maintenance-list.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class DeleteListDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<DeleteListDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: FullMaintenanceList,
+    @Inject(MAT_DIALOG_DATA) public data: MaintenanceList,
     maintenanceListService: MaintenanceListService,
 router: Router  ) {
 
@@ -30,7 +30,7 @@ router: Router  ) {
   }
 
   deleteList() {
-    this._maintenaceListservice.deleteList(this.data.maintenanceList.maintenanceListId).subscribe(() => {
+    this._maintenaceListservice.deleteList(this.data.maintenanceListId).subscribe(() => {
     this.dialogRef.close();
     this._router.navigate(['/todo-list']);
 
