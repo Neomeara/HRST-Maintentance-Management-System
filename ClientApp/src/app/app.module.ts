@@ -28,6 +28,9 @@ import { EditListItemComponent } from './todo-list-page/edit-list-item/edit-list
 import { DeleteListItemDialogComponent } from './todo-list-page/Dialogs/delete-list-item-dialog/delete-list-item-dialog.component';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { ApplicationPaths } from '../api-authorization/api-authorization.constants';
+import { LoginComponent } from '../api-authorization/login/login.component';
+import { LogoutComponent } from '../api-authorization/logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -58,17 +61,18 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       
-      { path: 'admin-page', component: AdminPageComponent },
-      { path: 'user-edit', component: UserEditComponent },
+      { path: 'admin-page', component: AdminPageComponent, canActivate: [AuthorizeGuard]},
+      { path: 'user-edit', component: UserEditComponent, canActivate: [AuthorizeGuard] },
 
-      { path: 'todo-list', component: TodoListPageComponent },
+      { path: 'todo-list', component: TodoListPageComponent, canActivate: [AuthorizeGuard] },
 
-      { path: 'edit-list', component: TodoListComponent },
-      { path: 'edit-list/:listId', component: TodoListComponent },
+      { path: 'edit-list', component: TodoListComponent, canActivate: [AuthorizeGuard] },
+      { path: 'edit-list/:listId', component: TodoListComponent, canActivate: [AuthorizeGuard] },
 
-      { path: 'edit-list-item', component: EditListItemComponent},
-      { path: 'edit-list-item/:listId/:newList', component: EditListItemComponent},
-      { path: 'edit-list-item/:listId/:newList/:listItemId', component: EditListItemComponent}
+      { path: 'edit-list-item', component: EditListItemComponent, canActivate: [AuthorizeGuard]},
+      { path: 'edit-list-item/:listId/:newList', component: EditListItemComponent, canActivate: [AuthorizeGuard]},
+      { path: 'edit-list-item/:listId/:newList/:listItemId', component: EditListItemComponent, canActivate: [AuthorizeGuard] },
+
     
     ]),
     BrowserAnimationsModule,
@@ -79,7 +83,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ReactiveFormsModule,
     MatInputModule,
     MatDialogModule,
-  
     
     
   ],

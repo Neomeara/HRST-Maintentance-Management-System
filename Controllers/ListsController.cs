@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using Microsoft.AspNet.Identity;
+using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,25 +17,50 @@ namespace HRST_Maintenance_Management_System.Controllers
     public class ListsController : ControllerBase
     {
         private ApplicationDbContext _applicationDbContext;
-        private UserManager<ApplicationUser> _userManager;
+        private Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
+        private HttpContextAccessor _httpContext;
 
-        public ListsController(ApplicationDbContext applicationDbContext, UserManager<ApplicationUser> userManager)
+        public ListsController(ApplicationDbContext applicationDbContext, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, HttpContextAccessor httpContext)
         {
             _applicationDbContext = applicationDbContext;
             _userManager = userManager;
+            _httpContext = httpContext;
         }
 
-
+        [Authorize(Roles ="HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, Basic")]
         [Route("getAllLists")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MaintenanceList>>> getAllLists()
         {
-            IEnumerable<MaintenanceList> lists;
-            lists = await _applicationDbContext.MaintenanceLists.ToListAsync();
-         
+            IEnumerable<MaintenanceList> lists = Enumerable.Empty<MaintenanceList>();
+
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            user = await _applicationDbContext.Users.Include(i => i.Group).FirstOrDefaultAsync(i => i.Id == user.Id);
+            if (user != null)
+            {
+                var isHRST_Admin = await _userManager.IsInRoleAsync(user, "HRST_Admin");
+                var isHRST_Basic = await _userManager.IsInRoleAsync(user, "HRST_Basic");
+
+                
+
+                if (isHRST_Admin || isHRST_Basic)
+                {
+                    lists = await _applicationDbContext.MaintenanceLists.ToListAsync();
+                }
+                else
+                {
+                    lists = await _applicationDbContext.MaintenanceLists.Where(l => l.GroupId == user.Group.GroupId).ToListAsync();
+
+                }
+
+            }
+
             return Ok(lists);
+
+         
         }
 
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, Basic")]
         [Route("getList/{id:int}")]
         [HttpGet]
         public async Task<ActionResult<MaintenanceList>> GetList(int id)
@@ -56,6 +83,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, Basic")]
         [Route("getListItem/{id:int}")]
         [HttpGet]
         public async Task<ActionResult<ListItem>> getListItem(int id)
@@ -71,6 +99,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
+        [Authorize(Roles = "HRST_Admin, HRSG_Owner, HRSG_Editer")]
         [Route("deleteItem/{id}")]
         [HttpDelete]
         public async Task<ActionResult> deleteListItem(int id)
@@ -92,8 +121,8 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
-     
 
+        [Authorize(Roles = "HRST_Admin, HRSG_Owner, HRSG_Editer")]
         [Route("addItem")]
         [HttpPost]
         public async Task<ActionResult<ListItem>> AddListItem(ListItem model)
@@ -114,6 +143,8 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
+
+        [Authorize(Roles = "HRST_Admin, HRSG_Owner, HRSG_Editer")]
         [Route("editItem")]
         [HttpPost]
         public async Task<ActionResult> EditItem(ListItem item, int id)
@@ -141,7 +172,7 @@ namespace HRST_Maintenance_Management_System.Controllers
         }
 
 
-        //[Authorize]
+        [Authorize(Roles = "HRST_Admin, HRSG_Owner")]
         [Route("newlist")]
         [HttpPost]
         public async Task<ActionResult<MaintenanceList>> AddList(MaintenanceList maintenanceList )
@@ -157,6 +188,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             return BadRequest(listResult);
         }
 
+        [Authorize(Roles = "HRST_Admin, HRSG_Owner")]
         [Route("deleteList/{id}")]
         [HttpDelete]
         public async Task<ActionResult> DeleteList(int id)
@@ -182,12 +214,32 @@ namespace HRST_Maintenance_Management_System.Controllers
 
 
         // get all Groups
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, Basic")]
         [Route("getAllGroups")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Group>>> getAllGroups()
         {
-            IEnumerable<Group> groups;
-            groups = await _applicationDbContext.Groups.ToListAsync();
+            IEnumerable<Group> groups = Enumerable.Empty<Group>();
+
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            user = await _applicationDbContext.Users.Include(i => i.Group).FirstOrDefaultAsync(i => i.Id == user.Id);
+            if (user != null)
+            {
+                var isHRST_Admin = await _userManager.IsInRoleAsync(user, "HRST_Admin");
+                var isHRST_Basic = await _userManager.IsInRoleAsync(user, "HRST_Basic");
+
+                if (isHRST_Admin || isHRST_Basic)
+                {
+                    groups = await _applicationDbContext.Groups.Where(x => x.Name != "!DefaultGroup!").ToListAsync();
+                }
+                else
+                {
+                    groups = await _applicationDbContext.Groups.Where(g => g == user.Group && g.Name != "!DefaultGroup!").ToListAsync();
+
+                }
+
+            }
+
             if (groups == null)
             {
                 return BadRequest();
@@ -197,6 +249,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, Basic")]
         [Route("getGroup/{id:int}")]
         [HttpGet]
         public async Task<ActionResult<Group>> getGroup(int id)
