@@ -17,3 +17,21 @@ code {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+table {
+  width: 100%;
+}
+
+.mat-row:hover {
+  background-color: #808080;
+  cursor: pointer;
+}
+button {
+  background-color: #6f2b90;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 5px
+}

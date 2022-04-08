@@ -8,6 +8,7 @@ import { map, startWith } from 'rxjs/operators';
 import { MaintenanceList } from '../../../Models/MaintenanceList';
 import { Group, User } from '../../../Models/user';
 import { MaintenanceListService } from '../../../Services/MaintenanceList/maintenance-list.service';
+import { UserServiceService } from '../../../Services/Users/user-service.service';
 import { defaultGroup, DefaultUser } from '../../mockLists';
 
 
@@ -32,37 +33,42 @@ export class addListDialog implements OnInit{
     });
 
   filteredGroups: Observable<Group[]> = of(this.data.groups);
-  filteredUsers: Observable<User[]> = of(this.data.users)
+  filteredUsers: Observable<User[]> = of(this.data.users);
+  newfilteredgroups: Group[] = [];
+  newfilteredusers: User[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<addListDialog>,
     maintenanceListService: MaintenanceListService,
-    @Inject(MAT_DIALOG_DATA) public data: AddListDialogData  ) {
+    @Inject(MAT_DIALOG_DATA) public data: AddListDialogData,
+    private userService:UserServiceService  ) {
     this._maintenaceListService = maintenanceListService;
-
   }
 
   ngOnInit() {
-    this.filteredGroups = this.addListForm.get('groupControl')!.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filterGroups(value))
-    );
+    //this.filteredGroups.subscribe(x => x = this.newfilteredgroups);
+    //this.filteredGroups = this.addListForm.get('groupControl')!.valueChanges.pipe(
+    //  startWith(''),
+    //  map(value => this._filterGroups(value))
+    //);
 
-    this.filteredUsers = this.addListForm.get('userControl')!.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filterUsers(value))
-    )
+    //this.filteredUsers = this.addListForm.get('userControl')!.valueChanges.pipe(
+    //  startWith(''),
+    //  map(value => this._filterUsers(value))
+    //);
+    this.userService.getAllUsers().subscribe(u => { this.data.users = u; this.newfilteredusers = u; });
+    this._maintenaceListService.getAllGroups().subscribe(g => { this.data.groups = g; this.newfilteredgroups = g; });
 
   }
 
-  private _filterGroups(value: string): Group[] {
-    const filterValue = value.toLowerCase();
-    return this.data.groups.filter(option => option.name.toLowerCase().includes(filterValue))
+  public _filterGroups(event:Event) {
+    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
+    this.newfilteredgroups = this.data.groups.filter(option => option.name.toLowerCase().includes(filterValue))
   }
 
-  private _filterUsers(value: string): User[] {
-    const filterValue = value.toLowerCase();
-    return this.data.users.filter(option => option.email.toLowerCase().includes(filterValue))
+  public _filterUsers(event:Event) {
+    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
+    this.newfilteredusers = this.data.users.filter(option => option.email.toLowerCase().includes(filterValue))
   }
 
 

@@ -6,8 +6,6 @@
       <button type="button" (click)="addItem()">Add Item</button>
       <button type="button">Manage User Access</button>
       <button type="button" (click)="openDialog()">Delete List</button>
-
-
     </div>
   </div>
 
@@ -24,53 +22,87 @@
 
     <div>
       <label for="CreateDate" class="label">Creation Date:</label>
-      <span name="CreateDate">{{fullList.creationDate}}</span>
+      <span name="CreateDate">{{fullList.creationDate | date:'MMMM d, y, h:mm:ss a'}}</span>
     </div>
 
     <div>
       <label for="EditDate">Last Edit Date:</label>
-      <span name="EditDate">{{fullList.lastEditDate}}</span>
+      <span name="EditDate">{{fullList.lastEditDate | date:'MMMM d, y, h:mm:ss a'}}</span>
     </div>
 
   </div>
   <h2>List Items</h2>
   <form>
-
-    <input matInput type="text" id="filterInput" name="filterInput" [formControl]="filterControl" />
+    <input matInput type="text" id="filterInput" name="filterInput" [formControl]="filterControl"(keyup)="filterItems($event)" />
   </form>
-  <div class="listOfMaintenanceListItems">
+
+  <table mat-table matSort [dataSource]="sortedData" (matSortChange)="sortData($event)">
+    <!--<tr>
+    <th mat-sort-header="name">Name</th>
+    <th mat-sort-header="location">Location</th>
+    <th mat-sort-header="priority">Priority</th>
+    <th mat-sort-header="nextevent">Next Scheduled Event</th>
+  </tr>
+  <tr *ngFor="let item of sortedData" (click)="selectItem(item)">
+    <td>{{item.name}}</td>
+    <td>{{item.location}}</td>
+    <td>{{item.priority}}</td>
+    <td>{{item.nextScheduledEvent | date:'MMMM d, y'}}</td>
+  </tr>-->
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="name"> Name </th>
+      <td mat-cell *matCellDef="let item"> {{item.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="location">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="location"> Location </th>
+      <td mat-cell *matCellDef="let item"> {{item.location}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="priority">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="priority"> Priority </th>
+      <td mat-cell *matCellDef="let item"> {{item.priority}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nextevent">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="nextevent"> Next Scheduled Event </th>
+      <td mat-cell *matCellDef="let item"> {{item.nextScheduledEvent | date:'MMMM d, y'}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let item; columns: displayedColumns;" (click)="selectItem(item)"></tr>
+
+  </table>
+
+  <!--<div class="listOfMaintenanceListItems">
     <div *ngFor="let item of listItems$ | async" (click)="selectItem(item)">
       <div class="maintenanceListItem">
         <div class="itemProperty">
-        <label for="itemName" class="label">Name: </label>
-        <span name="itemName">{{item.name}}</span>
-        </div>
-          
-
-
-        <div class="itemProperty">
-        <label for="itemLocation" class="label">Location: </label>
-        <span name="itemLocation">{{item.location}}</span>
-          </div>
-          <div class="itemProperty">
-        <label for="itemPriority" class="label">Priority: </label>
-        <span name="itemPriority">{{item.priority}}</span>
-            </div>
-        <div class="itemProperty">
-        <label for="itemTotalCost" class="label">Total Cost: </label>
-        <span name="itemTotalCost">{{item.totalCost}}</span>
+          <label for="itemName" class="label">Name: </label>
+          <span name="itemName">{{item.name}}</span>
         </div>
         <div class="itemProperty">
-        <label for="itemLastCompleted" class="label">Last Completed: </label>
-        <span name="itemLastCompleted">{{item.lastCompleted}}</span>
-          </div>
-            <div class="itemProperty">
-        <label for="itemComments" class="label">Comments: </label>
-        <span name="itemComments">{{item.comments}}</span>
+          <label for="itemLocation" class="label">Location: </label>
+          <span name="itemLocation">{{item.location}}</span>
         </div>
-
-
+        <div class="itemProperty">
+          <label for="itemPriority" class="label">Priority: </label>
+          <span name="itemPriority">{{item.priority}}</span>
+        </div>
+        <div class="itemProperty">
+          <label for="itemTotalCost" class="label">Total Cost: </label>
+          <span name="itemTotalCost">{{item.totalCost}}</span>
+        </div>
+        <div class="itemProperty">
+          <label for="itemLastCompleted" class="label">Last Completed: </label>
+          <span name="itemLastCompleted">{{item.lastCompleted}}</span>
+        </div>
+        <div class="itemProperty">
+          <label for="itemComments" class="label">Comments: </label>
+          <span name="itemComments">{{item.comments}}</span>
+        </div>
       </div>
     </div>
-  </div>
+  </div>-->
 </div>

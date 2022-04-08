@@ -103,10 +103,10 @@ namespace HRST_Maintenance_Management_System.Controllers
             {
                 return NotFound();
             }
-
             var result = await _applicationDbContext.ListItems.AddAsync(model);
             if (result.State == EntityState.Added)
             {
+                list.LastEditDate = DateTime.Now;
                 _applicationDbContext.SaveChanges();
                 return CreatedAtAction(nameof(model), new { id =model.ListItemId }, model);
             }
@@ -118,10 +118,11 @@ namespace HRST_Maintenance_Management_System.Controllers
         [HttpPost]
         public async Task<ActionResult> EditItem(ListItem item, int id)
         {
-            
+            MaintenanceList list = await _applicationDbContext.MaintenanceLists.FindAsync(item.MaintenanceListId);
             ListItem currentItem = await _applicationDbContext.ListItems.FindAsync(id);
             if(currentItem != null)
             {
+                list.LastEditDate= DateTime.Now;
                 currentItem.Name = item.Name;
                 currentItem.Location = item.Location;
                 currentItem.Priority = item.Priority;
@@ -132,7 +133,7 @@ namespace HRST_Maintenance_Management_System.Controllers
                 currentItem.LastCompleted = item.LastCompleted;
                 currentItem.NextScheduledEvent = item.NextScheduledEvent;
                 currentItem.Comments = item.Comments;
-           
+                
           
                 _applicationDbContext.SaveChanges();
                 return Ok();
@@ -146,11 +147,12 @@ namespace HRST_Maintenance_Management_System.Controllers
         [HttpPost]
         public async Task<ActionResult<MaintenanceList>> AddList(MaintenanceList maintenanceList )
         {
-
+            maintenanceList.CreationDate = DateTime.Now;
             var listResult = await _applicationDbContext.MaintenanceLists.AddAsync(maintenanceList);
 
             if (listResult.State == EntityState.Added)
             {
+
                 _applicationDbContext.SaveChanges();
                 return CreatedAtAction(nameof(maintenanceList),new { id = maintenanceList.MaintenanceListId }, maintenanceList);
             }
