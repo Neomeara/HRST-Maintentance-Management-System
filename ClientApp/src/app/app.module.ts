@@ -32,6 +32,8 @@ import { ApplicationPaths } from '../api-authorization/api-authorization.constan
 import { LoginComponent } from '../api-authorization/login/login.component';
 import { LogoutComponent } from '../api-authorization/logout/logout.component';
 import { UnauthorizedComponent } from '../api-authorization/unauthorized/unauthorized.component';
+import { FileUploadComponent } from './file-upload/file-upload.component';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,8 @@ import { UnauthorizedComponent } from '../api-authorization/unauthorized/unautho
     addListDialog,
     DeleteListDialogComponent,
     EditListItemComponent,
-    DeleteListItemDialogComponent
+    DeleteListItemDialogComponent,
+    FileUploadComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -58,6 +61,7 @@ import { UnauthorizedComponent } from '../api-authorization/unauthorized/unautho
     ReactiveFormsModule,
     ApiAuthorizationModule,
     BrowserAnimationsModule,
+    MatSortModule,
     
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
