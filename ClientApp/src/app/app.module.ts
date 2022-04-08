@@ -31,6 +31,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { ApplicationPaths } from '../api-authorization/api-authorization.constants';
 import { LoginComponent } from '../api-authorization/login/login.component';
 import { LogoutComponent } from '../api-authorization/logout/logout.component';
+import { UnauthorizedComponent } from '../api-authorization/unauthorized/unauthorized.component';
 
 @NgModule({
   declarations: [
@@ -61,17 +62,19 @@ import { LogoutComponent } from '../api-authorization/logout/logout.component';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       
-      { path: 'admin-page', component: AdminPageComponent, canActivate: [AuthorizeGuard]},
-      { path: 'user-edit', component: UserEditComponent, canActivate: [AuthorizeGuard] },
+      { path: 'admin-page', component: AdminPageComponent, canActivate: [AuthorizeGuard], data: { roles: ['HRST_Admin', 'HRST_Basic'] }},
+      { path: 'user-edit', component: UserEditComponent, canActivate: [AuthorizeGuard], data: { roles: ['HRST_Admin'] } },
 
-      { path: 'todo-list', component: TodoListPageComponent, canActivate: [AuthorizeGuard] },
+      { path: 'todo-list', component: TodoListPageComponent, canActivate: [AuthorizeGuard], data: { roles: ['HRST_Admin'] } },
 
-      { path: 'edit-list', component: TodoListComponent, canActivate: [AuthorizeGuard] },
-      { path: 'edit-list/:listId', component: TodoListComponent, canActivate: [AuthorizeGuard] },
+      { path: 'edit-list', component: TodoListComponent, canActivate: [AuthorizeGuard], data: { roles: [] } },
+      { path: 'edit-list/:listId', component: TodoListComponent, canActivate: [AuthorizeGuard], data: { roles: [] } },
 
-      { path: 'edit-list-item', component: EditListItemComponent, canActivate: [AuthorizeGuard]},
-      { path: 'edit-list-item/:listId/:newList', component: EditListItemComponent, canActivate: [AuthorizeGuard]},
-      { path: 'edit-list-item/:listId/:newList/:listItemId', component: EditListItemComponent, canActivate: [AuthorizeGuard] },
+      { path: 'edit-list-item', component: EditListItemComponent, canActivate: [AuthorizeGuard], data: { roles: [] }},
+      { path: 'edit-list-item/:listId/:newList', component: EditListItemComponent, canActivate: [AuthorizeGuard], data: { roles: [] }},
+      { path: 'edit-list-item/:listId/:newList/:listItemId', component: EditListItemComponent, canActivate: [AuthorizeGuard], data: { roles: [] } },
+      { path: 'unauthorized', component: UnauthorizedComponent }
+
 
     
     ]),

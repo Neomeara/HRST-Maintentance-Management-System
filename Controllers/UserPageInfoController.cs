@@ -186,5 +186,24 @@ namespace HRST_Maintenance_Management_System.Controllers
             return Ok(group);
 
         }
+        
+        [Authorize]
+        [HttpPost]
+        [Route("userHasRoles")]
+        public async Task<ActionResult<bool>> userHasRoles(string[] roles)
+        {
+            bool hasRoles = false;
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            foreach (var role in roles)
+            {
+               if(await _userManager.IsInRoleAsync(user, role))
+                {
+                    hasRoles = true;
+                }
+            }
+
+            return hasRoles;
+        }
     }
 }
