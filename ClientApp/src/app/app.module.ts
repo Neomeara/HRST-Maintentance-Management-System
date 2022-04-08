@@ -28,8 +28,13 @@ import { EditListItemComponent } from './todo-list-page/edit-list-item/edit-list
 import { DeleteListItemDialogComponent } from './todo-list-page/Dialogs/delete-list-item-dialog/delete-list-item-dialog.component';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { ApplicationPaths } from '../api-authorization/api-authorization.constants';
+import { LoginComponent } from '../api-authorization/login/login.component';
+import { LogoutComponent } from '../api-authorization/logout/logout.component';
+import { UnauthorizedComponent } from '../api-authorization/unauthorized/unauthorized.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { MatSortModule } from '@angular/material/sort';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,17 +66,20 @@ import { MatSortModule } from '@angular/material/sort';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       
-      { path: 'admin-page', component: AdminPageComponent },
-      { path: 'user-edit', component: UserEditComponent },
+      { path: 'admin-page', component: AdminPageComponent, canActivate: [AuthorizeGuard], data: { roles: ['HRST_Admin', 'HRST_Basic'] }},
+      { path: 'user-edit', component: UserEditComponent, canActivate: [AuthorizeGuard], data: { roles: ['HRST_Admin'] } },
 
-      { path: 'todo-list', component: TodoListPageComponent },
+      { path: 'todo-list', component: TodoListPageComponent, canActivate: [AuthorizeGuard], data: { roles: ['HRST_Admin'] } },
 
-      { path: 'edit-list', component: TodoListComponent },
-      { path: 'edit-list/:listId', component: TodoListComponent },
+      { path: 'edit-list', component: TodoListComponent, canActivate: [AuthorizeGuard], data: { roles: [] } },
+      { path: 'edit-list/:listId', component: TodoListComponent, canActivate: [AuthorizeGuard], data: { roles: [] } },
 
-      { path: 'edit-list-item', component: EditListItemComponent},
-      { path: 'edit-list-item/:listId/:newList', component: EditListItemComponent},
-      { path: 'edit-list-item/:listId/:newList/:listItemId', component: EditListItemComponent}
+      { path: 'edit-list-item', component: EditListItemComponent, canActivate: [AuthorizeGuard], data: { roles: [] }},
+      { path: 'edit-list-item/:listId/:newList', component: EditListItemComponent, canActivate: [AuthorizeGuard], data: { roles: [] }},
+      { path: 'edit-list-item/:listId/:newList/:listItemId', component: EditListItemComponent, canActivate: [AuthorizeGuard], data: { roles: [] } },
+      { path: 'unauthorized', component: UnauthorizedComponent }
+
+
     
     ]),
     BrowserAnimationsModule,
@@ -82,7 +90,6 @@ import { MatSortModule } from '@angular/material/sort';
     ReactiveFormsModule,
     MatInputModule,
     MatDialogModule,
-  
     
     
   ],

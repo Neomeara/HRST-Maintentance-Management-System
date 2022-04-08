@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using HRST_Maintenance_Management_System.Models;
 using HRST_Maintenance_Management_System.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNet.Identity;
 
 namespace HRST_Maintenance_Management_System.Controllers
 {
-    //[Authorize]
+    //[Authorize(Roles = ("Admin"))]
     [Route("api/users")]
     [ApiController]
     public class UserPageInfoController : ControllerBase
@@ -17,18 +19,24 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         private readonly ILogger<UserPageInfoController> _logger;
         private readonly ApplicationDbContext _DbContext;
-        public UserPageInfoController(ILogger<UserPageInfoController> logger, ApplicationDbContext DbContext)
+        private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
+        private readonly Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> _roleManager;
+        public UserPageInfoController(ILogger<UserPageInfoController> logger, ApplicationDbContext DbContext, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, Microsoft.AspNetCore.Identity.RoleManager<IdentityRole> roleManager)
         {
             _logger = logger;
             _DbContext = DbContext;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
-        
 
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner")]
         [HttpGet]
         [Route("userinfo")]
 
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> Get()
         {
+            var currUser = User.Identity.GetUserId();
+
             IEnumerable<ApplicationUser> user;
             
             user = await _DbContext.Users.Include(x=> x.Group).ToListAsync();
@@ -36,6 +44,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
+        [Authorize(Roles = "HRST_Admin, HRST_Basic")]
         [HttpGet]
         [Route("edituser")]
 
@@ -52,6 +61,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
+        [Authorize(Roles = "HRST_Admin")]
         [HttpPut]
         [Route("updateuser")] // firstnamelastname
         public async Task<ActionResult>UpdateUser(UpdateUser model)
@@ -102,6 +112,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             return Ok(user);
         }
 
+        [Authorize(Roles = "HRST_Admin")]
         [HttpPut]
         [Route("updateuser2")]
 
@@ -142,7 +153,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
-
+        [Authorize(Roles = "HRST_Admin")]
         [Route("deleteUser")]
         [HttpDelete]
         public async Task<ActionResult> DeleteUser(string id)
@@ -175,7 +186,25 @@ namespace HRST_Maintenance_Management_System.Controllers
             return Ok(group);
 
         }
+        
+        [Authorize]
+        [HttpPost]
+        [Route("userHasRoles")]
+        public async Task<ActionResult<bool>> userHasRoles(string[] roles)
+        {
+            bool hasRoles = false;
+            var user = await _userManager.GetUserAsync(HttpContext.User);
 
-     
+            foreach (var role in roles)
+            {
+               if(await _userManager.IsInRoleAsync(user, role))
+                {
+                    hasRoles = true;
+                }
+            }
+
+            return hasRoles;
+        }
+
     }
 }

@@ -105,7 +105,7 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
 
                     b.HasIndex("Use");
 
-                    b.ToTable("Keys");
+                    b.ToTable("Keys", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.PersistedGrant", b =>
@@ -259,7 +259,7 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
 
                     b.HasKey("GroupId");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
                 });
 
             modelBuilder.Entity("HRST_Maintenance_Management_System.Models.ListItem", b =>
@@ -312,7 +312,7 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
 
                     b.HasIndex("MaintenanceListId");
 
-                    b.ToTable("ListItems");
+                    b.ToTable("ListItems", (string)null);
                 });
 
             modelBuilder.Entity("HRST_Maintenance_Management_System.Models.MaintenanceList", b =>
@@ -343,7 +343,7 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("MaintenanceLists");
+                    b.ToTable("MaintenanceLists", (string)null);
                 });
 
             modelBuilder.Entity("HRST_Maintenance_Management_System.Models.Picture", b =>
@@ -365,7 +365,7 @@ namespace HRST_Maintenance_Management_System.Data.Migrations
 
                     b.HasIndex("ListItemId");
 
-                    b.ToTable("Picture");
+                    b.ToTable("Picture", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

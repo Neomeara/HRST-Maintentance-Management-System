@@ -40,4 +40,9 @@ export class UserServiceService {
   public getAllGroups(): Observable<Group[]> {
     return this._httpClient.get<Group[]>(getBaseUrl() + 'api/users/getGroups')
   }
+
+  public userHasRoles(roles: string[]): Observable<boolean> {
+
+    return this._httpClient.post<boolean>(getBaseUrl() + 'api/users/userHasRoles', roles);
+  }
 }
