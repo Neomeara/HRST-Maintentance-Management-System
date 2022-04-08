@@ -1,4 +1,4 @@
-.listOfMaintenanceListItems {
+/*.listOfMaintenanceListItems {
   margin-bottom: 100px;
 }
 
@@ -62,11 +62,11 @@ input {
     justify-content: space-between;
     
 }
-  .pageHeader h1 {
+  .pageHeader h1 {*/
    /*flex: 50%;
     padding: 0px;*/
     
-  }
+  /*}
 
   .pageHeader .listFunctions {
      display: flex;
@@ -77,4 +77,4 @@ input {
   }
   .pageHeader .listFunctions button {
       
-  }
+  }*/

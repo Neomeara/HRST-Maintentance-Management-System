@@ -28,7 +28,8 @@ import { EditListItemComponent } from './todo-list-page/edit-list-item/edit-list
 import { DeleteListItemDialogComponent } from './todo-list-page/Dialogs/delete-list-item-dialog/delete-list-item-dialog.component';
 import { AuthorizeGuard } from '../api-authorization/authorize.guard';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
+import { FileUploadComponent } from './file-upload/file-upload.component';
+import { MatSortModule } from '@angular/material/sort';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,7 +45,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     addListDialog,
     DeleteListDialogComponent,
     EditListItemComponent,
-    DeleteListItemDialogComponent
+    DeleteListItemDialogComponent,
+    FileUploadComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -54,6 +56,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ReactiveFormsModule,
     ApiAuthorizationModule,
     BrowserAnimationsModule,
+    MatSortModule,
     
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },

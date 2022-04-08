@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Sort } from '@angular/material/sort';
+import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ListItem, MaintenanceList } from '../../Models/MaintenanceList';
@@ -17,7 +18,7 @@ import { defaultGroup } from '../mockLists';
   styleUrls: ['./todo-list.component.css']
 })
 export class TodoListComponent implements OnInit {
-
+  displayedColumns: string[] = ['name', 'location', 'priority', 'nextevent'];
   private readonly _httpClient: HttpClient;
   private readonly _router: Router;
   private readonly _maintenaceListservice: MaintenanceListService;
@@ -33,8 +34,8 @@ export class TodoListComponent implements OnInit {
   filterControl = new FormControl('');
 
   listItems$: Observable<ListItem[]> = null!;
-
-
+  sortedData: ListItem[];
+  listItems: ListItem[] = [];
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -44,6 +45,8 @@ export class TodoListComponent implements OnInit {
     this._router = router;
     this._httpClient = httpClient;
     this._maintenaceListservice = maintenanceListService;
+    this.sortedData = this.listItems.slice();
+
   }
 
   ngOnInit(): void {
@@ -56,13 +59,14 @@ export class TodoListComponent implements OnInit {
     this._maintenaceListservice.getList(this.listId).subscribe(data => {
       if (data != null) {
         this.fullList = data;
+        this.sortedData = this.fullList.listItems;
         this._maintenaceListservice.getGroup(data.groupId).subscribe(g => {
           this.listGroup = g;
-          this.listItems$ = this.filterControl.valueChanges.pipe(
-            startWith(''),
+          //this.listItems$ = this.filterControl.valueChanges.pipe(
+          //  startWith(''),
 
-            map(value => this.filterItems(value))
-          );
+          //  map(value => this.filterItems(value))
+          //);
         });
       }
       else {
@@ -72,9 +76,37 @@ export class TodoListComponent implements OnInit {
     
   }
 
-  private filterItems(term: string) {
-    const lowerTerm = term.toLowerCase();
-    return this.fullList!.listItems.filter(item => item.name.toLowerCase().includes(lowerTerm)
+
+  sortData(sort: Sort) {
+    //console.log("hello");
+    const data = this.sortedData.slice();
+    if (!sort.active || sort.direction === '') {
+      this.sortedData = data;
+      return;
+    }
+    this.sortedData = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'name':
+          return compare(a.name,b.name,isAsc);
+        case 'location':
+          return compare(a.location, b.location, isAsc);
+        case 'priority':
+          return compare(a.priority, b.priority, isAsc);
+        case 'nextevent':
+          return compare(a.nextScheduledEvent, b.nextScheduledEvent, isAsc);
+        default:
+          return 0;
+      }
+    });
+  }
+
+
+
+
+  public filterItems(event:Event) {
+    const lowerTerm = (event.target as HTMLInputElement).value.toLowerCase();
+    this.sortedData = this.fullList!.listItems.filter(item => item.name.toLowerCase().includes(lowerTerm)
       || item.location.toLowerCase().includes(lowerTerm)
       || item.priority.toLowerCase().includes(lowerTerm)
     )
@@ -109,4 +141,7 @@ export class TodoListComponent implements OnInit {
 
   
 
+}
+function compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
