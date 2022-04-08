@@ -17,16 +17,16 @@ export class AuthorizeGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     const roles = _next.data['roles'] as Array<string>;
     
-      let result = this.authorize.isAuthenticated()
-      .pipe(tap(isAuthenticated => this.handleAuthorization(isAuthenticated, state))) && this.userService.userHasRoles(roles).pipe(tap(x => x));
-    result.subscribe(a => {
-      if (a === true) {
-      }
-      else {
-        this.router.navigate(['unauthorized']);
-      }
-    })
-    return result;
+      return this.authorize.isAuthenticated()
+      .pipe(tap(isAuthenticated => this.handleAuthorization(isAuthenticated, state))) /*&& this.userService.userHasRoles(roles).pipe(tap(x => x));*/
+    //result.subscribe(a => {
+    //  if (a === true) {
+    //  }
+    //  else {
+    //    this.router.navigate(['unauthorized']);
+    //  }
+    //})
+    //return result;
   }
 
   private handleAuthorization(isAuthenticated: boolean, state: RouterStateSnapshot) {
