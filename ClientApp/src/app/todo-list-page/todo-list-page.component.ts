@@ -29,7 +29,7 @@ export class TodoListPageComponent implements OnInit {
   private readonly _router: Router;
   private readonly _userService: UserServiceService
   public addListData: AddListDialogData = {lists:[], groups:[], users:[]};
-  sortedData: ListRow[];
+  sortedData: ListRow[] = [];
 
   constructor(private router: Router, httpClient: HttpClient, private maintenaceListService: MaintenanceListService, public dialog: MatDialog, private userService:UserServiceService) {
     this._router = router;
@@ -41,7 +41,6 @@ export class TodoListPageComponent implements OnInit {
   listRows: ListRow[] = [];
 
   lists: MaintenanceList[] =[];
-  listRows$?: Observable<ListRow[]>;
   selectedList?: MaintenanceList;
   
   users$: Observable<User[]> = this.userService.getAllUsers()
@@ -50,6 +49,7 @@ export class TodoListPageComponent implements OnInit {
   filterControl = new FormControl('');
 
   ngOnInit(): void {
+
     let lists: MaintenanceList[] = [];
     let groups: Group[] = [];
     let users: User[] = [];
@@ -117,6 +117,8 @@ export class TodoListPageComponent implements OnInit {
         this.userService.getAllUsers().subscribe(u => {
           users = u;
           this.listRows = lists.map(l => ({ list: l, group: groups.find(g => g.groupId === l.groupId)!, applicationUser: users.find(u => u.id === l.applicationUserId)! }));
+          this.sortedData = this.listRows;
+
          // this.listRows$ = this.filterControl.valueChanges.pipe(
           //startWith(''),
 
