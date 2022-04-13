@@ -155,8 +155,18 @@ namespace HRST_Maintenance_Management_System.Areas.Identity.Pages.Account
 
                 string domain = Input.Email.Substring(Input.Email.IndexOf('@'));
                 string pt1 = Input.Email.Substring(Input.Email.IndexOf('@') + 1);
-                string pt2 = pt1.Substring(pt1.IndexOf('.'));
-                string name = pt1.Replace(pt2, "");
+                string name = "";
+                if(pt1.IndexOf('.') >-1)
+                {
+                    string pt2 = pt1.Substring(pt1.IndexOf('.'));
+                    name = pt1.Replace(pt2, "");
+
+                }
+                else
+                {
+                    name = pt1;
+
+                }
                 Group group = _applicationDbContext.Groups.Where(y => y.Domain == domain).FirstOrDefault();
 
 
