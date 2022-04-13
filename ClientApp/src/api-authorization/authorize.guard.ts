@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthorizeService } from './authorize.service';
 import { tap } from 'rxjs/operators';
@@ -18,15 +18,7 @@ export class AuthorizeGuard implements CanActivate {
     const roles = _next.data['roles'] as Array<string>;
     
       return this.authorize.isAuthenticated()
-      .pipe(tap(isAuthenticated => this.handleAuthorization(isAuthenticated, state))) /*&& this.userService.userHasRoles(roles).pipe(tap(x => x));*/
-    //result.subscribe(a => {
-    //  if (a === true) {
-    //  }
-    //  else {
-    //    this.router.navigate(['unauthorized']);
-    //  }
-    //})
-    //return result;
+      .pipe(tap(isAuthenticated => this.handleAuthorization(isAuthenticated, state)))
   }
 
   private handleAuthorization(isAuthenticated: boolean, state: RouterStateSnapshot) {
@@ -36,6 +28,28 @@ export class AuthorizeGuard implements CanActivate {
           [QueryParameterNames.ReturnUrl]: state.url
         }
       });
+    }
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RoleGuard implements CanActivate {
+
+  constructor(private authorize: AuthorizeService, private router: Router, private userService: UserServiceService) {
+  }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    let result = false;
+    const roles = route.data['roles'] as Array<string>;
+    return this.userService.userHasRoles(roles).pipe(tap(hasRoles => this.handleRoleCheck(hasRoles)));
+
+  }
+
+  private handleRoleCheck(hasRoles: boolean) {
+    if (!hasRoles) {
+      this.router.navigate(['unauthorized']);
     }
   }
 }

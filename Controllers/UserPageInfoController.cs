@@ -29,18 +29,35 @@ namespace HRST_Maintenance_Management_System.Controllers
             _roleManager = roleManager;
         }
 
-        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner")]
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, Basic_Editer")]
         [HttpGet]
         [Route("userinfo")]
-
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> Get()
         {
-            var currUser = User.Identity.GetUserId();
+            IEnumerable<ApplicationUser> allUsers = Enumerable.Empty<ApplicationUser>();
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            user = await _DbContext.Users.Include(i => i.Group).FirstOrDefaultAsync(i => i.Id == user.Id);
+            if (user != null)
+            {
+                var isHRST_Admin = await _userManager.IsInRoleAsync(user, "HRST_Admin");
+                var isHRST_Basic = await _userManager.IsInRoleAsync(user, "HRST_Basic");
 
-            IEnumerable<ApplicationUser> user;
+
+
+                if (isHRST_Admin || isHRST_Basic)
+                {
+                    allUsers = await _DbContext.Users.Include(x=> x.Group).ToListAsync();
+                }
+                else
+                {
+                    allUsers = await _DbContext.Users.Where(u => u.Group.GroupId == user.Group.GroupId).Include(x => x.Group).ToListAsync();
+
+                }
+
+            }
+
             
-            user = await _DbContext.Users.Include(x=> x.Group).ToListAsync();
-            return Ok(user);
+            return Ok(allUsers);
 
         }
 
@@ -182,7 +199,7 @@ namespace HRST_Maintenance_Management_System.Controllers
         public async Task<ActionResult<IEnumerable<Group>>> getGroups()
         {
             IEnumerable<Group> group;
-            group =  _DbContext.Groups.Where(x=> x.Name != "!DefaultGroup!").ToList();
+            group = await _DbContext.Groups.Where(x=> x.Name != "!DefaultGroup!").ToListAsync();
             return Ok(group);
 
         }
