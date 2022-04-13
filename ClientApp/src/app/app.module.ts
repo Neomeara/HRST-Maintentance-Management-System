@@ -26,7 +26,7 @@ import { UserEditComponent } from './user-edit/user-edit.component';
 import { DeleteListDialogComponent } from './todo-list-page/Dialogs/delete-list-dialog/delete-list-dialog.component';
 import { EditListItemComponent } from './todo-list-page/edit-list-item/edit-list-item.component';
 import { DeleteListItemDialogComponent } from './todo-list-page/Dialogs/delete-list-item-dialog/delete-list-item-dialog.component';
-import { AuthorizeGuard } from '../api-authorization/authorize.guard';
+import { AuthorizeGuard, RoleGuard } from '../api-authorization/authorize.guard';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ApplicationPaths } from '../api-authorization/api-authorization.constants';
 import { LoginComponent } from '../api-authorization/login/login.component';
@@ -67,17 +67,17 @@ import { MatSelectModule } from '@angular/material/select';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       
-      { path: 'admin-page', component: AdminPageComponent, canActivate: [AuthorizeGuard], data: { roles: ['HRST_Admin', 'HRST_Basic'] }},
-      { path: 'user-edit', component: UserEditComponent, canActivate: [AuthorizeGuard], data: { roles: ['HRST_Admin'] } },
+      { path: 'admin-page', component: AdminPageComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic'] }},
+      { path: 'user-edit', component: UserEditComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic'] } },
 
-      { path: 'todo-list', component: TodoListPageComponent, canActivate: [AuthorizeGuard], data: { roles: ['HRST_Admin'] } },
+      { path: 'todo-list', component: TodoListPageComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'Basic_Editer'] } },
 
-      { path: 'edit-list', component: TodoListComponent, canActivate: [AuthorizeGuard], data: { roles: [] } },
-      { path: 'edit-list/:listId', component: TodoListComponent, canActivate: [AuthorizeGuard], data: { roles: [] } },
+      { path: 'edit-list', component: TodoListComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'Basic_Editer'] } },
+      { path: 'edit-list/:listId', component: TodoListComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'Basic_Editer'] } },
 
-      { path: 'edit-list-item', component: EditListItemComponent, canActivate: [AuthorizeGuard], data: { roles: [] }},
-      { path: 'edit-list-item/:listId/:newList', component: EditListItemComponent, canActivate: [AuthorizeGuard], data: { roles: [] }},
-      { path: 'edit-list-item/:listId/:newList/:listItemId', component: EditListItemComponent, canActivate: [AuthorizeGuard], data: { roles: [] } },
+      { path: 'edit-list-item', component: EditListItemComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'Basic_Editer'] }},
+      { path: 'edit-list-item/:listId/:newList', component: EditListItemComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'Basic_Editer'] }},
+      { path: 'edit-list-item/:listId/:newList/:listItemId', component: EditListItemComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'Basic_Editer'] } },
       { path: 'unauthorized', component: UnauthorizedComponent }
 
 
