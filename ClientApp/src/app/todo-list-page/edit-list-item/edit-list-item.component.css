@@ -22,3 +22,10 @@ textarea {
   font-size: 16px;
   resize: none;
 }
+
+mat-select-value {
+  width: 2000px !important;
+  background-color: red !important;
+  font-size: 10px !important;
+  color: black !important;
+} 

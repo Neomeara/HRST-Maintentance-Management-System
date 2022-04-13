@@ -3,7 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { Group, User } from '../Models/user';
+import { Group, User,Role } from '../Models/user';
 import { UserServiceService } from '../Services/Users/user-service.service';
 import { defaultGroup } from '../todo-list-page/mockLists';
 
@@ -14,6 +14,7 @@ import { defaultGroup } from '../todo-list-page/mockLists';
   styleUrls: ['./user-edit.component.css']
 })
 export class UserEditComponent implements OnInit {
+  public currentUserRole: Role = {} as Role;
   public userdata?: User;
 
     formdata = new FormGroup({
@@ -21,7 +22,8 @@ export class UserEditComponent implements OnInit {
       UserName: new FormControl(""),
       FirstName: new FormControl(""),
       LastName: new FormControl(""),
-      Group:new FormControl(defaultGroup)
+      Group: new FormControl(defaultGroup),
+      Role:new FormControl()
     }); formresult: any;
 
   private id: string ="";
@@ -29,7 +31,7 @@ export class UserEditComponent implements OnInit {
   private baseurl_: string;
   private readonly router_: Router;
   public groups: Group[] = [];
-
+  public roles: Role[] = [];
 
   constructor(Http: HttpClient, @Inject('BASE_URL') getBaseUrl: string, private route: ActivatedRoute, router: Router, private userService: UserServiceService) {
     this.Http_ = Http;
@@ -44,11 +46,13 @@ export class UserEditComponent implements OnInit {
       console.log(this.id);
 
     });
+    this.userService.getAllRoles().subscribe(r => this.roles = r);
     this.userService.getAllGroups().subscribe(x => this.groups = x);
+    this.userService.getUserRole(this.id).subscribe(u => { this.currentUserRole = u; this.formdata.patchValue({Role:u.name})});
     // get the user data
    this.userService.getUser(this.id).subscribe(result => {
       this.userdata = result;
-     this.formdata.setValue({ Email: result.email, UserName: result.userName, FirstName: result.firstname, LastName: result.lastname, Group: result.group });
+     this.formdata.patchValue({ Email: result.email, UserName: result.userName, FirstName: result.firstname, LastName: result.lastname, Group: result.group});
 
     }, error => console.error(error));
 
@@ -75,6 +79,7 @@ export class UserEditComponent implements OnInit {
       console.log(result);
       console.log(data);
     }, error => console.error(error));
+    this.userService.putRole(this.id, this.formdata.get('Role')!.value).subscribe();
     this.showSuccessAlert();
   }
 

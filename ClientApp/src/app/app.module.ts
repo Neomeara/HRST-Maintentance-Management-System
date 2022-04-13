@@ -34,6 +34,7 @@ import { LogoutComponent } from '../api-authorization/logout/logout.component';
 import { UnauthorizedComponent } from '../api-authorization/unauthorized/unauthorized.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { MatSortModule } from '@angular/material/sort';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -90,7 +91,7 @@ import { MatSortModule } from '@angular/material/sort';
     ReactiveFormsModule,
     MatInputModule,
     MatDialogModule,
-    
+    MatSelectModule
     
   ],
   providers: [

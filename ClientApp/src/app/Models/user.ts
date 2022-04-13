@@ -26,3 +26,13 @@ export interface Group {
   name: string;
   domain: string;
 }
+export interface Role {
+  id: string;
+  name: string;
+  normalizedName: string;
+}
+
+export interface changeRoleModel {
+  id: string;
+  roleName: string;
+}

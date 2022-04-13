@@ -21,15 +21,19 @@
     <!--<label for="group">Group</label>
   <input id="group" type="text" class="fortextbox" name="Group" placeholder="Group Name"
          formControlName="Group">-->
-    <mat-form-field >
+    <label for="email">Email</label>
+    <input id="email" type="text" class="fortextbox" name="Email" placeholder="Email"
+           formControlName="Email">
+    <br />
 
+    <mat-form-field>
       <input type="text"
              placeholder="Pick group"
              aria-label="Number"
              matInput
              formControlName="Group"
              [matAutocomplete]="abc">
-      <mat-autocomplete autoActiveFirstOption  #abc="matAutocomplete" [displayWith]="getGroupDisplayFn()">
+      <mat-autocomplete autoActiveFirstOption #abc="matAutocomplete" [displayWith]="getGroupDisplayFn()">
         <mat-option *ngFor="let group of groups" [value]="group" (onSelect)="selectGroup(group)">
           {{group.name}}
         </mat-option>
@@ -37,10 +41,14 @@
     </mat-form-field>
 
     <br />
+    
+    <mat-form-field>
+      
+      <select matNativeControl matInput formControlName ="Role" name="roles" id="roles">
+        <option *ngFor="let role of roles" [value]="role.name">{{role.name}}</option>
+      </select>
+    </mat-form-field>
 
-    <label for="email">Email</label>
-    <input id="email" type="text" class="fortextbox" name="Email" placeholder="Email"
-           formControlName="Email">
     <br />
 
     <!--<label>Select lists you want this user to have access to:</label>

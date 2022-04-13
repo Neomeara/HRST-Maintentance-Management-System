@@ -206,5 +206,60 @@ namespace HRST_Maintenance_Management_System.Controllers
             return hasRoles;
         }
 
+        [Authorize]
+        [HttpGet]
+        [Route("getAllRoles")]
+        public async Task<ActionResult<string[]>>getAllRoles()
+        {
+            var roles = await _DbContext.Roles.ToListAsync();
+            return Ok(roles);
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("getCurrentRole")]
+        public async Task<ActionResult<string>> getCurrentRole()
+        {
+           
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            //user = await _DbContext.Users.Include(i => i.Group).FirstOrDefaultAsync(i => i.Id == user.Id);
+            var userrole = await _DbContext.UserRoles.Where(i=>i.UserId == user.Id).FirstOrDefaultAsync();
+            var role = await _DbContext.Roles.FindAsync(userrole.RoleId);
+            return Ok(role);
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("getUserRole")]
+        public async Task<ActionResult<string>> getUserRole(string id)
+        {
+
+            //user = await _DbContext.Users.Include(i => i.Group).FirstOrDefaultAsync(i => i.Id == user.Id);
+            var userrole = await _DbContext.UserRoles.Where(i => i.UserId == id).FirstOrDefaultAsync();
+            var role = await _DbContext.Roles.FindAsync(userrole.RoleId);
+            return Ok(role);
+        }
+
+        
+        public class changeRoleModel
+        {
+            public string id;
+            public string roleName;
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        [Route("putRole")]
+        public async Task<ActionResult>putRole(string id,string rolename)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            var userrole = await _DbContext.UserRoles.Where(i => i.UserId == id).FirstOrDefaultAsync();
+            var role = await _DbContext.Roles.FindAsync(userrole.RoleId);
+            await _userManager.RemoveFromRoleAsync(user, role.Name);
+            await _userManager.AddToRoleAsync(user, rolename);
+            return Ok();
+        }
+
     }
 }
