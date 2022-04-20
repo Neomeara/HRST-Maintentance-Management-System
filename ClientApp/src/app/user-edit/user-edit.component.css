@@ -56,6 +56,9 @@ button:hover {
   background-color: purple;
 }
 
+select {
+  margin-top: 20px;
+}
 
 
 

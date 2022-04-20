@@ -27,7 +27,9 @@
     <br />
 
     <mat-form-field>
+      <label for="group">Group</label>
       <input type="text"
+             name="group"
              placeholder="Pick group"
              aria-label="Number"
              matInput
@@ -43,7 +45,8 @@
     <br />
     
     <mat-form-field>
-      
+      <label for="roles">Role</label>
+      <br />
       <select matNativeControl matInput formControlName ="Role" name="roles" id="roles">
         <option *ngFor="let role of roles" [value]="role.name">{{role.name}}</option>
       </select>
