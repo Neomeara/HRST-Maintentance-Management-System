@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using Microsoft.AspNet.Identity;
 using System.Security.Claims;
+using System.Net.Http.Headers;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -183,7 +184,6 @@ namespace HRST_Maintenance_Management_System.Controllers
 
             if (listResult.State == EntityState.Added)
             {
-
                 _applicationDbContext.SaveChanges();
                 return CreatedAtAction(nameof(maintenanceList),new { id = maintenanceList.MaintenanceListId }, maintenanceList);
             }
@@ -207,7 +207,11 @@ namespace HRST_Maintenance_Management_System.Controllers
             if(result.State == EntityState.Deleted)
             {
                 _applicationDbContext.SaveChanges();
-                
+                var folderName = Path.Combine("StaticFiles", "Images");
+                folderName = Path.Combine(folderName, id.ToString());
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                Directory.Delete(pathToSave, true);
+
             }
           
             return Ok();
@@ -267,5 +271,60 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
+        [HttpPost, DisableRequestSizeLimit]
+        [Route("upload/{id}")]
+        public async Task<IActionResult> Upload(int id)
+        {
+            try
+            {
+                var formCollection = await Request.ReadFormAsync();
+                var file = formCollection.Files.First();
+                var folderName = Path.Combine("StaticFiles", "Images");
+                folderName = Path.Combine(folderName, id.ToString());
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                Directory.CreateDirectory(pathToSave);
+
+
+                if (file.Length > 0)
+                {
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    var fullPath = Path.Combine(pathToSave, fileName);
+                    var dbPath = Path.Combine(folderName, fileName);
+
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+                    return Ok(new { dbPath });
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
+        }
+
+
+        [HttpGet]
+        [Route("getImage/{id}/{name}")]
+        public IActionResult GetImage(int id,string name)
+        {
+            var folderName = Path.Combine("StaticFiles", "Images");
+            folderName = Path.Combine(folderName, id.ToString());
+            folderName = Path.Combine(folderName, name);
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            FileStream file = new FileStream(pathToSave, FileMode.Open);
+            
+
+            file.CopyTo(result);
+
+            //Byte[] b = System.IO.File.ReadAllBytes(pathToSave);   // You can use your own method over here.         
+            return File(result, "image/png");
+        }
     }
 }

@@ -6,6 +6,7 @@ import { Sort } from '@angular/material/sort';
 import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { getBaseUrl } from '../../../main';
 import { ListItem, MaintenanceList } from '../../Models/MaintenanceList';
 import { Group } from '../../Models/user';
 import { MaintenanceListService } from '../../Services/MaintenanceList/maintenance-list.service';
@@ -22,6 +23,11 @@ export class TodoListComponent implements OnInit {
   private readonly _httpClient: HttpClient;
   private readonly _router: Router;
   private readonly _maintenaceListservice: MaintenanceListService;
+
+  public response: { dbPath: '' } = {dbPath: ''};
+  public uploadFinished = (event:any) => {
+    this.response = event;
+  }
 
   fullList?: MaintenanceList;
   listId: number = 0;
@@ -139,7 +145,9 @@ export class TodoListComponent implements OnInit {
 
   }
 
-  
+  public createImgPath = () => {
+    return 'https://localhost:7123' + this.response.dbPath;
+  }
 
 }
 function compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {

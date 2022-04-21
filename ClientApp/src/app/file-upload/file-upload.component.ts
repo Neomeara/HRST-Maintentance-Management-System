@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpEventType } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { getBaseUrl } from '../../main';
 import { FileUploadService } from '../Services/file-upload/file-upload.service';
 
 @Component({
@@ -7,27 +9,29 @@ import { FileUploadService } from '../Services/file-upload/file-upload.service';
   styleUrls: ['./file-upload.component.css']
 })
 export class FileUploadComponent implements OnInit {
-  shortLink: string = "";
-  loading: boolean = false;
-  file!: File;
+  @Input() listId: number = 1;
 
-  constructor(private fileUploadService: FileUploadService) { }
-
-  ngOnInit(): void {
+  public progress: number = 0;
+  public message: string = '';
+  @Output() public onUploadFinished = new EventEmitter();
+  constructor(private http: HttpClient) { }
+  ngOnInit() {
   }
-
-  onChange(event: any) {
-    this.file = event.target.files[0];
-  }
-
-  onUpload() {
-    this.loading = !this.loading;
-    console.log(this.file);
-    this.fileUploadService.upload(this.file).subscribe(
-      (event: any) => {
-        if (typeof (event) === 'object') {
-          this.shortLink = event.link;
-          this.loading = false;
+  public uploadFile = (files:any) => {
+    if (files.length === 0) {
+      return;
+    }
+    let fileToUpload = <File>files[0];
+    const formData = new FormData();
+    formData.append('file', fileToUpload, fileToUpload.name);
+    this.http.post(getBaseUrl() + 'api/lists/upload/' + this.listId.toString(), formData, { reportProgress: true, observe: 'events' })
+      .subscribe(event => {
+        if ( event.type === HttpEventType.UploadProgress)
+          this.progress = Math.round(100 * event!.loaded / event!.total!);
+        else if (event.type === HttpEventType.Response) {
+          this.message = 'Upload success.';
+          this.onUploadFinished.emit(event.body);
+          this.http.get(getBaseUrl() + 'api/list/getImage/' +this.listId.toString() + '/'+ fileToUpload.name).subscribe();
         }
       });
   }
