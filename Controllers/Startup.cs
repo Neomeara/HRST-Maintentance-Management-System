@@ -1,4 +1,5 @@
-﻿using HRST_Maintenance_Management_System.Models;
+﻿using HRST_Maintenance_Management_System.Data;
+using HRST_Maintenance_Management_System.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -24,6 +25,10 @@ namespace HRST_Maintenance_Management_System.Controllers
 
             var _userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
 
+            
+
+            ApplicationDbContext _dbcontext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+
             // Seed HRST_Admin role and claims if not found
             var hrstAdminRole = await _roleManager.FindByNameAsync("HRST_Admin");
             if (hrstAdminRole == null)
@@ -32,10 +37,23 @@ namespace HRST_Maintenance_Management_System.Controllers
                 var _hrstAdminRole = new IdentityRole("HRST_Admin");
                 await _roleManager.CreateAsync(_hrstAdminRole);
                 
-
                 //create and add claims
                  await _roleManager.AddClaimAsync(_hrstAdminRole, HRST_Claims.allClaims);
+
+                
                  
+            }
+
+
+            //Create !DefaultGroup! for blank database
+            var defaultGroup = _dbcontext.Groups.Where(x=>x.Name == "!DefaultGroup!").FirstOrDefault();
+            if (defaultGroup == null)
+            {
+                Group _defaultGroup = new Group();
+                _defaultGroup.Name = "!DefaultGroup!";
+                _defaultGroup.Domain = "@!DefaultGroup!.com";
+                _dbcontext.Groups.Add(_defaultGroup);
+                _dbcontext.SaveChanges();
             }
 
             // Seed HRST_Basic and claims if not found
