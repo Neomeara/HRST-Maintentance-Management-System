@@ -29,7 +29,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             _roleManager = roleManager;
         }
 
-        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, Basic_Editer")]
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer")]
         [HttpGet]
         [Route("userinfo")]
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> Get()
@@ -277,6 +277,72 @@ namespace HRST_Maintenance_Management_System.Controllers
             await _userManager.AddToRoleAsync(user, rolename);
             return Ok();
         }
+
+        public class userRole
+        {
+            public ApplicationUser user { get; set; }
+            public string role { get; set; }
+
+            public userRole() { }
+        }
+
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner")]
+        [HttpGet]
+        [Route("getListAccessUserRoles/{listGroupId}")]
+        public async Task<ActionResult<IEnumerable<userRole>>> getListAccessUserRoles(int listGroupId)
+        {
+            var users = await _DbContext.Users.Where(u => u.Group.GroupId == listGroupId).ToListAsync();
+            IEnumerable<userRole> userRolesList = Enumerable.Empty<userRole>();
+            foreach (var user in users)
+            {
+                var userrole = await _DbContext.UserRoles.Where(i => i.UserId == user.Id).FirstOrDefaultAsync();
+                var role = await _DbContext.Roles.FindAsync(userrole.RoleId);
+                userRole newUserRole = new userRole
+                {
+                    user = user,
+                    role = role.Name
+                };
+
+                if(role.Name == "Basic" || role.Name == "HRSG_Viewer" || role.Name == "HRSG_Editer")
+                {
+                    userRolesList = userRolesList.Append(newUserRole);
+
+                }
+            }
+
+            return Ok(userRolesList);
+
+        }
+
+
+        [Authorize(Roles = "HRST_Admin, HRSG_Owner")]
+        [HttpPut]
+        [Route("updateListAccessUserRoles")]
+        public async Task<ActionResult> updateListAccessUserRoles(IEnumerable<userRole> userRoles)
+        {
+            foreach (var ur in userRoles)
+            {
+                var userrole = await _DbContext.UserRoles.Where(i => i.UserId == ur.user.Id).FirstOrDefaultAsync();
+                //var role = await _DbContext.Roles.FindAsync(userrole.RoleId);
+
+                _DbContext.UserRoles.Remove(userrole);
+                await _DbContext.SaveChangesAsync();
+
+                var newRole = await _DbContext.Roles.Where(r => r.Name == ur.role).SingleAsync();
+
+                IdentityUserRole<string> identityUserRole = new IdentityUserRole<string>() { UserId = ur.user.Id, RoleId = newRole.Id };
+
+                _DbContext.UserRoles.Add(identityUserRole);
+               await _DbContext.SaveChangesAsync();
+
+         
+            }
+
+            return Ok();
+
+        }
+
+
 
     }
 }

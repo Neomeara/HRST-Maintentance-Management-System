@@ -6,6 +6,7 @@ import { Sort } from '@angular/material/sort';
 import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { getBaseUrl } from '../../../main';
 import { ListItem, MaintenanceList } from '../../Models/MaintenanceList';
 import { Group } from '../../Models/user';
 import { MaintenanceListService } from '../../Services/MaintenanceList/maintenance-list.service';
@@ -139,7 +140,12 @@ export class TodoListComponent implements OnInit {
 
   }
 
-  
+  public goToListAccessPage() {
+    if (this.fullList) {
+
+    this.router.navigate([`edit-list-access/${this.fullList.maintenanceListId}/${this.fullList.groupId}`])
+    }
+  }
 
 }
 function compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
