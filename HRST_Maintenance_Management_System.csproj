@@ -39,15 +39,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\Models\fileProgress.ts" />
     <None Remove="ClientApp\src\app\Models\user.ts" />
     <None Remove="ClientApp\src\app\todo-list-page\Dialogs\AddList\addListDialog.ts" />
     <None Remove="ClientApp\src\app\todo-list-page\mockLists.ts" />
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\Models\fileProgress.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Models\user.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\todo-list-page\Dialogs\AddList\addListDialog.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\todo-list-page\mockLists.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\app\file-upload\" />
   </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

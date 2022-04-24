@@ -8,6 +8,7 @@ using System.Linq;
 using Microsoft.AspNet.Identity;
 using System.Security.Claims;
 using System.Net.Http.Headers;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,12 +21,15 @@ namespace HRST_Maintenance_Management_System.Controllers
         private ApplicationDbContext _applicationDbContext;
         private Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
         private HttpContextAccessor _httpContext;
+        private IHostingEnvironment _hostingEnvironment;
 
-        public ListsController(ApplicationDbContext applicationDbContext, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, HttpContextAccessor httpContext)
+        public ListsController(IHostingEnvironment environment,ApplicationDbContext applicationDbContext, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, HttpContextAccessor httpContext)
         {
             _applicationDbContext = applicationDbContext;
             _userManager = userManager;
             _httpContext = httpContext;
+            _hostingEnvironment = environment;
+
         }
 
         [Authorize(Roles ="HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, Basic")]
@@ -207,8 +211,9 @@ namespace HRST_Maintenance_Management_System.Controllers
             if(result.State == EntityState.Deleted)
             {
                 _applicationDbContext.SaveChanges();
-                var folderName = Path.Combine("StaticFiles", "Images");
+                var folderName = Path.Combine(_hostingEnvironment.WebRootPath, "lists");
                 folderName = Path.Combine(folderName, id.ToString());
+
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
                 Directory.Delete(pathToSave, true);
 
@@ -314,17 +319,18 @@ namespace HRST_Maintenance_Management_System.Controllers
         [Route("getImage/{id}/{name}")]
         public IActionResult GetImage(int id,string name)
         {
-            var folderName = Path.Combine("StaticFiles", "Images");
-            folderName = Path.Combine(folderName, id.ToString());
-            folderName = Path.Combine(folderName, name);
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            FileStream file = new FileStream(pathToSave, FileMode.Open);
+            //var folderName = Path.Combine("StaticFiles", "Images");
+            //folderName = Path.Combine(folderName, id.ToString());
+            //folderName = Path.Combine(folderName, name);
+            //var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            //FileStream file = new FileStream(pathToSave, FileMode.Open);
             
 
-            file.CopyTo(result);
+            //file.CopyTo(result);
 
-            //Byte[] b = System.IO.File.ReadAllBytes(pathToSave);   // You can use your own method over here.         
-            return File(result, "image/png");
+            ////Byte[] b = System.IO.File.ReadAllBytes(pathToSave);   // You can use your own method over here.         
+            //return File(result, "image/png");
+            return Ok(new { id, name });
         }
     }
 }

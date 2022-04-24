@@ -7,8 +7,9 @@
       <button type="button">Manage User Access</button>
       <button type="button" (click)="openDialog()">Delete List</button>
     </div>
-    <app-file-upload [listId]="fullList.maintenanceListId" (onUploadFinished)="uploadFinished($event)"></app-file-upload>
-    <img [src]="createImgPath()" alt="profile picture" style="width:60px; height:60px;">
+    <app-filemanager (listId)="this.fullList.maintenanceListId"></app-filemanager>
+
+
 
   </div>
 
