@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 <mat-form-field appearance="standard">
   <mat-label>Enter a username</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Enter a username" #input>
@@ -40,6 +47,6 @@
 
 </table>
 
-<mat-paginator #pageinator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+<mat-paginator #pageinator [pageSizeOptions]="[25,50,100]" aria-label="Select page of users"></mat-paginator>
 
 

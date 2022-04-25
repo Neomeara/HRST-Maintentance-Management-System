@@ -16,3 +16,10 @@ html {
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
+
+img {
+  height: 4em;
+  width: 6em;
+  margin-right:20px;
+  /*background-color: rgb(128, 128, 128, .1);*/
+}

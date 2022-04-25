@@ -147,7 +147,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             user.lastname = model.LastName;
             user.Email = model.Email;
             user.Group = model.group;
-            _DbContext.SaveChanges();
+            await _DbContext.SaveChangesAsync();
 
             return Ok(user);
         }
