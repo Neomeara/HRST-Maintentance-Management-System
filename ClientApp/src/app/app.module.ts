@@ -55,7 +55,6 @@ import { FileManagerComponent } from './file-upload/file-manager/file-manager.co
     DeleteListDialogComponent,
     EditListItemComponent,
     DeleteListItemDialogComponent,
-    FileUploadComponent,
     EditListAccessComponent,
     UploadComponent,
     DownloadComponent,

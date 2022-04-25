@@ -149,8 +149,9 @@ export class TodoListComponent implements OnInit {
   public goToListAccessPage() {
     if (this.fullList) {
 
-    this.router.navigate([`edit-list-access/${this.fullList.maintenanceListId}/${this.fullList.groupId}`])
+      this.router.navigate([`edit-list-access/${this.fullList.maintenanceListId}/${this.fullList.groupId}`])
     }
+  }
 
   public createImgPath = () => {
     return 'https://localhost:7123' + this.response.dbPath;
