@@ -19,8 +19,9 @@ export interface AddListDialogData {
 }
 
 @Component({
-  selector: 'dialog-overview-example',
+  selector: 'addListDialog',
   templateUrl: 'addListDialog.html',
+  styleUrls: ['./addListDialog.css']
 })
 export class addListDialog implements OnInit{
   private _maintenaceListService: MaintenanceListService;

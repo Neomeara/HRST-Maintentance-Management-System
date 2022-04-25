@@ -1,44 +1,62 @@
+<div class="dialog">
+
 <h1 mat-dialog-title>Add New List</h1>
 <div mat-dialog-content>
   <form [formGroup]="addListForm">
-    <mat-form-field>
+    <fieldset>
+      <legend>Title</legend>
       <input type="text"
              placeholder="List Title"
              matInput
              formControlName="titleControl" />
-    </mat-form-field>
-    <mat-form-field>
+
+    </fieldset>
+
+    <br />
+
+    <fieldset>
+      <legend>Group</legend>
       <input type="text"
-             placeholder="Pick group"
+             placeholder="Filter Groups"
              aria-label="Number"
-             matInput
-             formControlName="groupControl"
-             [matAutocomplete]="groups"
-             (keyup)="_filterGroups($event)">
-      <mat-autocomplete autoActiveFirstOption #groups="matAutocomplete" [displayWith]="getGroupDisplayFn()">
-        <mat-option *ngFor="let group of newfilteredgroups" [value]="group" (onSelect)="selectGroup(group)">
+             (keyup)="_filterGroups($event)"
+             matInput>
+
+
+      <select matInput formControlName="groupControl" placeholder="Select Group">
+        <option *ngFor="let group of newfilteredgroups" [value]="group">
           {{group.name}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-    <mat-form-field>
+        </option>
+      </select>
+
+    </fieldset>
+    <br />
+
+    <fieldset>
+      <legend>User</legend>
       <input type="text"
-             placeholder="Select a list owner"
+             placeholder="Filter Users"
              aria-label="Number"
              matInput
-             formControlName="userControl"
-             [matAutocomplete]="users"
              (keyup)="_filterUsers($event)">
              
-      <mat-autocomplete autoActiveFirstOption #users="matAutocomplete" [displayWith]="getUserDisplayFn()">
-        <mat-option *ngFor="let user of newfilteredusers" [value]="user" (onSelect)="selectUser(user)">
+      <select formControlName="userControl" placeholder="Select User">
+        <option *ngFor="let user of newfilteredusers" [value]="user" >
           {{user.email}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+        </option>
+      </select>
+
+    </fieldset>
+
   </form>
+
+
 </div>
+
+
 <div mat-dialog-actions>
   <button mat-button (click)="formSubmit(addListForm.value)">Add List</button>
   <button mat-button (click)="onNoClick()">No Thanks</button>
+</div>
+
 </div>

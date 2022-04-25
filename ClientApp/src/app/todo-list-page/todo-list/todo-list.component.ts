@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -42,6 +44,10 @@ export class TodoListComponent implements OnInit {
   listItems$: Observable<ListItem[]> = null!;
   sortedData: ListItem[];
   listItems: ListItem[] = [];
+
+  dataSource: MatTableDataSource<ListItem>;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -52,6 +58,8 @@ export class TodoListComponent implements OnInit {
     this._httpClient = httpClient;
     this._maintenaceListservice = maintenanceListService;
     this.sortedData = this.listItems.slice();
+    this.dataSource = new MatTableDataSource(this.sortedData);
+    this.dataSource.paginator = this.paginator;
 
   }
 
@@ -73,6 +81,9 @@ export class TodoListComponent implements OnInit {
 
           //  map(value => this.filterItems(value))
           //);
+          this.dataSource = new MatTableDataSource(this.sortedData);
+          this.dataSource.paginator = this.paginator;
+
         });
       }
       else {
@@ -105,6 +116,11 @@ export class TodoListComponent implements OnInit {
           return 0;
       }
     });
+    this.dataSource = new MatTableDataSource(this.sortedData);
+    this.dataSource.paginator = this.paginator;
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
 
@@ -115,7 +131,14 @@ export class TodoListComponent implements OnInit {
     this.sortedData = this.fullList!.listItems.filter(item => item.name.toLowerCase().includes(lowerTerm)
       || item.location.toLowerCase().includes(lowerTerm)
       || item.priority.toLowerCase().includes(lowerTerm)
-    )
+      || item.nextScheduledEvent.toString().toLowerCase().includes(lowerTerm)
+    );
+
+    this.dataSource = new MatTableDataSource(this.sortedData);
+    this.dataSource.paginator = this.paginator;
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   addItem() {
@@ -150,6 +173,13 @@ export class TodoListComponent implements OnInit {
     if (this.fullList) {
 
       this.router.navigate([`edit-list-access/${this.fullList.maintenanceListId}/${this.fullList.groupId}`])
+    }
+  }
+
+  public goToListFilesPage() {
+    if (this.fullList) {
+
+      this.router.navigate([`edit-list/${this.fullList.maintenanceListId}/files`])
     }
   }
 
