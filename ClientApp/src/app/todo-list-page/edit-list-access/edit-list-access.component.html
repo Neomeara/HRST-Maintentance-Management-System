@@ -1,0 +1,51 @@
+<h1>Edit List Access</h1>
+
+
+
+<table mat-table [dataSource]="userRoles" class="mat-elevation-z8" matSort>
+
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+  <!-- Position Column -->
+  <ng-container matColumnDef="username">
+    <th mat-header-cell *matHeaderCellDef> Username </th>
+    <td mat-cell *matCellDef="let userRole"> {{userRole.user.userName}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="firstname">
+    <th mat-header-cell *matHeaderCellDef> First name </th>
+    <td mat-cell *matCellDef="let userRole"> {{userRole.user.firstname}} </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="lastname">
+    <th mat-header-cell *matHeaderCellDef> Last name </th>
+    <td mat-cell *matCellDef="let userRole"> {{userRole.user.lastname}} </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef> Email </th>
+    <td mat-cell *matCellDef="let userRole"> {{userRole.user.email}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="access">
+    <th mat-header-cell *matHeaderCellDef> List access </th>
+    <td mat-cell *matCellDef="let userRole">
+
+    <select value="{{userRole.role}}" (change)="onRoleChange( $event, userRole)" >
+      <option value="Basic">None</option>
+      <option value="HRSG_Viewer">View</option>
+      <option value="HRSG_Editer">Edit</option>
+    </select>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+
+</table>
+<br />
+<button (click)="updateUserRoles()">Save Changes</button>
