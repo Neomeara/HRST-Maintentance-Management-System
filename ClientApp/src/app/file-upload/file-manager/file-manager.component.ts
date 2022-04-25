@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ProgressStatus, ProgressStatusEnum } from '../../Models/fileProgress';
 import { FileUploadService } from '../../Services/file-upload/file-upload.service';
 
 @Component({
   selector: 'app-filemanager',
-  templateUrl: './file-manager.component.html'
+  templateUrl: './file-manager.component.html',
+  styleUrls: ['./file-manager.component.css']
 })
 export class FileManagerComponent implements OnInit {
 
@@ -18,7 +19,7 @@ export class FileManagerComponent implements OnInit {
   public listId: number = 0;
 
 
-  constructor(private service: FileUploadService, private route :ActivatedRoute) { }
+  constructor(private service: FileUploadService, private route :ActivatedRoute, private router:Router) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
@@ -34,6 +35,14 @@ export class FileManagerComponent implements OnInit {
         this.files = data;
       }
     );
+  }
+
+  public displayFileName(filepath: string): string {
+    return filepath.substr(filepath.lastIndexOf("\\") +1)
+  }
+
+  public backToList() {
+    this.router.navigate(['edit-list/' + this.listId.toString()]);
   }
 
 

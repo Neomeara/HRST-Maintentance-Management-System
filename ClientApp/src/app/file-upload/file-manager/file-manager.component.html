@@ -1,12 +1,20 @@
+<div class="pageHeader">
+  <h1>File List</h1>
+  <div class="listFunctions">
+    <button (click)="backToList()">BACK TO LIST</button>
 <app-upload [disabled]="showProgress" (uploadStatus)="uploadStatus($event)"></app-upload>
-<h2>File List</h2>
+    
+  </div>
+
+
+</div>
 <p *ngIf="showProgress"> progress <strong>{{percentage}}%</strong></p>
 <hr>
 <div class="container">
   <ul>
-    <li *ngFor="let file of files">
-      <a>
-        {{file}}
+    <li *ngFor="let file of files" >
+      <a >
+        <span>{{displayFileName(file)}}</span>
         <app-download [disabled]="showProgress" [fileName]="file" (downloadStatus)="downloadStatus($event)" (deleteStatus)="deleteStatus($event)"></app-download>
       </a>
     </li>
