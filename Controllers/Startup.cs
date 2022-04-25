@@ -111,7 +111,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
             // Seed HRSG_Editer role and claims if not found
             var hrsgEditer = await _roleManager.FindByNameAsync("HRSG_Editer");
-            if (hrsgOwnerRole == null)
+            if (hrsgEditer == null)
             {
                 // Create Role
                 var _hrsgEditer = new IdentityRole("HRSG_Editer");
@@ -131,6 +131,23 @@ namespace HRST_Maintenance_Management_System.Controllers
                 await _roleManager.AddClaimAsync(_hrsgEditer, HRST_Claims.deleteListItem);
             }
 
+            // Seed HRSG_Viewer role and claims if not found
+            var hrsgViewer = await _roleManager.FindByNameAsync("HRSG_Viewer");
+            if (hrsgViewer == null)
+            {
+                // Create Role
+                var _hrsgViewer = new IdentityRole("HRSG_Viewer");
+                await _roleManager.CreateAsync(_hrsgViewer);
+
+                // Create and Add claims
+                await _roleManager.AddClaimAsync(_hrsgViewer, HRST_Claims.getAllLists);
+                await _roleManager.AddClaimAsync(_hrsgViewer, HRST_Claims.viewAllLists);
+
+                await _roleManager.AddClaimAsync(_hrsgViewer, HRST_Claims.getOneList);
+                await _roleManager.AddClaimAsync(_hrsgViewer, HRST_Claims.viewOneList);
+
+             
+            }
 
 
             var basicRole = await _roleManager.FindByNameAsync("Basic");

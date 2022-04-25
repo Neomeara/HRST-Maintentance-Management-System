@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { getBaseUrl } from '../../../main';
 import { changeRoleModel, Group, Role, User } from '../../Models/user';
+import { userRole } from '../../todo-list-page/edit-list-access/edit-list-access.component';
 
 @Injectable({
   providedIn: 'root'
@@ -66,4 +67,13 @@ export class UserServiceService {
     params = params.append('rolename', rolename);
     return this._httpClient.post<any>(getBaseUrl() + 'api/users/putRole', {},{params:params});
   }
+
+  public getListAccessUserRoles(listGroupId: number): Observable<userRole[]> {
+    return this._httpClient.get<userRole[]>(getBaseUrl() + 'api/users/getListAccessUserRoles/' + listGroupId.toString());
+  }
+
+  public updateListAccessUserRoles(userRoles:userRole[]): Observable<any> {
+    return this._httpClient.put<any>(getBaseUrl() + 'api/users/updateListAccessUserRoles', userRoles);
+  }
+
 }

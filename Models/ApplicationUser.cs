@@ -1,5 +1,6 @@
 ﻿using HRST_Maintenance_Management_System.Data;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json.Serialization;
 
 namespace HRST_Maintenance_Management_System.Models
 {
@@ -17,6 +18,9 @@ namespace HRST_Maintenance_Management_System.Models
             //DefaultGroup group  = new DefaultGroup(application);
             Group = DefaultGroup.defaultGroup(db);
         }
+
+        [JsonConstructor]
+        public ApplicationUser() { }
     }
 
 }

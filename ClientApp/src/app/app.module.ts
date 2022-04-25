@@ -1,5 +1,5 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -32,9 +32,12 @@ import { ApplicationPaths } from '../api-authorization/api-authorization.constan
 import { LoginComponent } from '../api-authorization/login/login.component';
 import { LogoutComponent } from '../api-authorization/logout/logout.component';
 import { UnauthorizedComponent } from '../api-authorization/unauthorized/unauthorized.component';
-import { FileUploadComponent } from './file-upload/file-upload.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
+import { EditListAccessComponent } from './todo-list-page/edit-list-access/edit-list-access.component';
+import { UploadComponent } from './file-upload/upload/upload.component';
+import { DownloadComponent } from './file-upload/download/download.component';
+import { FileManagerComponent } from './file-upload/file-manager/file-manager.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +55,10 @@ import { MatSelectModule } from '@angular/material/select';
     DeleteListDialogComponent,
     EditListItemComponent,
     DeleteListItemDialogComponent,
-    FileUploadComponent,
+    EditListAccessComponent,
+    UploadComponent,
+    DownloadComponent,
+    FileManagerComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -70,14 +76,15 @@ import { MatSelectModule } from '@angular/material/select';
       { path: 'admin-page', component: AdminPageComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic'] }},
       { path: 'user-edit', component: UserEditComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic'] } },
 
-      { path: 'todo-list', component: TodoListPageComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'Basic_Editer'] } },
+      { path: 'todo-list', component: TodoListPageComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'HRSG_Editer'] } },
 
-      { path: 'edit-list', component: TodoListComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'Basic_Editer'] } },
-      { path: 'edit-list/:listId', component: TodoListComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'Basic_Editer'] } },
+      { path: 'edit-list', component: TodoListComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'HRSG_Editer'] } },
+      { path: 'edit-list/:listId', component: TodoListComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'HRSG_Editer'] } },
 
-      { path: 'edit-list-item', component: EditListItemComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'Basic_Editer'] }},
-      { path: 'edit-list-item/:listId/:newList', component: EditListItemComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'Basic_Editer'] }},
-      { path: 'edit-list-item/:listId/:newList/:listItemId', component: EditListItemComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'Basic_Editer'] } },
+      { path: 'edit-list-item', component: EditListItemComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'HRSG_Editer'] }},
+      { path: 'edit-list-item/:listId/:newList', component: EditListItemComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'HRSG_Editer'] }},
+      { path: 'edit-list-item/:listId/:newList/:listItemId', component: EditListItemComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'HRSG_Editer'] } },
+      { path: 'edit-list-access/:listId/:listGroupId', component: EditListAccessComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner'] }},
       { path: 'unauthorized', component: UnauthorizedComponent }
 
 
@@ -91,7 +98,7 @@ import { MatSelectModule } from '@angular/material/select';
     ReactiveFormsModule,
     MatInputModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
     
   ],
   providers: [
