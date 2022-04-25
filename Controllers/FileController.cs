@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using System;
 using System.IO;
@@ -6,6 +7,7 @@ using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace HRST_Maintenance_Management_System.Controllers
 {
+    [Authorize]
     [Route("api/files")]
     [ApiController]
     public class FileController : Controller
@@ -17,6 +19,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             _hostingEnvironment = environment;
         }
 
+        [Authorize(Roles = "HRST_Admin, HRSG_Owner, HRSG_Editer")]
         [HttpPost]
         [Route("upload/{listId}")]
         public async Task<IActionResult> Upload(IFormFile file, string listId)
@@ -38,6 +41,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, HRSG_Viewer")]
         [HttpGet]
         [Route("download/{listId}")]
         public async Task<IActionResult> Download([FromQuery] string file, string listId)
@@ -58,6 +62,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             return File(memory, GetContentType(filePath), file);
         }
 
+        [Authorize(Roles = "HRST_Admin, HRSG_Owner, HRSG_Editer")]
         [HttpDelete]
         [Route("delete/{listId}")]
         public async Task<IActionResult> Delete([FromQuery] string file, string listId)
@@ -76,6 +81,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             
         }
 
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, HRSG_Viewer")]
         [HttpGet]
         [Route("files/{listId}")]
         public IActionResult Files(string listId)
