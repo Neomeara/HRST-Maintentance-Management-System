@@ -31,7 +31,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, Basic_Editer")]
         [HttpGet]
-        [Route("userinfo")]
+        [Route("userinfo")] //api call to get all users
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> Get()
         {
             IEnumerable<ApplicationUser> allUsers = Enumerable.Empty<ApplicationUser>();
