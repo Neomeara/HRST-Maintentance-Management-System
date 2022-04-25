@@ -32,10 +32,12 @@ import { ApplicationPaths } from '../api-authorization/api-authorization.constan
 import { LoginComponent } from '../api-authorization/login/login.component';
 import { LogoutComponent } from '../api-authorization/logout/logout.component';
 import { UnauthorizedComponent } from '../api-authorization/unauthorized/unauthorized.component';
-import { FileUploadComponent } from './file-upload/file-upload.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { EditListAccessComponent } from './todo-list-page/edit-list-access/edit-list-access.component';
+import { UploadComponent } from './file-upload/upload/upload.component';
+import { DownloadComponent } from './file-upload/download/download.component';
+import { FileManagerComponent } from './file-upload/file-manager/file-manager.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +57,9 @@ import { EditListAccessComponent } from './todo-list-page/edit-list-access/edit-
     DeleteListItemDialogComponent,
     FileUploadComponent,
     EditListAccessComponent,
+    UploadComponent,
+    DownloadComponent,
+    FileManagerComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -94,7 +99,7 @@ import { EditListAccessComponent } from './todo-list-page/edit-list-access/edit-
     ReactiveFormsModule,
     MatInputModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
     
   ],
   providers: [

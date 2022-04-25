@@ -7,6 +7,10 @@
       <button type="button" (click)="goToListAccessPage()">Manage User Access</button>
       <button type="button" (click)="openDialog()">Delete List</button>
     </div>
+    <app-filemanager (listId)="this.fullList.maintenanceListId"></app-filemanager>
+
+
+
   </div>
 
   <div class="listDetails">

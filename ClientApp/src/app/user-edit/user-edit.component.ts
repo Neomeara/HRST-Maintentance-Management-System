@@ -61,14 +61,13 @@ export class UserEditComponent implements OnInit {
 
   showSuccessAlert() {
     
-    Swal.fire('User Information Updated', '', 'success');
+    Swal.fire('User Information Updated', '', 'success').then(() => {
+      this.redirectToAdminPage();
+    });
     
-    this.redirectToAdminPage();
   } 
   redirectToAdminPage() {
-    setTimeout(() => {
-      this.router_.navigate(['admin-page'])
-    }, 2000);  
+    this.router_.navigate(['admin-page']);
   }
 
   onClickSubmit(data: any) {
@@ -78,15 +77,15 @@ export class UserEditComponent implements OnInit {
       this.formresult = result;
       console.log(result);
       console.log(data);
-    }, error => console.error(error));
+      this.showSuccessAlert();
+    }, error => {Swal.fire('An unexpectd error occured','', 'error').then(()=> this.redirectToAdminPage())});
     this.userService.putRole(this.id, this.formdata.get('Role')!.value).subscribe();
-    this.showSuccessAlert();
   }
 
   deleteUser() {
     this.userService.deleteUser(this.id).subscribe(() => {
 
-      this.router_.navigate(['/admin-page']);
+      this.redirectToAdminPage();
     });
   }
 

@@ -24,6 +24,11 @@ export class TodoListComponent implements OnInit {
   private readonly _router: Router;
   private readonly _maintenaceListservice: MaintenanceListService;
 
+  public response: { dbPath: '' } = {dbPath: ''};
+  public uploadFinished = (event:any) => {
+    this.response = event;
+  }
+
   fullList?: MaintenanceList;
   listId: number = 0;
   listGroup: Group = defaultGroup;
@@ -140,11 +145,16 @@ export class TodoListComponent implements OnInit {
 
   }
 
+
   public goToListAccessPage() {
     if (this.fullList) {
 
     this.router.navigate([`edit-list-access/${this.fullList.maintenanceListId}/${this.fullList.groupId}`])
     }
+
+  public createImgPath = () => {
+    return 'https://localhost:7123' + this.response.dbPath;
+
   }
 
 }
