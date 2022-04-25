@@ -1,52 +1,3 @@
-/*.listOfMaintenanceListItems {
-  margin-bottom: 100px;
-}
-
-.listOfMaintenanceListItems div :hover {
-    background-color: lightgray;
-  }
-
-.maintenanceListItem {
-  border-left: 2px solid lightgray;
-  border-bottom: 2px solid lightgray;
-  margin-bottom: 5px;
-  box-shadow: black 2px 2px 5px;
-  display:flex;
-  justify-content: space-between;
-  width: 100%;
-
-}
-
-div .maintenanceListItem :hover {
-  background-color: lightgray;
-}
-
-.maintenanceListItem button {
-  height: 25px;
-  width: 100px;
-}
-
-label {
-  display: inline-block;
-  margin: 3px;
-}
-.itemProperty {
-    width: 100px;
-    display: flex;
-    justify-content:space-between;
-}
-.text {
-    margin-top: 5px;
-}
-
-input {
-  background-color: lightgray;
-  border: 1px solid black;
-  color: black;
-  width: 200px;
-  height: 40px;
-}
-
 .body {
   padding-bottom: 30px;
   width: 100%;
@@ -56,17 +7,17 @@ input {
     margin-bottom: 20px;
 }
 
-.pageHeader {
+/*.pageHeader {
     width: 100%;
     display: flex;
     justify-content: space-between;
     
 }
-  .pageHeader h1 {*/
-   /*flex: 50%;
-    padding: 0px;*/
+  .pageHeader h1 {
+   flex: 50%;
+    padding: 0px;
     
-  /*}
+  }
 
   .pageHeader .listFunctions {
      display: flex;
@@ -75,6 +26,4 @@ input {
      
     
   }
-  .pageHeader .listFunctions button {
-      
-  }*/
+*/

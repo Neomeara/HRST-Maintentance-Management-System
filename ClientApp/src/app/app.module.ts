@@ -80,13 +80,14 @@ import { FileManagerComponent } from './file-upload/file-manager/file-manager.co
 
       { path: 'edit-list', component: TodoListComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'HRSG_Editer'] } },
       { path: 'edit-list/:listId', component: TodoListComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'HRSG_Editer'] } },
+      { path: 'edit-list/:listId/files', component: FileManagerComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'HRSG_Editer'] } },
 
       { path: 'edit-list-item', component: EditListItemComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'HRSG_Editer'] }},
       { path: 'edit-list-item/:listId/:newList', component: EditListItemComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'HRSG_Editer'] }},
       { path: 'edit-list-item/:listId/:newList/:listItemId', component: EditListItemComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner', 'HRSG_Editer'] } },
       { path: 'edit-list-access/:listId/:listGroupId', component: EditListAccessComponent, canActivate: [AuthorizeGuard, RoleGuard], data: { roles: ['HRST_Admin', 'HRST_Basic', 'HRSG_Owner'] }},
-      { path: 'unauthorized', component: UnauthorizedComponent }
-
+      { path: 'unauthorized', component: UnauthorizedComponent },
+     
 
     
     ]),

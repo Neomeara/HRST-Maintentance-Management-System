@@ -215,7 +215,10 @@ namespace HRST_Maintenance_Management_System.Controllers
                 folderName = Path.Combine(folderName, id.ToString());
 
                 var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                Directory.Delete(pathToSave, true);
+                if (Directory.Exists(pathToSave))
+                {
+                    Directory.Delete(pathToSave, true);
+                }
 
             }
           

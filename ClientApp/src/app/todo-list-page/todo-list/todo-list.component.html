@@ -5,10 +5,9 @@
     <div class="listFunctions">
       <button type="button" (click)="addItem()">Add Item</button>
       <button type="button" (click)="goToListAccessPage()">Manage User Access</button>
+      <button type="button" (click)="goToListFilesPage()">Manage List Files</button>
       <button type="button" (click)="openDialog()">Delete List</button>
     </div>
-    <app-filemanager (listId)="this.fullList.maintenanceListId"></app-filemanager>
-
 
 
   </div>
@@ -37,22 +36,22 @@
   </div>
   <h2>List Items</h2>
   <form>
-    <input matInput type="text" id="filterInput" name="filterInput" [formControl]="filterControl"(keyup)="filterItems($event)" />
+    <input matInput type="text" id="filterInput" name="filterInput" [formControl]="filterControl" (keyup)="filterItems($event)"  class="tableFilter" placeholder="Filter Items"/>
   </form>
 
-  <table mat-table matSort [dataSource]="sortedData" (matSortChange)="sortData($event)">
+  <table mat-table matSort [dataSource]="dataSource" (matSortChange)="sortData($event)">
     <!--<tr>
-    <th mat-sort-header="name">Name</th>
-    <th mat-sort-header="location">Location</th>
-    <th mat-sort-header="priority">Priority</th>
-    <th mat-sort-header="nextevent">Next Scheduled Event</th>
-  </tr>
-  <tr *ngFor="let item of sortedData" (click)="selectItem(item)">
-    <td>{{item.name}}</td>
-    <td>{{item.location}}</td>
-    <td>{{item.priority}}</td>
-    <td>{{item.nextScheduledEvent | date:'MMMM d, y'}}</td>
-  </tr>-->
+      <th mat-sort-header="name">Name</th>
+      <th mat-sort-header="location">Location</th>
+      <th mat-sort-header="priority">Priority</th>
+      <th mat-sort-header="nextevent">Next Scheduled Event</th>
+    </tr>
+    <tr *ngFor="let item of sortedData" (click)="selectItem(item)">
+      <td>{{item.name}}</td>
+      <td>{{item.location}}</td>
+      <td>{{item.priority}}</td>
+      <td>{{item.nextScheduledEvent | date:'MMMM d, y'}}</td>
+    </tr>-->
 
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header="name"> Name </th>
@@ -79,34 +78,7 @@
 
   </table>
 
-  <!--<div class="listOfMaintenanceListItems">
-    <div *ngFor="let item of listItems$ | async" (click)="selectItem(item)">
-      <div class="maintenanceListItem">
-        <div class="itemProperty">
-          <label for="itemName" class="label">Name: </label>
-          <span name="itemName">{{item.name}}</span>
-        </div>
-        <div class="itemProperty">
-          <label for="itemLocation" class="label">Location: </label>
-          <span name="itemLocation">{{item.location}}</span>
-        </div>
-        <div class="itemProperty">
-          <label for="itemPriority" class="label">Priority: </label>
-          <span name="itemPriority">{{item.priority}}</span>
-        </div>
-        <div class="itemProperty">
-          <label for="itemTotalCost" class="label">Total Cost: </label>
-          <span name="itemTotalCost">{{item.totalCost}}</span>
-        </div>
-        <div class="itemProperty">
-          <label for="itemLastCompleted" class="label">Last Completed: </label>
-          <span name="itemLastCompleted">{{item.lastCompleted}}</span>
-        </div>
-        <div class="itemProperty">
-          <label for="itemComments" class="label">Comments: </label>
-          <span name="itemComments">{{item.comments}}</span>
-        </div>
-      </div>
-    </div>
-  </div>-->
+  <mat-paginator #pageinator [pageSizeOptions]="[25,50, 100]" aria-label="Select page of users"></mat-paginator>
+
+
 </div>

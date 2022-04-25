@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -12,6 +12,8 @@ import { UserServiceService } from '../Services/Users/user-service.service';
 import { addListDialog, AddListDialogData } from './Dialogs/AddList/addListDialog';
 import { Sort } from '@angular/material/sort';
 import { getBaseUrl } from '../../main';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 interface ListRow {
   list: MaintenanceList,
   group: Group,
@@ -32,11 +34,20 @@ export class TodoListPageComponent implements OnInit {
   public addListData: AddListDialogData = {lists:[], groups:[], users:[]};
   sortedData: ListRow[] = [];
 
+  public datasource: MatTableDataSource<ListRow>;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   constructor(private router: Router, httpClient: HttpClient, private maintenaceListService: MaintenanceListService, public dialog: MatDialog, private userService:UserServiceService) {
     this._router = router;
     this._httpClient = httpClient;
     this._userService = userService;
     this.sortedData = this.listRows.slice();
+
+    
+    this.datasource = new MatTableDataSource(this.sortedData);
+    
+ 
+    
   }
 
   listRows: ListRow[] = [];
@@ -51,6 +62,8 @@ export class TodoListPageComponent implements OnInit {
 
   ngOnInit(): void {
 
+    
+
     let lists: MaintenanceList[] = [];
     let groups: Group[] = [];
     let users: User[] = [];
@@ -63,6 +76,10 @@ export class TodoListPageComponent implements OnInit {
           
           this.listRows = lists.map(l => ({ list: l, group: groups.find(g => g.groupId === l.groupId)!, applicationUser: users.find(u => u.id === l.applicationUserId)! }));
           this.sortedData = this.listRows;
+          this.datasource = new MatTableDataSource(this.sortedData);
+          this.datasource.paginator = this.paginator;
+
+
           //this.filterControl.valueChanges.pipe(
             //startWith(''), map(value => this.sortedData = this.filterLists(value))
          // );
@@ -96,15 +113,27 @@ export class TodoListPageComponent implements OnInit {
         default:
           return 0;
       }
+
     });
+    this.datasource = new MatTableDataSource(this.sortedData);
+    if (this.datasource.paginator) {
+      this.datasource.paginator.firstPage();
+    }
   }
   public filterLists(event:Event) {
     const lowerTerm = (event.target as HTMLInputElement).value.toLowerCase();
-  this.sortedData = this.listRows.filter(item => item.list.title.toLowerCase().includes(lowerTerm) ||
+    this.sortedData = this.listRows.filter(item => item.list.title.toLowerCase().includes(lowerTerm) ||
+      item.applicationUser.userName.toLowerCase().includes(lowerTerm) ||
       item.applicationUser.email.toLowerCase().includes(lowerTerm) ||
       item.applicationUser.firstname.toLowerCase().includes(lowerTerm) ||
       item.applicationUser.lastname.toLowerCase().includes(lowerTerm) ||
-      item.group.name.toLowerCase().includes(lowerTerm))
+      item.group.name.toLowerCase().includes(lowerTerm));
+    this.datasource = new MatTableDataSource(this.sortedData);
+    this.datasource.paginator = this.paginator;
+
+    if (this.datasource.paginator) {
+      this.datasource.paginator.firstPage();
+    }
   }
 
   private createListRows() {
@@ -145,7 +174,7 @@ export class TodoListPageComponent implements OnInit {
     this.maintenaceListService.getAllGroups().subscribe(g => this.addListData.groups = g);
  
 
-    const dialogRef = this.dialog.open(addListDialog, { width: '400px', height: '500px', data: this.addListData });
+    const dialogRef = this.dialog.open(addListDialog, { data: this.addListData });
 
     dialogRef.afterClosed().subscribe((result: string) => {
       if (result === "ok") {
