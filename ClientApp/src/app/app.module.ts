@@ -32,9 +32,11 @@ import { ApplicationPaths } from '../api-authorization/api-authorization.constan
 import { LoginComponent } from '../api-authorization/login/login.component';
 import { LogoutComponent } from '../api-authorization/logout/logout.component';
 import { UnauthorizedComponent } from '../api-authorization/unauthorized/unauthorized.component';
-import { FileUploadComponent } from './file-upload/file-upload.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
+import { UploadComponent } from './file-upload/upload/upload.component';
+import { DownloadComponent } from './file-upload/download/download.component';
+import { FileManagerComponent } from './file-upload/file-manager/file-manager.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import { MatSelectModule } from '@angular/material/select';
     DeleteListDialogComponent,
     EditListItemComponent,
     DeleteListItemDialogComponent,
-    FileUploadComponent,
+    UploadComponent,
+    DownloadComponent,
+    FileManagerComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -91,7 +95,7 @@ import { MatSelectModule } from '@angular/material/select';
     ReactiveFormsModule,
     MatInputModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
     
   ],
   providers: [
