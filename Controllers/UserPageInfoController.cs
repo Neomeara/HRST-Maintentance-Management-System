@@ -31,7 +31,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer")]
         [HttpGet]
-        [Route("userinfo")]
+        [Route("userinfo")] //api call to get all users
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> Get()
         {
             IEnumerable<ApplicationUser> allUsers = Enumerable.Empty<ApplicationUser>();
@@ -147,7 +147,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             user.lastname = model.LastName;
             user.Email = model.Email;
             user.Group = model.group;
-            _DbContext.SaveChanges();
+            await _DbContext.SaveChangesAsync();
 
             return Ok(user);
         }
