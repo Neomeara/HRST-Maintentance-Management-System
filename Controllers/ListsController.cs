@@ -32,7 +32,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
-        [Authorize(Roles ="HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, Basic")]
+        [Authorize(Roles ="HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, HRSG_Viewer")]
         [Route("getAllLists")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MaintenanceList>>> getAllLists()
@@ -65,7 +65,7 @@ namespace HRST_Maintenance_Management_System.Controllers
          
         }
 
-        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, Basic")]
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, HRSG_Viewer")]
         [Route("getList/{id:int}")]
         [HttpGet]
         public async Task<ActionResult<MaintenanceList>> GetList(int id)
@@ -88,7 +88,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
-        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, Basic")]
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, HRSG_Viewer")]
         [Route("getListItem/{id:int}")]
         [HttpGet]
         public async Task<ActionResult<ListItem>> getListItem(int id)
@@ -141,7 +141,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             if (result.State == EntityState.Added)
             {
                 list.LastEditDate = DateTime.Now;
-                _applicationDbContext.SaveChanges();
+                await _applicationDbContext.SaveChangesAsync();
                 return CreatedAtAction(nameof(model), new { id =model.ListItemId }, model);
             }
             return BadRequest(result);
@@ -188,7 +188,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
             if (listResult.State == EntityState.Added)
             {
-                _applicationDbContext.SaveChanges();
+                await _applicationDbContext.SaveChangesAsync();
                 return CreatedAtAction(nameof(maintenanceList),new { id = maintenanceList.MaintenanceListId }, maintenanceList);
             }
             return BadRequest(listResult);
@@ -228,7 +228,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
 
         // get all Groups
-        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, Basic")]
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, HRSG_Viewer")]
         [Route("getAllGroups")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Group>>> getAllGroups()
@@ -263,7 +263,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
-        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, Basic")]
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, HRSG_Viewer")]
         [Route("getGroup/{id:int}")]
         [HttpGet]
         public async Task<ActionResult<Group>> getGroup(int id)
@@ -279,61 +279,6 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
-        [HttpPost, DisableRequestSizeLimit]
-        [Route("upload/{id}")]
-        public async Task<IActionResult> Upload(int id)
-        {
-            try
-            {
-                var formCollection = await Request.ReadFormAsync();
-                var file = formCollection.Files.First();
-                var folderName = Path.Combine("StaticFiles", "Images");
-                folderName = Path.Combine(folderName, id.ToString());
-                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-                Directory.CreateDirectory(pathToSave);
-
-
-                if (file.Length > 0)
-                {
-                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                    var fullPath = Path.Combine(pathToSave, fileName);
-                    var dbPath = Path.Combine(folderName, fileName);
-
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                    }
-
-                    return Ok(new { dbPath });
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex}");
-            }
-        }
-
-
-        [HttpGet]
-        [Route("getImage/{id}/{name}")]
-        public IActionResult GetImage(int id,string name)
-        {
-            //var folderName = Path.Combine("StaticFiles", "Images");
-            //folderName = Path.Combine(folderName, id.ToString());
-            //folderName = Path.Combine(folderName, name);
-            //var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
-            //FileStream file = new FileStream(pathToSave, FileMode.Open);
-            
-
-            //file.CopyTo(result);
-
-            ////Byte[] b = System.IO.File.ReadAllBytes(pathToSave);   // You can use your own method over here.         
-            //return File(result, "image/png");
-            return Ok(new { id, name });
-        }
+        
     }
 }

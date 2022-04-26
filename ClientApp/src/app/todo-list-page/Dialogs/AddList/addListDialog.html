@@ -23,8 +23,8 @@
              matInput>
 
 
-      <select matInput formControlName="groupControl" placeholder="Select Group">
-        <option *ngFor="let group of newfilteredgroups" [value]="group">
+      <select matInput formControlName="groupControl">
+        <option *ngFor="let group of newfilteredgroups" [ngValue]="group">
           {{group.name}}
         </option>
       </select>
@@ -40,8 +40,8 @@
              matInput
              (keyup)="_filterUsers($event)">
              
-      <select formControlName="userControl" placeholder="Select User">
-        <option *ngFor="let user of newfilteredusers" [value]="user" >
+      <select formControlName="userControl">
+        <option *ngFor="let user of newfilteredusers" [ngValue]="user" >
           {{user.email}}
         </option>
       </select>

@@ -29,7 +29,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             _roleManager = roleManager;
         }
 
-        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer")]
+        [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, HRSG_Viewer")]
         [HttpGet]
         [Route("userinfo")] //api call to get all users
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> Get()
@@ -78,56 +78,7 @@ namespace HRST_Maintenance_Management_System.Controllers
 
         }
 
-        [Authorize(Roles = "HRST_Admin")]
-        [HttpPut]
-        [Route("updateuser")] // firstnamelastname
-        public async Task<ActionResult>UpdateUser(UpdateUser model)
-        {
-            ApplicationUser user;
-            ApplicationUser user2;
-            user =  await _DbContext.Users.SingleOrDefaultAsync(x=> x.Email == model.Email);
-            if (user == null)
-            {
-                return BadRequest();
-
-            }
-            string domain = user.Email.Substring(user.Email.IndexOf('@'));
-            string pt1 = user.Email.Substring(user.Email.IndexOf('@') + 1);
-            string pt2 = pt1.Substring(pt1.IndexOf('.'));
-            string name = pt1.Replace(pt2, "");
-            Group group = _DbContext.Groups.Where(y => y.Domain == domain).FirstOrDefault();
-            if (domain == null)
-            {
-                return BadRequest();
-            }
-
-            if (group == null)
-            {
-                Group newgroup = new Group();
-                newgroup.Domain = domain;
-                newgroup.Name = name;
-                user.Group = newgroup;
-                _DbContext.Groups.Add(newgroup);
-                _DbContext.SaveChanges();
-            }
-            else
-            {
-                user.Group = group;
-
-            }
-            user2 = await _DbContext.Users.FirstOrDefaultAsync(x => x.UserName == model.UserName);
-            if (user2 != null)
-            {
-                return BadRequest("hello");
-            }
-            
-            user.UserName = model.UserName;
-            user.firstname = model.FirstName;
-            user.lastname = model.LastName;
-            _DbContext.SaveChanges();
-
-            return Ok(user);
-        }
+        
 
         [Authorize(Roles = "HRST_Admin")]
         [HttpPut]
@@ -152,23 +103,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             return Ok(user);
         }
 
-        [HttpGet]
-        [Route("editfirstnamelastname")]
-        public async Task<ActionResult<IEnumerable<ApplicationUser>>> Getusername(string username)
-        {
-            ApplicationUser user;
-            user =  await _DbContext.Users.Where(x => x.Email == username).FirstOrDefaultAsync();
-            if (user == null)
-            {
-                return BadRequest();
-
-            }
-
-            return Ok(user);
-
-
-
-        }
+        
 
         [Authorize(Roles = "HRST_Admin")]
         [Route("deleteUser")]
@@ -193,7 +128,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             return BadRequest();
         }
 
-
+        [Authorize(Roles ="HRST_Admin, HRST_Basic")]
         [HttpGet]
         [Route("getGroups")]
         public async Task<ActionResult<IEnumerable<Group>>> getGroups()
@@ -203,7 +138,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             return Ok(group);
 
         }
-        
+
         [Authorize]
         [HttpPost]
         [Route("userHasRoles")]
@@ -223,7 +158,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             return hasRoles;
         }
 
-        [Authorize]
+        [Authorize(Roles = "HRST_Admin, HRST_Basic")]
         [HttpGet]
         [Route("getAllRoles")]
         public async Task<ActionResult<string[]>>getAllRoles()
@@ -245,7 +180,7 @@ namespace HRST_Maintenance_Management_System.Controllers
             return Ok(role);
         }
 
-        [Authorize]
+        [Authorize(Roles = "HRST_Admin, HRST_Basic")]
         [HttpGet]
         [Route("getUserRole")]
         public async Task<ActionResult<string>> getUserRole(string id)
@@ -265,7 +200,7 @@ namespace HRST_Maintenance_Management_System.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "HRST_Admin")]
         [HttpPost]
         [Route("putRole")]
         public async Task<ActionResult>putRole(string id,string rolename)

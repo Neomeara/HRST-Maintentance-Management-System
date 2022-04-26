@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 import { MaintenanceList } from '../../../Models/MaintenanceList';
 import { Group, User } from '../../../Models/user';
 import { MaintenanceListService } from '../../../Services/MaintenanceList/maintenance-list.service';
@@ -76,7 +77,8 @@ export class addListDialog implements OnInit{
   formSubmit(data: any) {
 
     if (data.groupControl === null || data.userControl === null || data.titleControl === null) {
-      alert("Invalid input, try again please")
+      
+      Swal.fire('An error occured, Please try again', '', 'error');
     }
     else {
 
@@ -116,9 +118,7 @@ export class addListDialog implements OnInit{
     this.addListForm.get('groupControl')?.setValue(group);
   }
 
-  groupChange() {
-    console.log('yup');
-  }
+
 
   onNoClick(): void {
     this.dialogRef.close("cancel");

@@ -25,6 +25,11 @@ body {
 .container {
   padding-bottom: 50px;
 }
+app-nav-menu .container {
+    padding-bottom: 10px;
+}
+app-nav-menu .navbar-brand {
+}
 
 table {
   width: 100%;

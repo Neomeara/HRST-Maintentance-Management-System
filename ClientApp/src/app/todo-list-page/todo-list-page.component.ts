@@ -148,6 +148,13 @@ export class TodoListPageComponent implements OnInit {
           users = u;
           this.listRows = lists.map(l => ({ list: l, group: groups.find(g => g.groupId === l.groupId)!, applicationUser: users.find(u => u.id === l.applicationUserId)! }));
           this.sortedData = this.listRows;
+          this.datasource = new MatTableDataSource(this.sortedData);
+          this.datasource.paginator = this.paginator;
+
+          if (this.datasource.paginator) {
+            this.datasource.paginator.firstPage();
+          }
+
 
          // this.listRows$ = this.filterControl.valueChanges.pipe(
           //startWith(''),
