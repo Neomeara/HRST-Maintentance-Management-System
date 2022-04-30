@@ -15,20 +15,22 @@ export class DownloadComponent {
   @Output() public downloadStatus: EventEmitter<ProgressStatus>;
   @Output() public deleteStatus: EventEmitter<ProgressStatus>;
 
-  public listId: number = 0;;
+  public listId: number = 0;
+  public listItemId?: number|undefined;
 
   constructor(private service: FileUploadService, private route:ActivatedRoute) {
     this.downloadStatus = new EventEmitter<ProgressStatus>();
     this.deleteStatus = new EventEmitter<ProgressStatus>();
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.listId = Number(params.get('listId'))
+      this.listItemId = Number(params.get('listItemId'))
     })
 
   }
 
   public download() {
     this.downloadStatus.emit({ status: ProgressStatusEnum.START, percentage:0 });
-    this.service.downloadFile(this.fileName, this.listId.toString()).subscribe(
+    this.service.downloadFile(this.fileName, this.listId.toString(),this.listItemId?.toString()).subscribe(
       data => {
         switch (data.type) {
           case HttpEventType.DownloadProgress:
@@ -55,7 +57,7 @@ export class DownloadComponent {
   }
 
   public deleteFile() {
-    this.service.deleteFile(this.fileName, this.listId.toString()).subscribe(() => {
+    this.service.deleteFile(this.fileName, this.listId.toString(),this.listItemId?.toString()).subscribe(() => {
       this.deleteStatus.emit({ status: ProgressStatusEnum.COMPLETE, percentage: 100 });
 
     });

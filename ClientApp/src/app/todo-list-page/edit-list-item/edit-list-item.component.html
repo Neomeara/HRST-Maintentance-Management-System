@@ -8,8 +8,10 @@
   <div class="pageHeader">
     <h1>Edit Item</h1>
     <div>
-    <button mat-raised-button (click)="backToList()">View List</button>
-    <button mat-raised-button (click)="openDialog()">Delete Item</button>
+      <button mat-raised-button (click)="backToList()">View List</button>
+      <button type="button" (click)="goToListFilesPage()">Manage List Files</button>
+
+      <button mat-raised-button (click)="openDialog()">Delete Item</button>
 
     </div>
 

@@ -17,6 +17,7 @@ export class FileManagerComponent implements OnInit {
   public showDownloadError: boolean = false;
   public showUploadError: boolean = false;
   public listId: number = 0;
+  public listItemId?: number|undefined;
 
 
   constructor(private service: FileUploadService, private route :ActivatedRoute, private router:Router) { }
@@ -24,13 +25,14 @@ export class FileManagerComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.listId = Number(params.get('listId'))
+      this.listItemId = Number(params.get('listItemId'))
     })
 
     this.getFiles();
   }
 
   private getFiles() {
-    this.service.getFiles(this.listId.toString()).subscribe(
+    this.service.getFiles(this.listId.toString(),this.listItemId?.toString()).subscribe(
       data => {
         this.files = data;
       }
@@ -42,8 +44,16 @@ export class FileManagerComponent implements OnInit {
   }
 
   public backToList() {
+    if (this.listItemId !== 0 && this.listItemId !== undefined) {
+
+      this.router.navigate(['edit-list-item/' + this.listId.toString() + '/false/' + this.listItemId.toString()]);
+    }
+    else {
+
     this.router.navigate(['edit-list/' + this.listId.toString()]);
+    }
   }
+
 
 
 

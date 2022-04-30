@@ -22,10 +22,15 @@ namespace HRST_Maintenance_Management_System.Controllers
         [Authorize(Roles = "HRST_Admin, HRSG_Owner, HRSG_Editer")]
         [HttpPost]
         [Route("upload/{listId}")]
-        public async Task<IActionResult> Upload(IFormFile file, string listId)
+        public async Task<IActionResult> Upload(IFormFile file, string listId, string? listItemId)
         {
             var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "lists");
             uploads = Path.Combine(uploads, listId);
+            if(listItemId!= null)
+            {
+                uploads = Path.Combine(uploads, listItemId);
+
+            }
             if (!Directory.Exists(uploads))
             {
                 Directory.CreateDirectory(uploads);
@@ -44,10 +49,15 @@ namespace HRST_Maintenance_Management_System.Controllers
         [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, HRSG_Viewer")]
         [HttpGet]
         [Route("download/{listId}")]
-        public async Task<IActionResult> Download([FromQuery] string file, string listId)
+        public async Task<IActionResult> Download([FromQuery] string file, string listId, string? listItemId)
         {
             var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "lists");
             uploads = Path.Combine(uploads, listId);
+            if(listItemId!= null)
+            {
+                uploads = Path.Combine(uploads, listItemId);
+
+            }
             var filePath = Path.Combine(uploads, file);
             if (!System.IO.File.Exists(filePath))
                 return NotFound();
@@ -65,10 +75,15 @@ namespace HRST_Maintenance_Management_System.Controllers
         [Authorize(Roles = "HRST_Admin, HRSG_Owner, HRSG_Editer")]
         [HttpDelete]
         [Route("delete/{listId}")]
-        public async Task<IActionResult> Delete([FromQuery] string file, string listId)
+        public async Task<IActionResult> Delete([FromQuery] string file, string listId, string? listItemId)
         {
             var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "lists");
             uploads = Path.Combine(uploads, listId);
+            if (listItemId != null)
+            {
+                uploads = Path.Combine(uploads, listItemId);
+
+            }
             var filePath = Path.Combine(uploads, file);
             if (!System.IO.File.Exists(filePath))
                 return NotFound();
@@ -84,12 +99,17 @@ namespace HRST_Maintenance_Management_System.Controllers
         [Authorize(Roles = "HRST_Admin, HRST_Basic, HRSG_Owner, HRSG_Editer, HRSG_Viewer")]
         [HttpGet]
         [Route("files/{listId}")]
-        public IActionResult Files(string listId)
+        public IActionResult Files(string listId,string? listItemId)
         {
             var result = new List<string>();
 
             var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "lists");
             uploads = Path.Combine(uploads, listId);
+            if (listItemId != null)
+            {
+                uploads = Path.Combine(uploads, listItemId);
+
+            }
             if (Directory.Exists(uploads))
             {
                 var provider = _hostingEnvironment.ContentRootFileProvider;

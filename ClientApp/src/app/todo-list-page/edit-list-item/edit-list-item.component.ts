@@ -178,4 +178,11 @@ export class EditListItemComponent implements OnInit {
 
   }
 
+  public goToListFilesPage() {
+    if (this.newList === false) {
+
+      this.router.navigate([`edit-list/${this.listId}/${this.itemId}/files`])
+    }
+  }
+
 }

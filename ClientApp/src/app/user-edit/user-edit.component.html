@@ -62,7 +62,8 @@
   <label for="subject">Notes</label>
   <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>-->
 
-    <input type="submit" class="forsubmit" value="Submit">
-    <button (click)="deleteUser()">Delete User </button>
   </form>
+    <!--<input type="submit" class="forsubmit" value="Submit" (click)="onClickSubmit(formdata.value)">-->
+  <button (click)="onClickSubmit(formdata.value)" >Submit</button>
+    <button (click)="deleteUser()">Delete User </button>
 </div>

@@ -12,13 +12,15 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 export class UploadComponent {
   @Input() public disabled: boolean = false;
   public listId: number = 0;
+  public listItemId?: number|undefined;
   @Output() public uploadStatus: EventEmitter<ProgressStatus>;
   @ViewChild('inputFile') inputFile: ElementRef = null!;
 
   constructor(private service: FileUploadService, private route:ActivatedRoute) {
     this.uploadStatus = new EventEmitter<ProgressStatus>();
     this.route.paramMap.subscribe((params: ParamMap) => {
-      this.listId = Number(params.get('listId'))
+      this.listId = Number(params.get('listId'));
+      this.listItemId = Number(params.get('listItemId'));
     })
   }
 
@@ -26,7 +28,7 @@ export class UploadComponent {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
       this.uploadStatus.emit({ status: ProgressStatusEnum.START, percentage:0 });
-      this.service.uploadFile(file, this.listId.toString()).subscribe(
+      this.service.uploadFile(file, this.listId.toString(), this.listItemId?.toString()).subscribe(
         data => {
           if (data) {
             switch (data.type) {

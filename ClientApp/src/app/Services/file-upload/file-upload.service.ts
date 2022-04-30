@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { HttpClient, HttpEvent, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { getBaseUrl } from '../../../main';
 
@@ -24,43 +24,105 @@ export class FileUploadService {
     
   }
 
-  public downloadFile(file: string, listId:string): Observable<HttpEvent<Blob>> {
-    return this.httpClient.request(new HttpRequest(
-      'GET',
-      `${this.apiDownloadUrl + listId}?file=${file}`,
-      null,
-      {
-        reportProgress: true,
-        responseType: 'blob'
-      }));
+  public downloadFile(file: string, listId: string, listItemId: string|undefined): Observable<HttpEvent<Blob>> {
+    let filePath = '';
+      filePath = this.apiDownloadUrl + listId;
+    if (listItemId === undefined) {
+      return this.httpClient.request(new HttpRequest(
+        'GET',
+        `${filePath}?file=${file}`,
+        null,
+        {
+          reportProgress: true,
+          responseType: 'blob'
+        }));
+    }
+    else {
+      let params = new HttpParams;
+      params = params.append('listItemId', listItemId);
+      return this.httpClient.request(new HttpRequest(
+        'GET',
+        `${filePath}?file=${file}`,
+        null,
+        {
+          reportProgress: true,
+          responseType: 'blob',
+          params:params
+        }));
+    }
+   
   }
 
-  public deleteFile(file: string, listId: string): Observable<HttpEvent<Blob>> {
-    return this.httpClient.request(new HttpRequest(
-      'DELETE',
-      `${this.apiDeleteUrl + listId}?file=${file}`,
-      null,
-      {
-        reportProgress: true,
-        responseType: 'blob'
-      }));
+  public deleteFile(file: string, listId: string, listItemId: string|undefined): Observable<HttpEvent<Blob>> {
+    let filePath = '';
+      filePath = this.apiDeleteUrl + listId;
+    if (listItemId === undefined) {
+      return this.httpClient.request(new HttpRequest(
+        'DELETE',
+        `${filePath}?file=${file}`,
+        null,
+        {
+          reportProgress: true,
+          responseType: 'blob'
+        }));
+    }
+    else {
+      let params = new HttpParams;
+      params = params.append('listItemId', listItemId);
+      return this.httpClient.request(new HttpRequest(
+        'DELETE',
+        `${filePath}?file=${file}`,
+        null,
+        {
+          reportProgress: true,
+          responseType: 'blob',
+          params:params
+        }));
+    }
+   
   }
 
-  public uploadFile(file: Blob, listId:string): Observable<HttpEvent<void>> {
+  public uploadFile(file: Blob, listId: string, listItemId?: string|undefined): Observable<HttpEvent<void>> {
     const formData = new FormData();
     formData.append('file', file);
+    let filePath = '';
+      filePath = this.apiUploadUrl + listId;
+    if (listItemId === undefined) {
+      return this.httpClient.request(new HttpRequest(
+        'POST',
+        filePath,
+        formData,
+        {
+          reportProgress: true
+        }));
+    }
+    else {
+      let params = new HttpParams;
+      params = params.append('listItemId', listItemId);
+      return this.httpClient.request(new HttpRequest(
+        'POST',
+        filePath,
+        formData,
+        {
+          reportProgress: true,
+          params:params
+        }));
+    }
 
-    return this.httpClient.request(new HttpRequest(
-      'POST',
-      this.apiUploadUrl + listId,
-      formData,
-      {
-        reportProgress: true
-      }));
+    
   }
 
-  public getFiles(listId:string): Observable<string[]> {
-    return this.httpClient.get<string[]>(this.apiFileUrl + listId);
+  public getFiles(listId: string, listItemId?: string | undefined): Observable<string[]> {
+    if (listItemId === undefined) {
+
+      return this.httpClient.get<string[]>(this.apiFileUrl + listId);
+    }
+    else {
+    let params = new HttpParams;
+    params = params.append('listItemId',listItemId)
+      return this.httpClient.get<string[]>(this.apiFileUrl + listId, {params:params});
+
+    }
   }
 }
 
